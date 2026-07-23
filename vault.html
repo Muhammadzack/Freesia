@@ -3,75 +3,72 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://liteforge.rpc.caldera.xyz https://api.studio.thegraph.com https://api.thegraph.com; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<!-- KEAMANAN: CSP setara index.html. Halaman ini menangani deposit, jadi
+     jangan lebih longgar dari halaman swap. Kalau subgraph diaktifkan nanti,
+     tambahkan domainnya ke connect-src. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://liteforge.rpc.caldera.xyz; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <title>AI Vault — Freesia DEX</title>
+<!-- Favicon: bunga Freesia yang sama persis dengan index.html -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cg%20transform%3D%22translate%2840%2C40%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%232E6F68%22%20transform%3D%22rotate%28-12%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%233E8A80%22%20transform%3D%22rotate%2848%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%2357A99B%22%20transform%3D%22rotate%28108%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%236FC2B4%22%20transform%3D%22rotate%28168%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%237FD0C2%22%20transform%3D%22rotate%28228%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%238CDCCB%22%20transform%3D%22rotate%28288%29%20scale%280.94%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js" integrity="sha384-6Zl0Pc8zjSz8KvmNeXRvUQgY4ryFb+BwDvKCmLYcBME0joAaru491tQgi9B7zsMM" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
-  /* ==================== DARK (default) ==================== */
+  /* Palet diselaraskan dengan index.html supaya vault terasa satu produk
+     dengan DEX, bukan situs terpisah yang kebetulan mirip. */
   :root {
     --bg: #0a0f0d; --bg-card: #111917; --bg-elev: #16211d; --border: #223029;
-    --text: #dce8e2; --text-dim: #7f968c; --green: #3fd18b; --green-deep: #2e9d68;
-    --amber: #e0b15a; --red: #e07a7a;
+    --text: #dce8e2; --text-dim: #7f968c;
+    --green: #00e676; --green-deep: #00b25c;
+    --amber: #ffb020; --red: #ff5c5c;
+    --logo-grad-a: #8CDCCB; --logo-grad-b: #00e676;
     --mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
-    --shadow: 0 20px 60px rgba(0,0,0,0.5);
-    --overlay: rgba(4,8,6,0.72);
-    --input-bg: #16211d;
-    --spinner-border: rgba(255,255,255,0.25);
-    --spinner-top: var(--text);
-    --max-bg: var(--border); --max-color: var(--text);
-    --pill-green-bg: rgba(63,209,139,0.12); --pill-green-border: rgba(63,209,139,0.3);
-    --pill-red-bg: rgba(224,122,122,0.12); --pill-red-border: rgba(224,122,122,0.25);
-    --sec-banner-bg: rgba(224,122,122,0.08); --sec-banner-border: rgba(224,122,122,0.25);
-    --modal-ico-bg: rgba(224,122,122,0.12);
-    --tab-inactive-bg: transparent; --tab-inactive-border: var(--border);
-    --tab-inactive-color: var(--text-dim);
-    --link-color: var(--green);
   }
-
-  /* ==================== LIGHT ==================== */
   [data-theme="light"] {
     --bg: #f6f8f7; --bg-card: #ffffff; --bg-elev: #f0f3f1; --border: #d4ddd7;
-    --text: #1a2e24; --text-dim: #5f7a6e;
-    --green: #2a9d68; --green-deep: #1e7a4d;
-    --amber: #b8860b; --red: #c44;
-    --shadow: 0 20px 60px rgba(0,0,0,0.12);
-    --overlay: rgba(240,245,242,0.85);
-    --input-bg: #ffffff;
-    --spinner-border: rgba(0,0,0,0.15);
-    --spinner-top: #1a2e24;
-    --max-bg: #d4ddd7; --max-color: #1a2e24;
-    --pill-green-bg: rgba(42,157,104,0.10); --pill-green-border: rgba(42,157,104,0.25);
-    --pill-red-bg: rgba(204,68,68,0.10); --pill-red-border: rgba(204,68,68,0.20);
-    --sec-banner-bg: rgba(204,68,68,0.06); --sec-banner-border: rgba(204,68,68,0.20);
-    --modal-ico-bg: rgba(204,68,68,0.10);
-    --tab-inactive-bg: transparent; --tab-inactive-border: #d4ddd7;
-    --tab-inactive-color: #5f7a6e;
-    --link-color: #2a9d68;
+    --text: #142b25; --text-dim: #5c7a73;
+    --green: #49b76b; --green-deep: #3b5a53;
+    --amber: #b07d10; --red: #d1342c;
+    --logo-grad-a: #2E6F68; --logo-grad-b: #49B76B;
   }
-
   * { box-sizing: border-box; }
   html { transition: background 0.3s, color 0.3s; }
   body { margin: 0; background: var(--bg); color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.55; -webkit-font-smoothing: antialiased; transition: background 0.3s, color 0.3s; }
-  a { color: var(--link-color); text-decoration: none; }
+  a { color: var(--green); text-decoration: none; }
   .wrap { max-width: 560px; margin: 0 auto; padding: 20px 16px 60px; }
   header.top { display: flex; align-items: center; justify-content: space-between;
     padding: 6px 0 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; gap: 10px; }
-  .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 1.05rem; }
-  .brand .flower { width: 22px; height: 22px; }
-  .brand small { display: block; font-weight: 500; font-size: 0.7rem; color: var(--text-dim); letter-spacing: 0.04em; }
+
+  /* ── Identitas merek: bunga Freesia yang SAMA dengan index.html ──
+     Sebelumnya di sini hanya ada lingkaran hijau polos ber-class "flower"
+     yang sebenarnya bukan bunga sama sekali. */
+  .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); }
+  .logo-icon { width: 30px; height: 30px; flex-shrink: 0; display: block;
+    filter: drop-shadow(0 0 5px rgba(63,185,80,0.32)); animation: logoGlow 3s ease-in-out infinite;
+    transform-origin: center; }
+  @keyframes logoGlow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(63,185,80,0.28)); transform: scale(1); }
+    50% { filter: drop-shadow(0 0 9px rgba(63,185,80,0.48)); transform: scale(1.04); }
+  }
+  .brand-text { display: block; line-height: 1.15; }
+  .logo-name { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.01em;
+    background: linear-gradient(100deg, var(--logo-grad-a) 0%, var(--logo-grad-b) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    -webkit-text-fill-color: transparent; }
+  .brand-text small { display: block; font-weight: 700; font-size: 0.66rem;
+    color: var(--text-dim); letter-spacing: 0.09em; }
+
   .header-right { display: flex; align-items: center; gap: 10px; }
   .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
   .lang-toggle button { background: transparent; color: var(--text-dim); border: 0; padding: 5px 11px;
     font-size: 0.78rem; font-weight: 700; cursor: pointer; }
-  .lang-toggle button.active { background: var(--green); color: #fff; }
+  .lang-toggle button.active { background: var(--green); color: #04140c; }
   [data-theme="light"] .lang-toggle button.active { color: #fff; }
   .backlink { font-size: 0.82rem; color: var(--text-dim); white-space: nowrap; }
   h1 { font-size: 1.5rem; margin: 0 0 4px; letter-spacing: -0.01em; }
   .subtitle { color: var(--text-dim); font-size: 0.9rem; margin: 0 0 22px; }
-  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px;
-    transition: background 0.3s, border-color 0.3s; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 16px; transition: background 0.3s, border-color 0.3s; }
   .card h2 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-dim); margin: 0 0 14px; font-weight: 600; }
   .stat-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid rgba(128,128,128,0.08); }
   .stat-row:last-child { border-bottom: 0; }
@@ -82,21 +79,20 @@
     padding: 13px; border-radius: 12px; border: 0; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: filter .15s, opacity .15s; }
   .btn:active { filter: brightness(0.92); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-primary { background: var(--green); color: #fff; }
+  .btn-primary { background: var(--green); color: #04140c; }
   [data-theme="light"] .btn-primary { color: #fff; }
   .btn-ghost { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); }
-  .btn-connect.connected { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); }
-  .btn-connect { background: var(--green); color: #fff; width: auto; padding: 9px 16px; font-size: 0.86rem; border-radius: 10px; border: 0; cursor: pointer; font-weight: 600; white-space: nowrap; }
   .tabs { display: flex; gap: 6px; margin-bottom: 14px; }
   .tab { flex: 1; padding: 10px; text-align: center; border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
-    color: var(--tab-inactive-color); background: var(--tab-inactive-bg); border: 1px solid var(--tab-inactive-border);
-    transition: background 0.2s, color 0.2s, border-color 0.2s; }
-  .tab.active { color: #fff; background: var(--green); border-color: var(--green); }
+    color: var(--text-dim); background: transparent; border: 1px solid var(--border); transition: all 0.2s; }
+  .tab.active { color: #04140c; background: var(--green); border-color: var(--green); }
+  [data-theme="light"] .tab.active { color: #fff; }
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 6px; }
-  .input-group { display: flex; align-items: center; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; padding: 4px 4px 4px 14px; transition: border-color 0.2s; }
+  .input-group { display: flex; align-items: center; background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px; padding: 4px 4px 4px 14px; }
   .input-group input { flex: 1; background: transparent; border: 0; color: var(--text); font-family: var(--mono); font-size: 1.1rem; padding: 9px 0; outline: none; min-width: 0; }
-  .input-group .max { background: var(--max-bg); color: var(--max-color); border: 0; padding: 7px 11px; border-radius: 8px; font-size: 0.76rem; font-weight: 700; cursor: pointer; letter-spacing: 0.03em; }
+  .input-group .max { background: var(--border); color: var(--text); border: 0; padding: 7px 11px; border-radius: 8px; font-size: 0.76rem; font-weight: 700; cursor: pointer; }
+  .input-group.invalid { border-color: var(--red); }
   .balance-hint { font-size: 0.76rem; color: var(--text-dim); margin-top: 6px; text-align: right; }
   .ai-item { padding: 12px 0; border-bottom: 1px solid rgba(128,128,128,0.08); }
   .ai-item:last-child { border-bottom: 0; }
@@ -106,7 +102,7 @@
   .ai-reason { font-size: 0.9rem; }
   .ai-alloc { font-family: var(--mono); font-size: 0.8rem; color: var(--text-dim); margin-top: 3px; }
   .empty { color: var(--text-dim); font-size: 0.88rem; text-align: center; padding: 18px 0; }
-  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--spinner-border); border-top-color: var(--spinner-top); border-radius: 50%; animation: spin .7s linear infinite; }
+  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(128,128,128,0.25); border-top-color: var(--text); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.88rem; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; max-width: 90%; z-index: 50; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -114,22 +110,26 @@
   #toast.ok { border-color: var(--green); color: var(--green); }
   [data-theme="light"] #toast.ok { color: var(--green-deep); }
   .disclaimer { font-size: 0.76rem; color: var(--text-dim); text-align: center; margin-top: 8px; line-height: 1.5; }
-  .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; background: var(--pill-green-bg); color: var(--green); border: 1px solid var(--pill-green-border); letter-spacing: 0.05em; vertical-align: middle; margin-left: 8px; }
+  .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.3); letter-spacing: 0.05em; vertical-align: middle; margin-left: 8px; }
 
-  .btn-connect { display: inline-flex; align-items: center; gap: 7px; background: var(--green); color: #fff; padding: 9px 15px; font-size: 0.85rem; border-radius: 20px; border: 0; cursor: pointer; font-weight: 700; white-space: nowrap; transition: filter .15s, background .2s; }
+  /* Tombol connect — satu definisi saja (dulu ditulis dua kali dan saling menimpa) */
+  .btn-connect { display: inline-flex; align-items: center; gap: 7px; background: var(--green); color: #04140c;
+    padding: 9px 15px; font-size: 0.85rem; border-radius: 20px; border: 0; cursor: pointer; font-weight: 700;
+    white-space: nowrap; transition: filter .15s, background .2s; }
+  [data-theme="light"] .btn-connect { color: #fff; }
   .btn-connect:hover { filter: brightness(1.06); }
   .btn-connect.connected { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); font-family: var(--mono); font-weight: 600; }
-  .btn-connect.connected .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(63,209,139,0.18); flex-shrink: 0; }
+  .btn-connect.connected .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(0,230,118,0.18); flex-shrink: 0; }
   .btn-connect.connected:hover { border-color: var(--red); color: var(--red); }
-  .btn-connect.connected:hover .dot { background: var(--red); box-shadow: 0 0 0 3px rgba(224,122,122,0.18); }
+  .btn-connect.connected:hover .dot { background: var(--red); box-shadow: 0 0 0 3px rgba(255,92,92,0.18); }
   .btn-connect.connected:hover .addr { display: none; }
   .btn-connect.connected:hover .disc-label { display: inline; }
   .btn-connect .disc-label { display: none; }
 
-  .modal-overlay { position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(4,8,6,0.72); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-overlay.show { display: flex; }
-  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: var(--shadow); transition: background 0.3s, border-color 0.3s; }
-  .modal .m-ico { width: 46px; height: 46px; border-radius: 50%; background: var(--modal-ico-bg); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 22px; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transition: background 0.3s, border-color 0.3s; }
+  .modal .m-ico { width: 46px; height: 46px; border-radius: 50%; background: rgba(255,92,92,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 22px; }
   .modal h3 { margin: 0 0 6px; font-size: 1.1rem; color: var(--text); }
   .modal p { margin: 0 0 20px; color: var(--text-dim); font-size: 0.88rem; }
   .modal .m-actions { display: flex; gap: 10px; }
@@ -137,14 +137,11 @@
   .modal .m-cancel { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); }
   .modal .m-confirm { background: var(--red); color: #fff; }
 
-  .input-group.invalid { border-color: var(--red); }
-
-  /* Transaction History */
   .tx-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(128,128,128,0.08); }
   .tx-item:last-child { border-bottom: 0; }
   .tx-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
-  .tx-icon.in  { background: var(--pill-green-bg); color: var(--green); }
-  .tx-icon.out { background: var(--pill-red-bg); color: var(--red); }
+  .tx-icon.in  { background: rgba(0,230,118,0.12); color: var(--green); }
+  .tx-icon.out { background: rgba(255,92,92,0.12); color: var(--red); }
   .tx-body { flex: 1; min-width: 0; }
   .tx-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .tx-type { font-size: 0.88rem; font-weight: 600; color: var(--text); }
@@ -154,18 +151,20 @@
   .tx-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
   .tx-time { font-size: 0.74rem; color: var(--text-dim); }
   .tx-link { font-size: 0.74rem; color: var(--text-dim); text-decoration: none; }
-  .tx-link:hover { color: var(--link-color); text-decoration: underline; }
+  .tx-link:hover { color: var(--green); text-decoration: underline; }
   .tx-pill { display: inline-block; font-size: 0.65rem; padding: 2px 7px; border-radius: 20px; font-weight: 600; letter-spacing: 0.03em; margin-left: 6px; }
-  .tx-pill.in  { background: var(--pill-green-bg); color: var(--green); border: 1px solid var(--pill-green-border); }
-  .tx-pill.out { background: var(--pill-red-bg); color: var(--red); border: 1px solid var(--pill-red-border); }
+  .tx-pill.in  { background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.25); }
+  .tx-pill.out { background: rgba(255,92,92,0.12); color: var(--red); border: 1px solid rgba(255,92,92,0.25); }
 
-  /* Security banner */
-  .sec-banner { background: var(--sec-banner-bg); border: 1px solid var(--sec-banner-border); color: var(--red); padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
+  .sec-banner { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.25); color: var(--red); padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
   .sec-banner.show { display: block; }
 
-  /* Theme toggle */
   .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-elev); color: var(--text); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: transform 0.2s, background 0.2s; }
   .theme-toggle:hover { transform: scale(1.08); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
 </style>
 </head>
 <body>
@@ -173,10 +172,22 @@
   <div class="sec-banner" id="secBanner">⚠️ <span id="secMsg"></span></div>
 
   <header class="top">
-    <div class="brand">
-      <img class="flower" src="/freesia-mark.svg" alt="Freesia" />
-      <div>Freesia<small>AI VAULT</small></div>
-    </div>
+    <a class="brand" href="/" title="Kembali ke Freesia DEX">
+      <svg class="logo-icon" viewBox="0 0 80 80" role="img" aria-label="Freesia">
+        <g transform="translate(40,40)">
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#2E6F68" transform="rotate(-12) scale(0.94)"/>
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#3E8A80" transform="rotate(48) scale(0.94)"/>
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#57A99B" transform="rotate(108) scale(0.94)"/>
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#6FC2B4" transform="rotate(168) scale(0.94)"/>
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#7FD0C2" transform="rotate(228) scale(0.94)"/>
+          <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#8CDCCB" transform="rotate(288) scale(0.94)"/>
+        </g>
+      </svg>
+      <span class="brand-text">
+        <span class="logo-name">Freesia</span>
+        <small>AI VAULT</small>
+      </span>
+    </a>
     <div class="header-right">
       <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
       <div class="lang-toggle">
@@ -247,9 +258,11 @@
 
   <p class="disclaimer">
     <span data-i18n="disc">Vault ini MVP di testnet & belum diaudit. Token testnet tanpa nilai nyata.</span><br>
-    <span data-i18n="contract">Kontrak:</span> <a id="vaultLink" href="#" target="_blank">0x49e5…6547a</a>
+    <span data-i18n="contract">Kontrak:</span>
+    <a id="vaultLink" href="#" target="_blank" rel="noopener noreferrer">0x49e5…6547a</a>
   </p>
 </div>
+
 <div class="modal-overlay" id="discModal">
   <div class="modal">
     <div class="m-ico">🔌</div>
@@ -264,7 +277,6 @@
 <div id="toast"></div>
 
 <script>
-// ==================== CONFIG & SECURITY ====================
 const CONFIG = {
   VAULT: "0x49e513d6dbF7D93Fa60A7fF1f0d5762851D6547a",
   USDC:  "0xD8508E5e783F88E669070cf7DF80cb0b56097bCF",
@@ -274,7 +286,13 @@ const CONFIG = {
   EXPLORER: "https://liteforge.explorer.caldera.xyz",
   HISTORY_BLOCK_RANGE: 5000,
   SUBGRAPH: null,
-  ALLOWED_HOSTS: ["localhost", "127.0.0.1", "freesia.dex", "app.freesia.dex", "freesia-dex.vercel.app"],
+  // Domain yang benar-benar dipakai. Tambahkan domain preview Vercel di sini
+  // kalau kamu sering mengujinya, supaya peringatan palsu tidak muncul.
+  ALLOWED_HOSTS: [
+    "localhost", "127.0.0.1",
+    "freesiadex.xyz", "www.freesiadex.xyz", "app.freesiadex.xyz",
+    "freesia-black.vercel.app", "freesia-dex.vercel.app"
+  ],
   MAX_INPUT_LEN: 24
 };
 
@@ -282,10 +300,10 @@ const VAULT_ABI = [
   "function deposit(uint256 assets, address receiver) returns (uint256)",
   "function withdraw(uint256 assets, address receiver, address owner) returns (uint256)",
   "function balanceOf(address) view returns (uint256)",
+  "function decimals() view returns (uint8)",
   "function totalAssets() view returns (uint256)",
   "function convertToAssets(uint256 shares) view returns (uint256)",
   "function targetAllocationBps() view returns (uint16)",
-  "function rebalanceCount() view returns (uint256)",
   "event Deposit(address indexed sender, address indexed owner, uint256 assets, uint256 shares)",
   "event Withdraw(address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares)",
   "event Rebalanced(uint256 indexed round, uint16 targetAllocationBps, int256 volatilitySignal, string reason, uint256 timestamp)"
@@ -297,7 +315,6 @@ const ERC20_ABI = [
   "function mint(address to, uint256 amount)"
 ];
 
-// ==================== THEME ====================
 let THEME = localStorage.getItem("freesia_theme") || "dark";
 function applyTheme() {
   document.documentElement.setAttribute("data-theme", THEME);
@@ -309,39 +326,32 @@ function toggleTheme() {
   localStorage.setItem("freesia_theme", THEME);
   applyTheme();
 }
-// Sync with OS preference on first visit
 if (!localStorage.getItem("freesia_theme")) {
-  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) {
-    THEME = "light";
-  }
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) THEME = "light";
   applyTheme();
 }
 
-// ==================== RATE LIMITER ====================
 const RateLimiter = {
   _last: {},
   canRun(key, ms = 3000) {
     const now = Date.now();
-    if (!this._last[key] || now - this._last[key] >= ms) {
-      this._last[key] = now;
-      return true;
-    }
+    if (!this._last[key] || now - this._last[key] >= ms) { this._last[key] = now; return true; }
     return false;
   }
 };
 
-// ==================== SECURITY HELPERS ====================
 function isValidAddress(addr) {
-  try {
-    return ethers.isAddress(addr) && ethers.getAddress(addr) === addr;
-  } catch { return false; }
+  try { return ethers.isAddress(addr); } catch { return false; }
 }
 
+// Verifikasi kontrak benar-benar ada di chain ini.
+// Kalau alamat kosong (0x) -> BLOKIR, itu tanda jelas salah jaringan/alamat.
+// Kalau RPC-nya yang gagal -> beri tahu apa adanya, tapi jangan kunci pengguna
+// keluar hanya karena jaringan sedang tersendat.
 async function verifyContract() {
   try {
     const [vaultCode, usdcCode] = await Promise.all([
-      readProvider.getCode(CONFIG.VAULT),
-      readProvider.getCode(CONFIG.USDC)
+      readProvider.getCode(CONFIG.VAULT), readProvider.getCode(CONFIG.USDC)
     ]);
     if (vaultCode === "0x" || usdcCode === "0x") {
       showSecWarning(LANG === "id"
@@ -352,6 +362,9 @@ async function verifyContract() {
     return true;
   } catch (e) {
     console.warn("verifyContract failed:", e);
+    showSecWarning(LANG === "id"
+      ? "Kontrak belum bisa diverifikasi (jaringan tersendat). Periksa sendiri di explorer sebelum menyetor."
+      : "Could not verify the contract (network issue). Check the explorer yourself before depositing.");
     return true;
   }
 }
@@ -371,11 +384,6 @@ function showSecWarning(msg) {
   b.classList.add("show");
 }
 
-async function clearClipboard() {
-  try { await navigator.clipboard.writeText(""); } catch {}
-}
-
-// ==================== i18n ====================
 const I18N = {
   id: {
     back: "← DEX", title: "Vault Dikelola AI",
@@ -388,7 +396,8 @@ const I18N = {
     aiTitle: "Keputusan AI Terbaru", loading: "Memuat riwayat…",
     disc: "Vault ini MVP di testnet & belum diaudit. Token testnet tanpa nilai nyata.", contract: "Kontrak:",
     connect: "Hubungkan", disconnect: "Putuskan", deposit: "Setor", withdraw: "Tarik",
-    faucetTitle: "Klaim USDC Uji", faucet: "Klaim 1.000 USDC uji", fauceting: "Mengirim…", faucetOk: "Berhasil klaim 1.000 USDC uji!", faucetHint: "Belum punya USDC uji? Klaim gratis dulu untuk mencoba vault.",
+    faucetTitle: "Klaim USDC Uji", faucet: "Klaim 1.000 USDC uji", fauceting: "Mengirim…",
+    faucetOk: "Berhasil klaim 1.000 USDC uji!", faucetHint: "Belum punya USDC uji? Klaim gratis dulu untuk mencoba vault.",
     available: "Tersedia:", position: "Nilai posisi:",
     noWallet: "Tidak ada dompet terpasang. Buka di browser dompet atau pasang ekstensi.",
     wrongNet: "Jaringan salah — pindah ke LitVM (chain 4441) di dompet kamu.",
@@ -404,7 +413,9 @@ const I18N = {
     switchNet: "Pindah ke LitVM", switched: "Jaringan berhasil dipindahkan.",
     txTitle: "Riwayat Transaksi", txConnect: "Hubungkan dompet untuk melihat riwayat.",
     txEmpty: "Belum ada transaksi.", txDeposit: "Deposit", txWithdraw: "Withdraw",
-    txView: "Lihat tx →"
+    txView: "Lihat tx →", discTitle: "Putuskan dompet?",
+    discBody: "Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.",
+    cancel: "Batal", disconnected: "Dompet diputuskan."
   },
   en: {
     back: "← DEX", title: "AI-Managed Vault",
@@ -417,7 +428,8 @@ const I18N = {
     aiTitle: "Recent AI Decisions", loading: "Loading history…",
     disc: "This vault is a testnet MVP and unaudited. Testnet tokens have no real value.", contract: "Contract:",
     connect: "Connect", disconnect: "Disconnect", deposit: "Deposit", withdraw: "Withdraw",
-    faucetTitle: "Claim Test USDC", faucet: "Claim 1,000 test USDC", fauceting: "Sending…", faucetOk: "Claimed 1,000 test USDC!", faucetHint: "No test USDC yet? Claim some free to try the vault.",
+    faucetTitle: "Claim Test USDC", faucet: "Claim 1,000 test USDC", fauceting: "Sending…",
+    faucetOk: "Claimed 1,000 test USDC!", faucetHint: "No test USDC yet? Claim some free to try the vault.",
     available: "Available:", position: "Position value:",
     noWallet: "No wallet detected. Open in a wallet browser or install an extension.",
     wrongNet: "Wrong network — switch to LitVM (chain 4441) in your wallet.",
@@ -433,7 +445,9 @@ const I18N = {
     switchNet: "Switch to LitVM", switched: "Network switched successfully.",
     txTitle: "Transaction History", txConnect: "Connect wallet to view history.",
     txEmpty: "No transactions yet.", txDeposit: "Deposit", txWithdraw: "Withdraw",
-    txView: "View tx →"
+    txView: "View tx →", discTitle: "Disconnect wallet?",
+    discBody: "You will leave this session. Your funds stay safe in the contract.",
+    cancel: "Cancel", disconnected: "Wallet disconnected."
   }
 };
 let LANG = localStorage.getItem("freesia_lang") || "id";
@@ -451,18 +465,14 @@ function applyI18n() {
   document.documentElement.lang = LANG;
   document.getElementById("langId").classList.toggle("active", LANG === "id");
   document.getElementById("langEn").classList.toggle("active", LANG === "en");
-
   const cb = document.getElementById("connectBtn");
   if (cb && !user) cb.textContent = t("connect");
-
   if (!user) {
     document.getElementById("depHint").textContent = t("available") + " — USDC";
     document.getElementById("wdHint").textContent = t("position") + " — USDC";
   } else {
-    refreshUser();
-  }
-
-  if (user) {
+    // force: ganti bahasa harus langsung menyegarkan angka, jangan tertahan rate limiter
+    refreshUser(true);
     document.getElementById("depBtn").textContent = t("deposit");
     document.getElementById("wdBtn").textContent = t("withdraw");
     document.getElementById("faucetBtn").textContent = t("faucet");
@@ -473,13 +483,21 @@ function applyI18n() {
 }
 function setLang(l) { LANG = l; localStorage.setItem("freesia_lang", l); applyI18n(); }
 
-// ==================== PROVIDER & STATE ====================
 let provider, signer, user;
 let readProvider = new ethers.JsonRpcProvider(CONFIG.RPC);
 let vaultRead = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, readProvider);
 let usdcRead  = new ethers.Contract(CONFIG.USDC, ERC20_ABI, readProvider);
 let walletUsdc = 0n, positionValue = 0n;
 let rawProvider = null;
+
+// Desimal share TIDAK diasumsikan sama dengan aset. Banyak ERC4626 (mis. OpenZeppelin
+// dengan decimals offset) memakai 18 walau asetnya 6 — kalau ditebak, angka share
+// yang tampil bisa salah ribuan kali lipat.
+let SHARE_DECIMALS = CONFIG.USDC_DECIMALS;
+async function loadShareDecimals() {
+  try { SHARE_DECIMALS = Number(await vaultRead.decimals()); }
+  catch (e) { console.warn("decimals() tidak tersedia, pakai default:", e); }
+}
 
 document.getElementById("vaultLink").href = CONFIG.EXPLORER + "/address/" + CONFIG.VAULT;
 
@@ -512,14 +530,16 @@ function sanitizeInput(inputEl) {
   const group = inputEl.closest(".input-group");
   let v = inputEl.value;
   if (v.length > CONFIG.MAX_INPUT_LEN) v = v.slice(0, CONFIG.MAX_INPUT_LEN);
-  v = v.replace(/[^0-9.,]/g, "");
-  v = v.replace(/,/g, ".");
+  v = v.replace(/[^0-9.,]/g, "").replace(/,/g, ".");
   const parts = v.split(".");
   if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
-  if (parts[1] && parts[1].length > 6) v = parts[0] + "." + parts[1].slice(0, 6);
+  // batas desimal mengikuti desimal aset, bukan angka yang ditulis manual
+  if (parts[1] && parts[1].length > CONFIG.USDC_DECIMALS) {
+    v = parts[0] + "." + parts[1].slice(0, CONFIG.USDC_DECIMALS);
+  }
   if (v.length > 1 && v[0] === "0" && v[1] !== ".") v = v.replace(/^0+/, "0");
   inputEl.value = v;
-  if (group) group.classList.toggle("invalid", false);
+  if (group) group.classList.remove("invalid");
 }
 
 function setMax(which) {
@@ -530,7 +550,6 @@ function setMax(which) {
   }
 }
 
-// ==================== WALLET CONNECTION ====================
 const injectedProviders = [];
 window.addEventListener("eip6963:announceProvider", (e) => {
   if (!injectedProviders.find(p => p.info.uuid === e.detail.info.uuid)) injectedProviders.push(e.detail);
@@ -546,31 +565,37 @@ function pickProvider() {
   return null;
 }
 
+// Pindah jaringan yang tahan perbedaan antar-wallet.
+// Versi lama hanya mengenali kode 4902 (gaya MetaMask); Zerion & lainnya memakai
+// kode/pesan berbeda sehingga selalu jatuh ke "Jaringan salah".
 async function switchNetwork() {
   if (!rawProvider || !rawProvider.request) return false;
+  const hexId = "0x" + CONFIG.CHAIN_ID.toString(16);
+  const chainParams = {
+    chainId: hexId, chainName: "LitVM Testnet", rpcUrls: [CONFIG.RPC],
+    nativeCurrency: { name: "zkLTC", symbol: "zkLTC", decimals: 18 },
+    blockExplorerUrls: [CONFIG.EXPLORER]
+  };
   try {
-    await rawProvider.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x" + CONFIG.CHAIN_ID.toString(16) }]
-    });
+    await rawProvider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
     return true;
   } catch (e) {
-    if (e.code === 4902) {
-      try {
-        await rawProvider.request({
-          method: "wallet_addEthereumChain",
-          params: [{
-            chainId: "0x" + CONFIG.CHAIN_ID.toString(16),
-            chainName: "LitVM Testnet",
-            rpcUrls: [CONFIG.RPC],
-            nativeCurrency: { name: "zkLTC", symbol: "zkLTC", decimals: 18 },
-            blockExplorerUrls: [CONFIG.EXPLORER]
-          }]
-        });
-        return true;
-      } catch (addErr) { return false; }
+    const code = e?.code ?? e?.data?.originalError?.code;
+    const msg = String(e?.message || "").toLowerCase();
+    if (code === 4001 || msg.includes("user rejected") || msg.includes("user denied")) return false;
+    const chainUnknown = code === 4902 || code === -32603 || code === -32602 ||
+      msg.includes("unrecognized") || msg.includes("unsupported") ||
+      msg.includes("not supported") || msg.includes("does not exist");
+    if (!chainUnknown) return false;
+    try {
+      await rawProvider.request({ method: "wallet_addEthereumChain", params: [chainParams] });
+      // Sebagian wallet menambah jaringan tapi tidak berpindah — paksa pindah.
+      await rawProvider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
+      return true;
+    } catch (addErr) {
+      console.warn("addEthereumChain ditolak:", addErr);
+      return false;
     }
-    return false;
   }
 }
 
@@ -579,7 +604,6 @@ function attachWalletListeners() {
   rawProvider.on?.("accountsChanged", handleAccountsChanged);
   rawProvider.on?.("chainChanged", handleChainChanged);
 }
-
 function detachWalletListeners() {
   if (!rawProvider) return;
   rawProvider.removeListener?.("accountsChanged", handleAccountsChanged);
@@ -587,46 +611,31 @@ function detachWalletListeners() {
 }
 
 function handleAccountsChanged(accounts) {
-  if (accounts.length === 0) {
-    disconnect();
-  } else if (accounts[0] !== user) {
-    user = accounts[0];
-    userTxCache = null;
+  if (!accounts || accounts.length === 0) { disconnect(); }
+  else if (accounts[0] !== user) {
+    user = accounts[0]; userTxCache = null;
     setConnectedBtn(document.getElementById("connectBtn"), user);
-    refreshUser();
-    loadUserTxHistory();
+    refreshUser(true); loadUserTxHistory();
   }
 }
-
-function handleChainChanged(chainId) {
-  window.location.reload();
-}
+function handleChainChanged() { window.location.reload(); }
 
 async function connect() {
   const raw = pickProvider();
   if (!raw) { toast(t("noWallet"), "err"); return; }
-
-  disconnect(false);
-  rawProvider = raw;
-
-  const cb0 = document.getElementById("connectBtn");
-  cb0.textContent = "…";
+  disconnect(false); rawProvider = raw;
+  const cb0 = document.getElementById("connectBtn"); cb0.textContent = "…";
   try {
     provider = new ethers.BrowserProvider(raw);
     await provider.send("eth_requestAccounts", []);
-    signer = await provider.getSigner();
-    user = await signer.getAddress();
-
-    if (!isValidAddress(user)) {
-      throw new Error("Invalid address returned from wallet");
-    }
+    signer = await provider.getSigner(); user = await signer.getAddress();
+    if (!isValidAddress(user)) throw new Error("Invalid address");
 
     const net = await provider.getNetwork();
     if (Number(net.chainId) !== CONFIG.CHAIN_ID) {
       const switched = await switchNetwork();
-      if (!switched) {
-        toast(t("wrongNet"), "err");
-      } else {
+      if (!switched) { toast(t("wrongNet"), "err"); }
+      else {
         toast(t("switched"), "ok");
         provider = new ethers.BrowserProvider(raw);
         signer = await provider.getSigner();
@@ -634,70 +643,54 @@ async function connect() {
       }
     }
 
-    await verifyContract();
+    // Hasil verifikasi DIHORMATI: kalau kontrak tidak ada, jangan biarkan
+    // pengguna menyetor ke alamat kosong.
+    const ok = await verifyContract();
+    if (!ok) { disconnect(false); cb0.textContent = t("connect"); return; }
 
     attachWalletListeners();
-
-    const cb = document.getElementById("connectBtn");
-    setConnectedBtn(cb, user);
-    document.getElementById("depBtn").disabled = false;
-    document.getElementById("depBtn").textContent = t("deposit");
-    document.getElementById("wdBtn").disabled = false;
-    document.getElementById("wdBtn").textContent = t("withdraw");
-    document.getElementById("faucetBtn").disabled = false;
-    document.getElementById("faucetBtn").textContent = t("faucet");
+    const cb = document.getElementById("connectBtn"); setConnectedBtn(cb, user);
+    document.getElementById("depBtn").disabled = false; document.getElementById("depBtn").textContent = t("deposit");
+    document.getElementById("wdBtn").disabled = false; document.getElementById("wdBtn").textContent = t("withdraw");
+    document.getElementById("faucetBtn").disabled = false; document.getElementById("faucetBtn").textContent = t("faucet");
     document.getElementById("txCard").style.display = "";
-    await refreshUser();
-    await loadUserTxHistory();
+    await refreshUser(true); await loadUserTxHistory();
   } catch (e) {
-    disconnect(false);
-    cb0.textContent = t("connect");
-    toast(friendlyErr(e), "err");
+    disconnect(false); cb0.textContent = t("connect"); toast(friendlyErr(e), "err");
   }
 }
 
 function disconnect(notify = true) {
   detachWalletListeners();
-  clearClipboard();
-  provider = signer = user = null;
-  rawProvider = null;
-  walletUsdc = 0n; positionValue = 0n;
-  userTxCache = null;
+  provider = signer = user = null; rawProvider = null;
+  walletUsdc = 0n; positionValue = 0n; userTxCache = null;
   const cb = document.getElementById("connectBtn");
-  cb.textContent = t("connect");
-  cb.classList.remove("connected");
-  document.getElementById("depBtn").disabled = true;
-  document.getElementById("depBtn").textContent = t("connectFirst");
-  document.getElementById("wdBtn").disabled = true;
-  document.getElementById("wdBtn").textContent = t("connectFirst");
-  document.getElementById("faucetBtn").disabled = true;
-  document.getElementById("faucetBtn").textContent = t("connectFirst");
+  cb.textContent = t("connect"); cb.classList.remove("connected");
+  document.getElementById("depBtn").disabled = true; document.getElementById("depBtn").textContent = t("connectFirst");
+  document.getElementById("wdBtn").disabled = true; document.getElementById("wdBtn").textContent = t("connectFirst");
+  document.getElementById("faucetBtn").disabled = true; document.getElementById("faucetBtn").textContent = t("connectFirst");
   document.getElementById("uWallet").textContent = "—";
   document.getElementById("uShares").textContent = "—";
   document.getElementById("uValue").textContent = "—";
   document.getElementById("depHint").textContent = t("available") + " — USDC";
   document.getElementById("wdHint").textContent = t("position") + " — USDC";
   document.getElementById("txCard").style.display = "none";
-  if (notify) toast(LANG === "id" ? "Dompet diputuskan." : "Wallet disconnected.", "ok");
+  if (notify) toast(t("disconnected"), "ok");
 }
 
-function onConnectBtn() {
-  if (user) { openDiscModal(); } else { connect(); }
-}
+function onConnectBtn() { if (user) { openDiscModal(); } else { connect(); } }
 function openDiscModal() {
-  document.getElementById("discTitle").textContent = LANG === "id" ? "Putuskan dompet?" : "Disconnect wallet?";
-  document.getElementById("discBody").textContent = LANG === "id"
-    ? "Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak."
-    : "You will leave this session. Your funds stay safe in the contract.";
-  document.getElementById("discCancel").textContent = LANG === "id" ? "Batal" : "Cancel";
-  document.getElementById("discConfirm").textContent = LANG === "id" ? "Putuskan" : "Disconnect";
+  document.getElementById("discTitle").textContent = t("discTitle");
+  document.getElementById("discBody").textContent = t("discBody");
+  document.getElementById("discCancel").textContent = t("cancel");
+  document.getElementById("discConfirm").textContent = t("disconnect");
   document.getElementById("discModal").classList.add("show");
 }
 function closeDiscModal() { document.getElementById("discModal").classList.remove("show"); }
 function setConnectedBtn(cb, addr) {
   cb.classList.add("connected");
-  const discTxt = LANG === "id" ? "Putuskan" : "Disconnect";
-  cb.innerHTML = '<span class="dot"></span><span class="addr">' + short(addr) + '</span><span class="disc-label">' + discTxt + '</span>';
+  cb.innerHTML = '<span class="dot"></span><span class="addr">' + short(addr) +
+    '</span><span class="disc-label">' + t("disconnect") + '</span>';
 }
 
 function friendlyErr(e) {
@@ -708,153 +701,94 @@ function friendlyErr(e) {
   return t("failed") + " " + m.slice(0, 80);
 }
 
-// ==================== DATA REFRESH ====================
-async function refreshVaultStats() {
-  if (isTxPending || !RateLimiter.canRun("vaultStats", 3000)) return;
+// force=true dipakai SETELAH transaksi selesai. Tanpa ini, penjaga isTxPending
+// dan rate limiter membuat angka di layar tidak pernah ter-update — pengguna
+// melihat saldo lama padahal transaksinya sukses.
+async function refreshVaultStats(force = false) {
+  if (!force && (isTxPending || !RateLimiter.canRun("vaultStats", 3000))) return;
   try {
     const [total, alloc] = await Promise.all([vaultRead.totalAssets(), vaultRead.targetAllocationBps()]);
     document.getElementById("vTotal").innerHTML = fmt(total) + '<span class="unit">USDC</span>';
     document.getElementById("vAlloc").innerHTML = (Number(alloc) / 100).toFixed(0) + '<span class="unit">%</span>';
-  } catch (e) {
-    console.warn("refreshVaultStats failed:", e);
-  }
+  } catch (e) { console.warn("refreshVaultStats failed:", e); }
 }
 
-async function refreshUser() {
-  if (!user || isTxPending || !RateLimiter.canRun("user", 3000)) return;
+async function refreshUser(force = false) {
+  if (!user) return;
+  if (!force && (isTxPending || !RateLimiter.canRun("user", 3000))) return;
   try {
     const [uBal, shares] = await Promise.all([usdcRead.balanceOf(user), vaultRead.balanceOf(user)]);
     walletUsdc = uBal;
     positionValue = shares > 0n ? await vaultRead.convertToAssets(shares) : 0n;
     document.getElementById("uWallet").innerHTML = fmt(uBal) + '<span class="unit">USDC</span>';
-    document.getElementById("uShares").innerHTML = fmt(shares) + '<span class="unit">faUSDC</span>';
+    document.getElementById("uShares").innerHTML = fmt(shares, SHARE_DECIMALS) + '<span class="unit">faUSDC</span>';
     document.getElementById("uValue").innerHTML = fmt(positionValue) + '<span class="unit">USDC</span>';
     document.getElementById("depHint").textContent = t("available") + " " + fmt(uBal) + " USDC";
     document.getElementById("wdHint").textContent = t("position") + " " + fmt(positionValue) + " USDC";
-  } catch (e) {
-    console.warn("refreshUser failed:", e);
-  }
+  } catch (e) { console.warn("refreshUser failed:", e); }
 }
 
-// ==================== SUBGRAPH ====================
 async function querySubgraph(query) {
   if (!CONFIG.SUBGRAPH) return null;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
   try {
-    const res = await fetch(CONFIG.SUBGRAPH, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query }),
-      signal: controller.signal
-    });
+    const res = await fetch(CONFIG.SUBGRAPH, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }), signal: controller.signal });
     clearTimeout(timeout);
     if (!res.ok) return null;
     const json = await res.json();
     return json.data || null;
-  } catch (e) {
-    clearTimeout(timeout);
-    return null;
-  }
+  } catch (e) { clearTimeout(timeout); return null; }
 }
 
-// ==================== AI HISTORY ====================
 async function loadAiHistory() {
   const box = document.getElementById("aiList");
   if (CONFIG.SUBGRAPH) {
-    const data = await querySubgraph(`{
-      rebalanceds(orderBy: blockTimestamp, orderDirection: desc, first: 12) {
-        round targetAllocationBps volatilitySignal reason blockTimestamp
-      }
-    }`);
+    const data = await querySubgraph(`{ rebalanceds(orderBy: blockTimestamp, orderDirection: desc, first: 12) { round targetAllocationBps volatilitySignal reason blockTimestamp } }`);
     if (data && data.rebalanceds) {
-      aiHistoryCache = data.rebalanceds.map(r => ({
-        args: {
-          round: BigInt(r.round),
-          targetAllocationBps: Number(r.targetAllocationBps),
-          volatilitySignal: BigInt(r.volatilitySignal),
-          reason: r.reason,
-          timestamp: BigInt(r.blockTimestamp)
-        }
-      }));
-      renderAiHistory();
-      return;
+      aiHistoryCache = data.rebalanceds.map(r => ({ args: { round: BigInt(r.round), targetAllocationBps: Number(r.targetAllocationBps), volatilitySignal: BigInt(r.volatilitySignal), reason: r.reason, timestamp: BigInt(r.blockTimestamp) } }));
+      renderAiHistory(); return;
     }
   }
   try {
     const latest = await readProvider.getBlockNumber();
     const from = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
     const logs = await vaultRead.queryFilter("Rebalanced", from, latest);
-    aiHistoryCache = logs;
-    renderAiHistory();
-  } catch (e) {
-    console.warn("loadAiHistory failed:", e);
-    box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
-  }
+    aiHistoryCache = logs; renderAiHistory();
+  } catch (e) { console.warn("loadAiHistory failed:", e); box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>'; }
 }
 
 function renderAiHistory() {
   const box = document.getElementById("aiList");
-  if (!aiHistoryCache) {
-    box.innerHTML = '<div class="empty">' + t("loading") + '</div>';
-    return;
-  }
-  if (aiHistoryCache.length === 0) {
-    box.innerHTML = '<div class="empty">' + t("noAi") + '</div>';
-    return;
-  }
-  const sorted = [...aiHistoryCache];
-  if (!CONFIG.SUBGRAPH) sorted.reverse();
+  if (!aiHistoryCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
+  if (aiHistoryCache.length === 0) { box.innerHTML = '<div class="empty">' + t("noAi") + '</div>'; return; }
+  const sorted = [...aiHistoryCache]; if (!CONFIG.SUBGRAPH) sorted.reverse();
   box.innerHTML = sorted.slice(0, 12).map(l => {
     const round = l.args.round.toString();
     const bps = Number(l.args.targetAllocationBps);
     const vol = Number(l.args.volatilitySignal);
-    const reason = l.args.reason;
+    const reason = String(l.args.reason);
     const when = new Date(Number(l.args.timestamp) * 1000).toLocaleString(LANG === "id" ? "id-ID" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-    return `<div class="ai-item"><div class="ai-head"><span class="ai-round">${t("rebalance")}${round}</span><span class="ai-time">${when}</span></div>
-      <div class="ai-reason">${escapeHtml(reason)}</div>
-      <div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div></div>`;
+    return `<div class="ai-item"><div class="ai-head"><span class="ai-round">${t("rebalance")}${round}</span><span class="ai-time">${when}</span></div><div class="ai-reason">${escapeHtml(reason)}</div><div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div></div>`;
   }).join("");
 }
 
-function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const TX_HASH_RE = /^0x[0-9a-fA-F]{64}$/;
 
-// ==================== TRANSACTION HISTORY ====================
 async function loadUserTxHistory() {
   if (!user) return;
   const box = document.getElementById("txList");
   box.innerHTML = '<div class="empty"><span class="spinner"></span> ' + t("loading") + '</div>';
-
   if (CONFIG.SUBGRAPH) {
-    const data = await querySubgraph(`{
-      deposits(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) {
-        assets shares blockTimestamp transactionHash blockNumber
-      }
-      withdraws(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) {
-        assets shares blockTimestamp transactionHash blockNumber
-      }
-    }`);
+    const data = await querySubgraph(`{ deposits(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } withdraws(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } }`);
     if (data && (data.deposits || data.withdraws)) {
       const txs = [];
-      (data.deposits || []).forEach(d => txs.push({
-        type: "deposit", assets: BigInt(d.assets), shares: BigInt(d.shares),
-        blockNumber: Number(d.blockNumber), txHash: d.transactionHash,
-        timestamp: BigInt(d.blockTimestamp)
-      }));
-      (data.withdraws || []).forEach(w => txs.push({
-        type: "withdraw", assets: BigInt(w.assets), shares: BigInt(w.shares),
-        blockNumber: Number(w.blockNumber), txHash: w.transactionHash,
-        timestamp: BigInt(w.blockTimestamp)
-      }));
-      txs.sort((a, b) => b.blockNumber - a.blockNumber);
-      userTxCache = txs;
-      renderUserTxHistory();
-      return;
+      (data.deposits || []).forEach(d => txs.push({ type: "deposit", assets: BigInt(d.assets), shares: BigInt(d.shares), blockNumber: Number(d.blockNumber), txHash: d.transactionHash, timestamp: BigInt(d.blockTimestamp) }));
+      (data.withdraws || []).forEach(w => txs.push({ type: "withdraw", assets: BigInt(w.assets), shares: BigInt(w.shares), blockNumber: Number(w.blockNumber), txHash: w.transactionHash, timestamp: BigInt(w.blockTimestamp) }));
+      txs.sort((a, b) => b.blockNumber - a.blockNumber); userTxCache = txs; renderUserTxHistory(); return;
     }
   }
-
   try {
     const latest = await readProvider.getBlockNumber();
     const from = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
@@ -863,19 +797,18 @@ async function loadUserTxHistory() {
       vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, user), from, latest)
     ]);
     const txs = [];
-    depLogs.forEach(l => {
-      txs.push({ type: "deposit", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: l.args.timestamp || 0 });
-    });
-    wdLogs.forEach(l => {
-      txs.push({ type: "withdraw", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: l.args.timestamp || 0 });
-    });
+    depLogs.forEach(l => txs.push({ type: "deposit", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
+    wdLogs.forEach(l => txs.push({ type: "withdraw", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
     txs.sort((a, b) => b.blockNumber - a.blockNumber);
-    userTxCache = txs;
-    renderUserTxHistory();
-  } catch (e) {
-    console.warn("loadUserTxHistory failed:", e);
-    box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
-  }
+
+    // Ambil waktu blok untuk 8 transaksi teratas saja — cukup untuk tampilan,
+    // tanpa membanjiri RPC. Sisanya tetap menampilkan nomor blok.
+    await Promise.all(txs.slice(0, 8).map(async tx => {
+      try { const b = await readProvider.getBlock(tx.blockNumber); if (b) tx.timestamp = b.timestamp; } catch (e) {}
+    }));
+
+    userTxCache = txs; renderUserTxHistory();
+  } catch (e) { console.warn("loadUserTxHistory failed:", e); box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>'; }
 }
 
 function renderUserTxHistory() {
@@ -883,7 +816,6 @@ function renderUserTxHistory() {
   if (!user) { box.innerHTML = '<div class="empty">' + t("txConnect") + '</div>'; return; }
   if (!userTxCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
   if (userTxCache.length === 0) { box.innerHTML = '<div class="empty">' + t("txEmpty") + '</div>'; return; }
-
   box.innerHTML = userTxCache.slice(0, 20).map(tx => {
     const isIn = tx.type === "deposit";
     const sign = isIn ? "+" : "−";
@@ -892,31 +824,19 @@ function renderUserTxHistory() {
       ? new Date(Number(tx.timestamp) * 1000).toLocaleString(LANG === "id" ? "id-ID" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
       : ("#" + tx.blockNumber);
     const label = isIn ? t("txDeposit") : t("txWithdraw");
-    const pillClass = isIn ? "in" : "out";
+    const cls = isIn ? "in" : "out";
     const icon = isIn ? "↓" : "↑";
-    const amtClass = isIn ? "in" : "out";
-
-    return `<div class="tx-item">
-      <div class="tx-icon ${pillClass}">${icon}</div>
-      <div class="tx-body">
-        <div class="tx-row">
-          <span class="tx-type">${label}<span class="tx-pill ${pillClass}">${isIn ? "IN" : "OUT"}</span></span>
-          <span class="tx-amt ${amtClass}">${sign}${amt} USDC</span>
-        </div>
-        <div class="tx-meta">
-          <span class="tx-time">${when}</span>
-          <a class="tx-link" href="${CONFIG.EXPLORER}/tx/${tx.txHash}" target="_blank" rel="noopener">${t("txView")}</a>
-        </div>
-      </div>
-    </div>`;
+    // Link explorer hanya dibangun dari hash berformat sah.
+    const link = TX_HASH_RE.test(tx.txHash || "")
+      ? `<a class="tx-link" href="${CONFIG.EXPLORER}/tx/${tx.txHash}" target="_blank" rel="noopener noreferrer">${t("txView")}</a>`
+      : `<span class="tx-link">—</span>`;
+    return `<div class="tx-item"><div class="tx-icon ${cls}">${icon}</div><div class="tx-body"><div class="tx-row"><span class="tx-type">${label}<span class="tx-pill ${cls}">${isIn ? "IN" : "OUT"}</span></span><span class="tx-amt ${cls}">${sign}${amt} USDC</span></div><div class="tx-meta"><span class="tx-time">${when}</span>${link}</div></div></div>`;
   }).join("");
 }
 
-// ==================== ACTIONS ====================
 async function doDeposit() {
   if (!signer) return;
-  const input = document.getElementById("depAmt");
-  const group = document.getElementById("depGroup");
+  const input = document.getElementById("depAmt"); const group = document.getElementById("depGroup");
   let amt;
   try { amt = ethers.parseUnits(input.value.trim() || "0", CONFIG.USDC_DECIMALS); }
   catch { toast(t("invalid"), "err"); group.classList.add("invalid"); return; }
@@ -924,8 +844,7 @@ async function doDeposit() {
   if (amt > walletUsdc) { toast(t("exceedBal"), "err"); return; }
 
   isTxPending = true;
-  const btn = document.getElementById("depBtn");
-  btn.disabled = true;
+  const btn = document.getElementById("depBtn"); btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("processing");
   try {
     const usdc = new ethers.Contract(CONFIG.USDC, ERC20_ABI, signer);
@@ -933,24 +852,28 @@ async function doDeposit() {
     const allowance = await usdc.allowance(user, CONFIG.VAULT);
     if (allowance < amt) {
       btn.innerHTML = '<span class="spinner"></span> ' + t("approving");
-      const approveTx = await usdc.approve(CONFIG.VAULT, amt);
-      await approveTx.wait();
+      await (await usdc.approve(CONFIG.VAULT, amt)).wait();
     }
     btn.innerHTML = '<span class="spinner"></span> ' + t("depositing");
-    const nonce = await provider.getTransactionCount(user, "pending");
-    const depTx = await vault.deposit(amt, user, { nonce });
-    await depTx.wait();
+    // Nonce diserahkan ke wallet. Menentukannya manual memicu "nonce too low"
+    // setelah approve yang baru saja confirm.
+    await (await vault.deposit(amt, user)).wait();
     toast(t("okDep") + " " + fmt(amt) + " USDC.", "ok");
     input.value = "";
-    await refreshUser(); await refreshVaultStats(); await loadUserTxHistory();
   } catch (e) { toast(friendlyErr(e), "err"); }
-  finally { isTxPending = false; btn.disabled = false; btn.textContent = t("deposit"); }
+  finally {
+    isTxPending = false;
+    btn.disabled = false;
+    btn.textContent = t("deposit");
+    await refreshUser(true);
+    await refreshVaultStats(true);
+    await loadUserTxHistory();
+  }
 }
 
 async function doWithdraw() {
   if (!signer) return;
-  const input = document.getElementById("wdAmt");
-  const group = document.getElementById("wdGroup");
+  const input = document.getElementById("wdAmt"); const group = document.getElementById("wdGroup");
   let amt;
   try { amt = ethers.parseUnits(input.value.trim() || "0", CONFIG.USDC_DECIMALS); }
   catch { toast(t("invalid"), "err"); group.classList.add("invalid"); return; }
@@ -958,62 +881,63 @@ async function doWithdraw() {
   if (amt > positionValue) { toast(t("exceedPos"), "err"); return; }
 
   isTxPending = true;
-  const btn = document.getElementById("wdBtn");
-  btn.disabled = true;
+  const btn = document.getElementById("wdBtn"); btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("withdrawing");
   try {
     const vault = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, signer);
-    const nonce = await provider.getTransactionCount(user, "pending");
-    const tx = await vault.withdraw(amt, user, user, { nonce });
-    await tx.wait();
+    await (await vault.withdraw(amt, user, user)).wait();
     toast(t("okWd") + " " + fmt(amt) + " USDC.", "ok");
     input.value = "";
-    await refreshUser(); await refreshVaultStats(); await loadUserTxHistory();
   } catch (e) { toast(friendlyErr(e), "err"); }
-  finally { isTxPending = false; btn.disabled = false; btn.textContent = t("withdraw"); }
+  finally {
+    isTxPending = false;
+    btn.disabled = false;
+    btn.textContent = t("withdraw");
+    await refreshUser(true);
+    await refreshVaultStats(true);
+    await loadUserTxHistory();
+  }
 }
 
 async function doFaucet() {
   if (!signer) return;
-  const btn = document.getElementById("faucetBtn");
-  btn.disabled = true;
+  isTxPending = true;
+  const btn = document.getElementById("faucetBtn"); btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("fauceting");
   try {
     const usdc = new ethers.Contract(CONFIG.USDC, ERC20_ABI, signer);
     const amount = ethers.parseUnits("1000", CONFIG.USDC_DECIMALS);
-    const nonce = await provider.getTransactionCount(user, "pending");
-    const tx = await usdc.mint(user, amount, { nonce });
-    await tx.wait();
+    await (await usdc.mint(user, amount)).wait();
     toast(t("faucetOk"), "ok");
-    await refreshUser();
   } catch (e) { toast(friendlyErr(e), "err"); }
-  finally { btn.disabled = false; btn.textContent = t("faucet"); }
+  finally {
+    isTxPending = false;
+    btn.disabled = false;
+    btn.textContent = t("faucet");
+    await refreshUser(true);
+  }
 }
 
-// ==================== INIT ====================
 (function init() {
-  applyTheme();
-  checkDomain();
-
+  applyTheme(); checkDomain();
   const b = document.createElement("button");
   b.className = "btn-connect"; b.id = "connectBtn"; b.textContent = "Connect"; b.onclick = onConnectBtn;
   document.querySelector(".header-right").insertBefore(b, document.querySelector(".backlink"));
-
   document.getElementById("discCancel").onclick = closeDiscModal;
   document.getElementById("discConfirm").onclick = () => { closeDiscModal(); disconnect(); };
   document.getElementById("discModal").onclick = (e) => { if (e.target.id === "discModal") closeDiscModal(); };
 
   applyI18n();
-  refreshVaultStats();
+  loadShareDecimals().then(() => { if (user) refreshUser(true); });
+  refreshVaultStats(true);
   loadAiHistory();
 
   const raw = pickProvider();
   if (raw && raw.request) {
-    raw.request({ method: "eth_accounts" }).then(accounts => {
-      if (accounts.length > 0) connect();
-    }).catch(() => {});
+    raw.request({ method: "eth_accounts" })
+      .then(accounts => { if (accounts.length > 0) connect(); })
+      .catch(() => {});
   }
-
   setInterval(() => { refreshVaultStats(); if (user) refreshUser(); }, 20000);
 })();
 </script>
