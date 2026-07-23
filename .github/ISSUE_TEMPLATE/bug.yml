@@ -1,0 +1,149 @@
+# Kebijakan Keamanan / Security Policy
+
+*Bahasa Indonesia di bawah · English below*
+
+---
+
+## Bahasa Indonesia
+
+### Jangan laporkan kerentanan di issue publik
+
+GitHub Issues di repo ini terbuka untuk siapa pun. Kerentanan yang dilaporkan di sana bisa
+dibaca — dan dipakai — orang lain sebelum sempat kami tambal. Gunakan jalur privat di bawah.
+
+### Cara melapor
+
+Pilih salah satu:
+
+1. **GitHub Private Vulnerability Reporting** (paling disarankan)
+   → tab **Security** di repo ini → **Report a vulnerability**.
+   Laporannya privat antara Anda dan saya.
+2. **DM di X/Twitter:** [@0xzackbh](https://x.com/0xzackbh)
+
+Sertakan bila memungkinkan: apa kerentanannya, cara mereproduksinya, dampak terburuk yang
+Anda bayangkan, dan alamat kontrak atau URL yang terpengaruh. Laporan seadanya tetap
+diterima — laporan tidak sempurna jauh lebih baik daripada tidak ada laporan.
+
+### Janji saya
+
+- **Balasan pertama dalam 72 jam.** Freesia dikerjakan satu orang, bukan tim
+  yang berjaga 24 jam — kalau lewat dari itu, tegur saya di X.
+- **Saya akan bilang jujur** apakah laporan Anda valid, dan kalau tidak, kenapa.
+- **Setelah ditambal, kerentanannya akan diterbitkan** di
+  [halaman insiden](https://app.freesiadex.xyz/insiden) — lengkap dengan apa akibatnya,
+  dan kredit untuk Anda kalau Anda mau. Kami tidak menyembunyikan kerentanan yang sudah
+  selesai; menyembunyikannya berarti membohongi pengguna berikutnya.
+- **Tidak ada tuntutan hukum** terhadap Anda atas riset yang dilakukan dengan itikad baik
+  sesuai kebijakan ini.
+
+### Aturan main
+
+Boleh:
+- Menguji apa pun di **testnet** — token di sana tanpa nilai.
+- Membaca, memanggil, dan memeriksa kontrak kami sepuasnya.
+- Melaporkan kelemahan di antarmuka web (XSS, dependensi, header, dsb).
+
+Jangan:
+- Menyerang RPC atau infrastruktur pihak ketiga (Caldera, Vercel, DIA) — itu bukan milik
+  kami, dan kebijakan ini tidak melindungi Anda di sana.
+- Mengambil dana milik pengguna lain, meski hanya untuk membuktikan sesuatu. Di pool
+  USDC/DAI ada LP milik alamat lain — jangan disentuh.
+- Merusak layanan bagi pengguna lain (DoS, spam transaksi).
+- Rekayasa sosial terhadap siapa pun.
+
+### Cakupan
+
+**Dalam cakupan:** kontrak Freesia di LitVM Testnet (daftar lengkap ada di
+[/verify](https://app.freesiadex.xyz/verify)), aplikasi DEX (`app.freesiadex.xyz`),
+landing page (`freesiadex.xyz`), dan repo ini.
+
+**Di luar cakupan:** jaringan LitVM/Caldera, oracle DIA, wallet pihak ketiga, dan
+kerentanan yang butuh akses fisik ke perangkat korban.
+
+### Yang sudah kami ketahui
+
+Beberapa hal sudah tercatat terbuka di
+[halaman insiden](https://app.freesiadex.xyz/insiden) — periksa dulu sebelum melapor:
+
+- Pool USDC/DAI (`0x79989f44…`) berjalan di kontrak generasi awal, kode sumbernya hilang,
+  dan sebagian proteksi tidak dapat diverifikasi. **Ini insiden terbuka**, bukan temuan baru.
+- Kontrak Freesia **belum diaudit pihak ketiga**. Itu bukan kerentanan; itu keadaan yang
+  kami nyatakan terus terang.
+
+### Belum ada hadiah uang
+
+Freesia belum punya token dan belum punya dana. Jadi jujur saja: **belum ada bug bounty
+berbayar**. Yang bisa saya berikan adalah kredit publik di halaman insiden, dan janji
+bahwa laporan Anda ditangani serius serta diterbitkan setelah ditambal. Kalau nanti ada
+dukungan ekosistem, program bounty adalah salah satu yang pertama akan didanai.
+
+---
+
+## English
+
+### Do not report vulnerabilities in public issues
+
+GitHub Issues here are open to anyone. A vulnerability reported there can be read — and
+used — by others before we can patch it. Please use a private channel below.
+
+### How to report
+
+1. **GitHub Private Vulnerability Reporting** (preferred)
+   → **Security** tab in this repo → **Report a vulnerability**. Private between you and me.
+2. **DM on X/Twitter:** [@0xzackbh](https://x.com/0xzackbh)
+
+Include if you can: what the vulnerability is, how to reproduce it, the worst impact you
+can imagine, and the affected contract address or URL. Rough reports are welcome — an
+imperfect report beats no report by a wide margin.
+
+### My promises
+
+- **First response within 72 hours.** Freesia is one person, not a 24/7 team — if I'm
+  slower than that, call me out on X.
+- **I'll tell you honestly** whether your report is valid, and if not, why.
+- **Once patched, the vulnerability gets published** on the
+  [incident log](https://app.freesiadex.xyz/insiden) — including what it cost, and credit
+  to you if you want it. We don't hide fixed vulnerabilities; hiding them means lying to
+  the next user.
+- **No legal action** against you for good-faith research under this policy.
+
+### Rules
+
+Allowed:
+- Test anything on **testnet** — those tokens are worthless.
+- Read, call, and inspect our contracts as much as you like.
+- Report web app weaknesses (XSS, dependencies, headers, etc).
+
+Not allowed:
+- Attacking third-party RPC or infrastructure (Caldera, Vercel, DIA) — not ours, and this
+  policy does not protect you there.
+- Taking other users' funds, even to prove a point. The USDC/DAI pool holds LP belonging
+  to another address — leave it alone.
+- Degrading service for others (DoS, transaction spam).
+- Social engineering of anyone.
+
+### Scope
+
+**In scope:** Freesia contracts on LitVM Testnet (full list at
+[/verify](https://app.freesiadex.xyz/verify)), the DEX app (`app.freesiadex.xyz`), the
+landing page (`freesiadex.xyz`), and this repo.
+
+**Out of scope:** the LitVM/Caldera network, the DIA oracle, third-party wallets, and
+anything requiring physical access to a victim's device.
+
+### Already known
+
+Some things are already logged openly on the
+[incident log](https://app.freesiadex.xyz/insiden) — please check before reporting:
+
+- The USDC/DAI pool (`0x79989f44…`) runs on early-generation code, its source is lost, and
+  some protections can't be verified. **This is an open incident**, not a new finding.
+- Freesia's contracts are **not third-party audited**. That isn't a vulnerability; it's a
+  fact we state plainly.
+
+### No cash rewards yet
+
+Freesia has no token and no funds. So, plainly: **there is no paid bug bounty yet**. What
+I can offer is public credit on the incident log, and a promise that your report is taken
+seriously and published once patched. If ecosystem support arrives, a bounty program is
+among the first things it will fund.

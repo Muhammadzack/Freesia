@@ -1,0 +1,47 @@
+name: "🔍 Klaim tidak cocok / A claim doesn't add up"
+description: "Anda menemukan sesuatu yang berbeda dari yang kami klaim. Laporan seperti ini akan dicatat di /insiden dengan kredit. | You found something that differs from what we claim. Reports like this get logged on /insiden with credit."
+title: "[Klaim] "
+labels: ["transparansi"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Ini kanal paling penting di repo ini.**
+
+        Freesia mengklaim: setiap angka dibaca on-chain, setiap kontrak bisa Anda periksa
+        sendiri di [/verify](https://app.freesiadex.xyz/verify), dan setiap kesalahan kami
+        terbitkan di [/insiden](https://app.freesiadex.xyz/insiden).
+
+        Kalau salah satu klaim itu tidak cocok dengan kenyataan — angka yang beda, kontrak
+        yang tidak sesuai deskripsi, janji yang tidak ditepati — laporkan di sini.
+        Kami berjanji: **entri yang terbukti akan masuk ke halaman /insiden, dengan kredit
+        kepada Anda.** Janji itu tertulis di halaman itu sendiri.
+
+        _**This is the most important channel in this repo.** If a claim doesn't match
+        reality, report it here. Verified reports get logged on /insiden with credit to you._
+
+  - type: textarea
+    id: klaim
+    attributes:
+      label: "Klaim yang mana? / Which claim?"
+      description: "Salin kalimatnya, dan sebutkan di mana Anda melihatnya. | Quote the sentence and say where you saw it."
+      placeholder: "Di landing page tertulis '…', tapi…"
+    validations:
+      required: true
+
+  - type: textarea
+    id: kenyataan
+    attributes:
+      label: "Apa yang sebenarnya Anda temukan? / What did you actually find?"
+      description: "Sertakan bukti bila ada: alamat kontrak, hash transaksi, tautan explorer, tangkapan layar. | Include evidence: contract address, tx hash, explorer link, screenshot."
+    validations:
+      required: true
+
+  - type: input
+    id: kredit
+    attributes:
+      label: "Nama untuk kredit / Name for credit"
+      description: "Bagaimana Anda ingin disebut di /insiden? Kosongkan bila ingin anonim. | How should we credit you on /insiden? Leave blank to stay anonymous."
+      placeholder: "@handle, nama, atau kosongkan"
+    validations:
+      required: false

@@ -1,0 +1,42 @@
+name: "💬 Masukan — ide, kebingungan, keluhan / feedback"
+description: "Fitur yang Anda butuhkan, sesuatu yang membingungkan, atau apa pun yang mengganjal | A feature you need, something confusing, or anything that bothers you"
+title: "[Masukan] "
+labels: ["masukan"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tidak harus bug. Kalau ada yang membingungkan, itu juga kesalahan kami —
+        antarmuka yang butuh penjelasan berarti belum cukup jelas.
+
+        _It doesn't have to be a bug. If something confused you, that's our failure too —
+        an interface that needs explaining isn't clear enough yet._
+
+  - type: dropdown
+    id: jenis
+    attributes:
+      label: "Jenis masukan / Type"
+      options:
+        - "Ada yang membingungkan / Something confused me"
+        - "Fitur yang saya butuhkan / A feature I need"
+        - "Teks atau bahasa yang janggal / Awkward wording or translation"
+        - "Tampilan / Design"
+        - "Keluhan lain / Other complaint"
+    validations:
+      required: true
+
+  - type: textarea
+    id: isi
+    attributes:
+      label: "Ceritakan / Tell us"
+      description: "Sejujurnya saja. Kritik keras lebih berguna daripada pujian sopan. | Be blunt. Harsh criticism is more useful than polite praise."
+    validations:
+      required: true
+
+  - type: textarea
+    id: kenapa
+    attributes:
+      label: "Kenapa ini penting bagi Anda? / Why does this matter to you?"
+      description: "Ini membantu saya memilih mana yang dikerjakan dulu. | This helps me decide what to build first."
+    validations:
+      required: false

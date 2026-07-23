@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Catatan Insiden — Freesia DEX</title>
+<meta name="description" content="Setiap kesalahan yang kami buat di Freesia DEX, ditulis terbuka: apa yang terjadi, apa akibatnya, apa yang berubah.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cg%20transform%3D%22translate%2840%2C40%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%232E6F68%22%20transform%3D%22rotate%28-12%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%233E8A80%22%20transform%3D%22rotate%2848%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%2357A99B%22%20transform%3D%22rotate%28108%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%236FC2B4%22%20transform%3D%22rotate%28168%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%237FD0C2%22%20transform%3D%22rotate%28228%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%238CDCCB%22%20transform%3D%22rotate%28288%29%20scale%280.94%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root, [data-theme="dark"] {
+        --bg-primary:#0A1210; --bg-secondary:#111B17; --bg-tertiary:#18241F;
+        --border-color:#27352F; --text-primary:#EDF5F0; --text-secondary:#93A89D;
+        --accent:#00e676; --accent-dim:#00b25c; --accent-glow:rgba(0,230,118,0.22);
+        --mint:#d4ff5c; --danger:#ff4d4d; --warning:#ffb020;
+        --card-shadow:0 0 0 1px rgba(0,230,118,0.09), 0 24px 70px -26px rgba(0,230,118,0.22), 0 10px 30px rgba(0,0,0,0.45);
+        --logo-grad-a:#8CDCCB; --logo-grad-b:#00e676;
+        --body-bg:
+            radial-gradient(ellipse 1000px 620px at 12% -12%, rgba(0,230,118,0.13), transparent 62%),
+            radial-gradient(ellipse 820px 540px at 100% 6%, rgba(212,255,92,0.07), transparent 58%),
+            radial-gradient(ellipse 760px 520px at 50% 112%, rgba(0,178,92,0.10), transparent 60%),
+            linear-gradient(180deg, #0C1512 0%, #080E0C 100%);
+    }
+    [data-theme="light"] {
+        --bg-primary:#F5F7F8; --bg-secondary:#FFFFFF; --bg-tertiary:#EEF1F2;
+        --border-color:#D9E2DD; --text-primary:#142B25; --text-secondary:#5C7A73;
+        --accent:#49B76B; --accent-dim:#3B5A53; --accent-glow:rgba(73,183,107,0.14);
+        --mint:#8FBF2E; --danger:#d1342c; --warning:#b07d10;
+        --card-shadow:0 0 0 1px rgba(73,183,107,0.10), 0 12px 32px -12px rgba(20,43,37,0.12), 0 2px 8px rgba(20,43,37,0.05);
+        --logo-grad-a:#2E6F68; --logo-grad-b:#49B76B;
+        --body-bg:
+            radial-gradient(ellipse 900px 500px at 15% -10%, rgba(73,183,107,0.10), transparent 60%),
+            radial-gradient(ellipse 700px 500px at 100% 15%, rgba(212,255,92,0.14), transparent 55%),
+            #F5F7F8;
+    }
+    body {
+        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;
+        background:var(--body-bg); color:var(--text-primary); min-height:100vh;
+        padding:24px 16px 40px; transition:background .35s ease, color .35s ease;
+    }
+    .wrap { width:100%; max-width:680px; margin:0 auto; }
+    .mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+
+    .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+    .logo { display:flex; align-items:center; gap:10px; font-size:19px; font-weight:700; color:var(--text-primary); text-decoration:none; }
+    .logo-icon { width:34px; height:34px; flex-shrink:0; }
+    .logo-name { background:linear-gradient(100deg, var(--logo-grad-a) 0%, var(--logo-grad-b) 100%);
+        -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:800; }
+    .logo-suffix { color:var(--text-secondary); font-weight:700; font-size:0.86em; letter-spacing:0.06em; }
+    .top-actions { display:flex; align-items:center; gap:8px; }
+    .lang-switch { display:inline-flex; border:1px solid var(--border-color); border-radius:99px; overflow:hidden; background:var(--bg-secondary); }
+    .lang-btn { border:0; background:transparent; color:var(--text-secondary); font-size:11.5px; font-weight:700;
+                padding:6px 10px; cursor:pointer; letter-spacing:.03em; line-height:1; }
+    .lang-btn.active { background:var(--accent); color:#fff; }
+    .icon-btn { width:34px; height:34px; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-tertiary);
+        color:var(--text-secondary); display:flex; align-items:center; justify-content:center; cursor:pointer; line-height:0; }
+    .icon-btn:hover { color:var(--text-primary); }
+    .back-link { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:10px;
+        border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-secondary);
+        font-size:13px; font-weight:600; text-decoration:none; }
+    .back-link:hover { color:var(--accent); border-color:var(--accent-dim); }
+
+    .hero h1 { font-size:clamp(30px, 8vw, 46px); font-weight:800; letter-spacing:-.03em; line-height:1.05; margin-bottom:12px; }
+    .hero h1 .em { color:var(--warning); }
+    .hero p { font-size:14.5px; line-height:1.65; color:var(--text-secondary); max-width:52ch; }
+
+    .tally { display:grid; grid-template-columns:1fr 1fr 1fr; gap:9px; margin:24px 0 30px; }
+    .tally div { background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:13px; padding:13px 12px; }
+    .tally b { display:block; font-size:24px; font-weight:800; letter-spacing:-.02em; line-height:1.1; font-variant-numeric:tabular-nums; }
+    .tally span { display:block; font-size:10.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--text-secondary); margin-top:3px; line-height:1.35; }
+
+    /* Buku besar: tiap entri punya cap "apa akibatnya" */
+    .entry { position:relative; padding:0 0 0 22px; margin-bottom:22px; }
+    .entry::before { content:''; position:absolute; left:4px; top:8px; bottom:-22px; width:1px; background:var(--border-color); }
+    .entry:last-of-type::before { display:none; }
+    .entry::after { content:''; position:absolute; left:0; top:6px; width:9px; height:9px; border-radius:50%;
+        background:var(--bg-primary); border:2px solid var(--warning); }
+    .entry.fixed::after { border-color:var(--accent); }
+    .entry.open::after  { border-color:var(--danger); }
+
+    .e-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:5px; }
+    .e-date { font-size:11.5px; font-weight:700; letter-spacing:.05em; color:var(--text-secondary); }
+    .tag { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:3px 8px; border-radius:99px;
+        border:1px solid var(--border-color); color:var(--text-secondary); }
+    .tag.kind { border-color:var(--warning); color:var(--warning); }
+    .tag.state-fixed { border-color:var(--accent-dim); color:var(--accent); }
+    .tag.state-open  { border-color:var(--danger); color:var(--danger); }
+    .e-title { font-size:17px; font-weight:700; letter-spacing:-.01em; line-height:1.3; margin-bottom:9px; }
+
+    .e-body { background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:14px; padding:14px 15px; }
+    .e-line { margin-bottom:11px; }
+    .e-line:last-child { margin-bottom:0; }
+    .e-lbl { font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-secondary); display:block; margin-bottom:3px; }
+    .e-txt { font-size:13px; line-height:1.65; color:var(--text-primary); }
+    .e-txt.dim { color:var(--text-secondary); }
+    .e-txt code { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:11.5px; color:var(--text-secondary); word-break:break-all; }
+    .e-cost { border-left:3px solid var(--warning); background:var(--bg-tertiary); border-radius:0 9px 9px 0; padding:9px 11px; }
+    .entry.fixed .e-cost { border-left-color:var(--accent-dim); }
+    .entry.open  .e-cost { border-left-color:var(--danger); }
+
+    .note { margin-top:8px; padding:18px; border-radius:16px; background:var(--bg-secondary);
+        border:1px solid var(--border-color); border-left:3px solid var(--accent-dim); }
+    .note h2 { font-size:15px; font-weight:700; margin-bottom:9px; }
+    .note p { font-size:12.5px; line-height:1.7; color:var(--text-secondary); }
+    .note p + p { margin-top:9px; }
+    .note b { color:var(--text-primary); font-weight:600; }
+
+    .foot { margin-top:28px; padding-top:18px; border-top:1px solid var(--border-color);
+        text-align:center; font-size:12px; color:var(--text-secondary); line-height:1.6; }
+    .foot a { color:var(--accent); text-decoration:none; font-weight:600; }
+    .foot a:hover { text-decoration:underline; }
+
+    a:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    @media (prefers-reduced-motion:reduce) { * { transition-duration:.001ms !important; animation-duration:.001ms !important; } }
+</style>
+<script>
+    (function () {
+        var saved;
+        try { saved = localStorage.getItem('freesia_theme'); } catch (e) { saved = null; }
+        if (saved !== 'light' && saved !== 'dark') {
+            saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', saved);
+    })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+    <a href="/" class="logo"><svg class="logo-icon" viewBox="0 0 80 80" role="img" aria-label="Freesia"><g transform="translate(40,40)"><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#2E6F68" transform="rotate(-12) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#3E8A80" transform="rotate(48) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#57A99B" transform="rotate(108) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#6FC2B4" transform="rotate(168) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#7FD0C2" transform="rotate(228) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#8CDCCB" transform="rotate(288) scale(0.94)"/></g></svg><span><span class="logo-name">Freesia</span> <span class="logo-suffix">DEX</span></span></a>
+    <div class="top-actions">
+        <div class="lang-switch" role="group" aria-label="Bahasa / Language">
+            <button type="button" data-langbtn="id" class="lang-btn active" onclick="setLang('id')">ID</button>
+            <button type="button" data-langbtn="en" class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Tema"></button>
+        <a class="back-link" href="/" data-i18n="back">← Buka DEX</a>
+    </div>
+</div>
+
+<div class="hero">
+    <h1><span data-i18n="hero_1">Semua yang</span><br><span class="em" data-i18n="hero_2">kami rusak.</span></h1>
+    <p data-i18n="hero_p">Siapa pun bisa bilang "kami transparan". Jauh lebih sedikit yang menerbitkan daftar kesalahannya sendiri. Ini daftar kami — kontrak yang harus dibuang, klaim yang terlalu jauh, kode yang keliru. Ditulis oleh orang yang membuat kesalahannya. Halaman ini akan bertambah panjang, bukan makin pendek.</p>
+</div>
+
+<div class="tally">
+    <div><b id="tallyTotal">—</b><span data-i18n="tally_all">Insiden dicatat</span></div>
+    <div><b id="tallyFixed" style="color:var(--accent)">—</b><span data-i18n="tally_fixed">Sudah diperbaiki</span></div>
+    <div><b id="tallyOpen" style="color:var(--danger)">—</b><span data-i18n="tally_open">Masih terbuka</span></div>
+</div>
+
+<div id="ledger"></div>
+
+<div class="note">
+    <h2 data-i18n="note_title">Kenapa halaman ini ada</h2>
+    <p data-i18n="note_1">Freesia dibangun satu orang. Itu berarti kesalahan akan terjadi — dan sudah terjadi. Pilihannya bukan antara "punya kesalahan" dan "tidak punya"; pilihannya antara <b>Anda mengetahuinya</b> atau tidak.</p>
+    <p data-i18n="note_2">Aturan kami: setiap insiden yang menyentuh dana, keamanan, atau kejujuran klaim kami akan muncul di sini — juga yang tidak pernah dilihat siapa pun. Setiap entri harus menyebut apa akibatnya, bukan cuma bahwa "sudah diperbaiki".</p>
+    <p data-i18n="note_3">Ada yang kami lewatkan? <b>Katakan.</b> Entri yang dikirim orang luar akan dicatat di sini dengan kredit.</p>
+</div>
+
+<div class="foot">
+    <a href="https://x.com/freesiadex" target="_blank" rel="noopener noreferrer">@freesiadex</a> ·
+    <a href="/verify" data-i18n="foot_verify">Verifikasi kontrak</a> ·
+    <a href="https://github.com/Muhammadzack/Freesia" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+</div>
+
+</div>
+
+<script>
+    // ── Buku besar insiden ──
+    // Tiap entri: [tanggal, jenis, status, judul, apa yang terjadi, akibat, yang berubah]
+    // Teks ditulis dua bahasa: [ID, EN]. Tambahkan entri baru DI ATAS.
+    const ENTRIES = [
+        {
+            date: '17 Jul 2026', state: 'fixed',
+            kind:  ['Kode frontend', 'Frontend code'],
+            title: ['Peralihan bahasa setengah jalan, histori transaksi mati',
+                    'Half-broken language switch, dead transaction history'],
+            what:  ['Tombol ID/EN mengganti sebagian teks saja. Banyak elemen tak pernah didaftarkan ke kamus, placeholder & tooltip tidak pernah diproses sama sekali, dan puluhan pesan dinamis (peringatan risiko, katalog error, portofolio) tertanam keras dalam Bahasa Indonesia. Terpisah dari itu: panel "Transaksi terakhir" hanya menyimpan swap di memori — hilang tiap kali halaman dimuat ulang, dan tidak pernah membaca swap yang sudah tercatat di rantai.',
+                    'The ID/EN button translated only part of the interface. Many elements were never registered in the dictionary, placeholders and tooltips were never processed at all, and dozens of dynamic messages (risk warnings, the error catalogue, the portfolio) were hardcoded in Indonesian. Separately: the "Recent transactions" panel only kept swaps in memory — gone on every reload, and it never read swaps already recorded on-chain.'],
+            cost:  ['Pengguna berbahasa Inggris membaca antarmuka campur aduk — termasuk peringatan risiko, tepat pada saat mereka paling perlu paham. Tidak ada dana yang hilang.',
+                    'English-speaking users read a mixed-language interface — including the risk warnings, exactly when understanding matters most. No funds were lost.'],
+            fix:   ['Setiap teks dinamis dipindahkan ke kamus (251 kunci), placeholder & tooltip kini ikut diproses, dan peralihan bahasa menyegarkan seluruh tampilan aktif. Histori transaksi kini dibaca dari event Swap milik alamat Anda langsung dari kontrak, ditambah cache lokal agar bertahan setelah reload.',
+                    'Every dynamic string moved into the dictionary (251 keys), placeholders and tooltips are now processed, and switching language refreshes the whole active view. Transaction history is now read from your address\'s own Swap events straight from the contracts, plus a local cache so it survives a reload.']
+        },
+        {
+            date: '16–17 Jul 2026', state: 'fixed',
+            kind:  ['Kelemahan keamanan', 'Security weakness'],
+            title: ['Nama wallet dari extension disisipkan tanpa disaring',
+                    'Wallet names from extensions were injected unsanitised'],
+            what:  ['Saat beberapa wallet terpasang, Freesia menampilkan daftar pilihan. Nama dan ikon wallet itu datang dari extension lewat standar EIP-6963, dan kami menempelkannya ke halaman lewat innerHTML — tanpa disaring. Extension jahat bisa memakai namanya sendiri untuk menyuntik skrip ke halaman kami (XSS). Ditemukan lewat audit sendiri, bukan lewat laporan pengguna. Di audit yang sama: tidak ada Content-Security-Policy, toleransi slippage tanpa batas atas, dan kolom jumlah menerima angka negatif.',
+                    'When several wallets are installed, Freesia shows a picker. Those wallet names and icons come from the extension via the EIP-6963 standard, and we pasted them into the page with innerHTML — unsanitised. A malicious extension could have used its own name to inject script into our page (XSS). Found in a self-audit, not reported by a user. Same audit: no Content-Security-Policy, no upper bound on slippage tolerance, and amount fields accepted negative numbers.'],
+            cost:  ['Tidak ada bukti pernah dieksploitasi — jumlah pengguna kami masih sangat kecil, dan serangan ini butuh extension jahat yang sudah terpasang di browser korban. Tetap saja: kelemahan ini ada di situs live selama beberapa waktu.',
+                    'No evidence it was ever exploited — our user count is still tiny, and the attack requires a malicious extension already installed in the victim\'s browser. Even so: the weakness sat on the live site for some time.'],
+            fix:   ['Nama & ikon wallet kini dipasang lewat createElement/textContent, bukan innerHTML. Ditambahkan Content-Security-Policy plus header keamanan di Vercel, slippage dibatasi 0,01–50% dengan peringatan di atas 5%, dan angka masukan menolak nilai negatif atau tak wajar.',
+                    'Wallet names and icons now go through createElement/textContent, never innerHTML. Added a Content-Security-Policy plus security headers on Vercel, clamped slippage to 0.01–50% with a warning above 5%, and input amounts now reject negative or absurd values.']
+        },
+        {
+            date: '15 Jul 2026', state: 'fixed',
+            kind:  ['Klaim yang terlalu jauh', 'Overstated claim'],
+            title: ['Kami mengiklankan "6 FIX keamanan" yang tidak semuanya ada',
+                    'We advertised "6 security fixes" that weren\'t all there'],
+            what:  ['Landing page dan docs menyebut pool kami punya 6 perbaikan keamanan. Saat memeriksa ulang kontraknya sendiri, ternyata pool USDC/DAI yang sudah live TIDAK punya nonReentrant, MINIMUM_LIQUIDITY, excess refund, maupun safeTransfer. Yang terverifikasi hanya proteksi slippage pada swap dan removeLiquidity 3-parameter. Lebih buruk: kode sumber pool itu hilang/tertimpa, jadi sisanya tidak bisa kami konfirmasi sampai kapan pun.',
+                    'The landing page and docs said our pools had six security fixes. On re-reading our own contracts, the live USDC/DAI pool turned out to have NO nonReentrant, no MINIMUM_LIQUIDITY, no excess refund, no safeTransfer. Only the swap slippage protection and the 3-parameter removeLiquidity were verifiable. Worse: that pool\'s source was lost/overwritten, so the rest can never be confirmed.'],
+            cost:  ['Selama beberapa hari, pengunjung membaca janji keamanan yang lebih besar dari kenyataannya. Ini kesalahan terburuk di daftar ini — bukan karena dampak teknisnya, tapi karena kami menjual kepercayaan.',
+                    'For several days, visitors read a safety promise larger than reality. This is the worst mistake on this list — not for its technical impact, but because trust is the thing we sell.'],
+            fix:   ['Klaim diluruskan: landing & docs kini menyebut kontrak spesifik (SimpleLiquidityPoolV3), dan menyatakan terang-terangan bahwa pool USDC/DAI mendahului V3 dengan sebagian proteksi tidak terverifikasi. Peringatan yang sama muncul di halaman verifikasi. Pool KOPDES/USDC dan MBG/USDC di-deploy dari V3 — aman sejak lahir.',
+                    'Claim corrected: the landing page and docs now name the specific contract (SimpleLiquidityPoolV3) and state plainly that the USDC/DAI pool predates V3 with some protections unverified. The same warning appears on the verification page. The KOPDES/USDC and MBG/USDC pools were deployed from V3 — safe by birth.']
+        },
+        {
+            date: '15 Jul 2026', state: 'fixed',
+            kind:  ['Kontrak dibuang', 'Contracts discarded'],
+            title: ['Enam kontrak generasi pertama harus ditinggalkan',
+                    'Six first-generation contracts had to be abandoned'],
+            what:  ['Pool generasi pertama menerbitkan LP token tanpa fungsi ERC20 — tidak ada approve, transfer, maupun transferFrom. Akibatnya kontrak staking tidak akan pernah bisa menarik LP milik pengguna; setiap percobaan stake ditolak. Kami baru menyadarinya setelah pool dan staking-nya di-deploy.',
+                    'The first-generation pools issued LP tokens with no ERC20 functions — no approve, no transfer, no transferFrom. That meant a staking contract could never pull a user\'s LP; every stake attempt was rejected. We only realised after both the pools and their staking contracts were deployed.'],
+            cost:  ['Enam kontrak jadi sampah permanen di rantai: <code>0x56C4dcC4</code>, <code>0x0dfD5f12</code>, <code>0xbB2fCfDC</code>, <code>0x59eAD09f</code>, <code>0x7d40836D</code>, <code>0x0ba502E6</code>. Semuanya sudah dihapus dari antarmuka. Ini testnet, jadi yang hilang cuma waktu — di mainnet, ini akan menjadi kesalahan yang mahal.',
+                    'Six contracts became permanent garbage on-chain: <code>0x56C4dcC4</code>, <code>0x0dfD5f12</code>, <code>0xbB2fCfDC</code>, <code>0x59eAD09f</code>, <code>0x7d40836D</code>, <code>0x0ba502E6</code>. All removed from the interface. This is a testnet, so only time was lost — on mainnet it would have been an expensive mistake.'],
+            fix:   ['SimpleLiquidityPoolV3 menambahkan fungsi ERC20 penuh untuk LP token. Pool & staking baru dari kontrak itu sudah dibuktikan bisa di-stake sebelum diumumkan.',
+                    'SimpleLiquidityPoolV3 adds full ERC20 functions to the LP token. New pools and staking from that contract were proven stakeable before being announced.']
+        },
+        {
+            date: '14 Jul 2026', state: 'fixed',
+            kind:  ['Kesalahan operasi', 'Operational error'],
+            title: ['Pool KOPDES/USDC ter-seed empat kali',
+                    'The KOPDES/USDC pool was seeded four times'],
+            what:  ['Skrip penambahan likuiditas kena Headers Timeout dari RPC. Transaksinya sebenarnya sudah masuk, tapi skrip tidak tahu — dan kami mengulang seluruh skrip dari awal. Berulang. Akhirnya likuiditas masuk empat kali.',
+                    'The liquidity script hit a Headers Timeout from the RPC. The transaction had actually gone through, but the script didn\'t know — and we re-ran the whole script from the top. Repeatedly. Liquidity ended up added four times.'],
+            cost:  ['Pool terisi jauh di atas rencana dan gas terbuang. Rasio harga tetap benar, jadi tidak ada pengguna yang dirugikan. Di mainnet, ini akan berarti kehilangan uang sungguhan.',
+                    'The pool ended up far larger than planned and gas was wasted. The price ratio stayed correct, so no user was harmed. On mainnet this would have meant losing real money.'],
+            fix:   ['Aturan operasi: saat skrip transaksi timeout, JANGAN ulangi seluruh skrip — periksa dulu di explorer bagian mana yang sudah sukses.',
+                    'Operating rule: when a transaction script times out, do NOT re-run the whole script — check the explorer first to see what already succeeded.']
+        },
+        {
+            date: '14 Jul 2026', state: 'fixed',
+            kind:  ['Kehilangan kode', 'Lost code'],
+            title: ['Leaderboard hilang total — dari file kerja, GitHub, dan situs live',
+                    'The leaderboard vanished — from the working file, GitHub, and the live site'],
+            what:  ['Selama berbulan-bulan, file situs di-upload manual ke Vercel tanpa melewati GitHub. Tidak ada sumber kebenaran. Fitur bisa hilang tanpa jejak — dan Leaderboard memang hilang total, ketiga tempat sekaligus, tanpa ada versi yang bisa dipulihkan.',
+                    'For months, the site file was uploaded manually to Vercel without going through GitHub. There was no source of truth. Features could disappear without a trace — and the leaderboard did exactly that, in all three places at once, with no version left to restore.'],
+            cost:  ['Satu fitur utuh harus ditulis ulang dari nol. Ini terjadi berkali-kali dalam bentuk berbeda sebelum akarnya kami akui.',
+                    'A whole feature had to be rewritten from scratch. This happened repeatedly in different forms before we admitted the root cause.'],
+            fix:   ['GitHub jadi sumber kebenaran; Vercel auto-deploy dari sana, tidak ada lagi upload manual. Leaderboard dibangun ulang dari event Swap on-chain — sekarang kalaupun file-nya hilang lagi, datanya tetap ada di blockchain.',
+                    'GitHub is now the source of truth; Vercel auto-deploys from it, no more manual uploads. The leaderboard was rebuilt from on-chain Swap events — now even if the file is lost again, the data still lives on the blockchain.']
+        },
+        {
+            date: 'Terbuka', state: 'open',
+            kind:  ['Masih terbuka', 'Still open'],
+            title: ['Pool USDC/DAI masih berjalan di kontrak generasi lama',
+                    'The USDC/DAI pool still runs on old-generation code'],
+            what:  ['Pool USDC/DAI (<code>0x79989f44</code>) mendahului SimpleLiquidityPoolV3 dan kode sumbernya hilang. Pemeriksaan langsung ke rantai (17 Jul) menunjukkan: cadangan 10.230 USDC + 9.989,5 DAI, total suplai LP 10.108,86. Dari jumlah itu <b>10.000 LP (98,92%) milik pembuat Freesia</b>, dan <b>108,86 LP (1,08%) milik alamat lain</b>. Bytecode-nya tidak memuat fungsi admin apa pun — tidak ada pintu darurat, juga tidak ada jalan pintas. LP token-nya tidak punya fungsi ERC20, sehingga tidak pernah memancarkan event Transfer: pemegang 1,08% itu tidak bisa kami lacak, dan mereka hanya bisa menarik dananya lewat antarmuka Freesia.',
+                    'The USDC/DAI pool (<code>0x79989f44</code>) predates SimpleLiquidityPoolV3 and its source is lost. A direct on-chain check (17 Jul) shows: reserves of 10,230 USDC + 9,989.5 DAI, total LP supply 10,108.86. Of that, <b>10,000 LP (98.92%) belongs to Freesia\'s builder</b> and <b>108.86 LP (1.08%) belongs to another address</b>. Its bytecode contains no admin functions at all — no emergency door, and no shortcut either. Its LP token has no ERC20 functions, so it never emitted Transfer events: we cannot trace who holds that 1.08%, and they can only withdraw through the Freesia interface.'],
+            cost:  ['Pool paling ramai di Freesia adalah pool yang proteksinya paling sedikit bisa kami buktikan. Konsekuensi yang mengikat kami: pool ini <b>tidak boleh dihapus dari antarmuka</b> — kalau tombolnya hilang, 1,08% milik orang lain itu terkunci selamanya. Ia hanya akan ditandai usang sampai migrasi selesai.',
+                    'Freesia\'s busiest pool is the one whose protections we can prove the least about. The commitment this binds us to: this pool <b>must not be removed from the interface</b> — if the button disappears, that 1.08% belonging to someone else is locked forever. It will only be marked deprecated until the migration is done.'],
+            fix:   ['Belum selesai — dan sengaja ditunda. Migrasi berarti pool baru dari V3 <i>plus</i> kontrak staking baru, karena staking lama terikat mati ke LP pool ini. Kami memilih tidak melakukannya di tengah testnet tanpa alasan mendesak. <b>Tenggatnya jelas: harus beres sebelum mainnet.</b> Sampai saat itu, pool ini diberi peringatan di halaman verifikasi, dan pool dari V3 (KOPDES/USDC, MBG/USDC) tersedia sebagai alternatif yang aman sejak lahir.',
+                    'Not done — and deliberately deferred. Migrating means a new V3 pool <i>plus</i> a new staking contract, because the old staking is hard-wired to this pool\'s LP. We chose not to do it mid-testnet without an urgent reason. <b>The deadline is firm: it must be done before mainnet.</b> Until then, this pool carries a warning on the verification page, and the V3 pools (KOPDES/USDC, MBG/USDC) are available as alternatives that are safe by birth.']
+        }
+    ];
+
+    const I18N = {
+        back:      ["← Buka DEX", "← Open DEX"],
+        hero_1:    ["Semua yang", "Everything"],
+        hero_2:    ["kami rusak.", "we broke."],
+        hero_p:    ["Siapa pun bisa bilang \"kami transparan\". Jauh lebih sedikit yang menerbitkan daftar kesalahannya sendiri. Ini daftar kami — kontrak yang harus dibuang, klaim yang terlalu jauh, kode yang keliru. Ditulis oleh orang yang membuat kesalahannya. Halaman ini akan bertambah panjang, bukan makin pendek.",
+                    "Anyone can say \"we're transparent\". Far fewer publish the list of their own mistakes. This is ours — contracts we had to throw away, a claim that reached too far, code we got wrong. Written by the person who made them. This page will get longer, not shorter."],
+        tally_all: ["Insiden dicatat", "Incidents logged"],
+        tally_fixed:["Sudah diperbaiki", "Fixed"],
+        tally_open:["Masih terbuka", "Still open"],
+        l_what:    ["Apa yang terjadi", "What happened"],
+        l_cost:    ["Apa akibatnya", "What it cost"],
+        l_fix:     ["Apa yang berubah", "What changed"],
+        s_fixed:   ["Diperbaiki", "Fixed"],
+        s_open:    ["Terbuka", "Open"],
+        note_title:["Kenapa halaman ini ada", "Why this page exists"],
+        note_1:    ["Freesia dibangun satu orang. Itu berarti kesalahan akan terjadi — dan sudah terjadi. Pilihannya bukan antara \"punya kesalahan\" dan \"tidak punya\"; pilihannya antara <b>Anda mengetahuinya</b> atau tidak.",
+                    "Freesia is built by one person. That means mistakes will happen — and they have. The choice was never between having mistakes and not having them; it's between <b>you knowing about them</b> or not."],
+        note_2:    ["Aturan kami: setiap insiden yang menyentuh dana, keamanan, atau kejujuran klaim kami akan muncul di sini — juga yang tidak pernah dilihat siapa pun. Setiap entri harus menyebut apa akibatnya, bukan cuma bahwa \"sudah diperbaiki\".",
+                    "Our rule: every incident touching funds, security, or the honesty of our claims shows up here — including the ones nobody ever saw. Every entry must say what it cost, not just that it was fixed."],
+        note_3:    ["Ada yang kami lewatkan? <b>Katakan.</b> Entri yang dikirim orang luar akan dicatat di sini dengan kredit.",
+                    "Did we miss one? <b>Tell us.</b> Entries reported from outside get logged here with credit."],
+        foot_verify:["Verifikasi kontrak", "Verify contracts"],
+        theme_dark:["Ganti ke tema gelap", "Switch to dark theme"],
+        theme_light:["Ganti ke tema terang", "Switch to light theme"]
+    };
+    let LANG = 'id';
+    const t = (k) => { const e = I18N[k]; return e ? (LANG === 'en' ? e[1] : e[0]) : k; };
+    const pick = (pair) => LANG === 'en' ? pair[1] : pair[0];
+
+    function renderLedger() {
+        document.getElementById('ledger').innerHTML = ENTRIES.map(e => `
+            <div class="entry ${e.state}">
+                <div class="e-meta">
+                    <span class="e-date mono">${e.date}</span>
+                    <span class="tag kind">${pick(e.kind)}</span>
+                    <span class="tag state-${e.state}">${e.state === 'fixed' ? t('s_fixed') : t('s_open')}</span>
+                </div>
+                <h3 class="e-title">${pick(e.title)}</h3>
+                <div class="e-body">
+                    <div class="e-line">
+                        <span class="e-lbl">${t('l_what')}</span>
+                        <p class="e-txt dim">${pick(e.what)}</p>
+                    </div>
+                    <div class="e-line e-cost">
+                        <span class="e-lbl">${t('l_cost')}</span>
+                        <p class="e-txt">${pick(e.cost)}</p>
+                    </div>
+                    <div class="e-line">
+                        <span class="e-lbl">${t('l_fix')}</span>
+                        <p class="e-txt dim">${pick(e.fix)}</p>
+                    </div>
+                </div>
+            </div>`).join('');
+
+        document.getElementById('tallyTotal').textContent = ENTRIES.length;
+        document.getElementById('tallyFixed').textContent = ENTRIES.filter(e => e.state === 'fixed').length;
+        document.getElementById('tallyOpen').textContent  = ENTRIES.filter(e => e.state === 'open').length;
+    }
+
+    function setLang(l) {
+        LANG = (l === 'en') ? 'en' : 'id';
+        try { localStorage.setItem('freesia_lang', LANG); } catch (e) {}
+        document.documentElement.lang = LANG;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const v = t(el.getAttribute('data-i18n'));
+            if (v.includes('<')) el.innerHTML = v; else el.textContent = v;
+        });
+        document.querySelectorAll('[data-langbtn]').forEach(b =>
+            b.classList.toggle('active', b.getAttribute('data-langbtn') === LANG));
+        applyThemeIcon();
+        renderLedger();
+    }
+
+    const currentTheme = () => document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    function applyThemeIcon() {
+        const btn = document.getElementById('themeBtn');
+        if (!btn) return;
+        const isLight = currentTheme() === 'light';
+        btn.innerHTML = isLight
+            ? '<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a1 1 0 0 0-1.3-1.2A10.3 10.3 0 1 0 21.7 15.5a1 1 0 0 0-1.2-1.3z"/></svg>'
+            : '<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 2.4v2.4M12 19.2v2.4M4.5 4.5l1.7 1.7M17.8 17.8l1.7 1.7M2.4 12h2.4M19.2 12h2.4M4.5 19.5l1.7-1.7M17.8 6.2l1.7-1.7"/></g></svg>';
+        btn.title = isLight ? t('theme_dark') : t('theme_light');
+    }
+    function toggleTheme() {
+        const next = currentTheme() === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('freesia_theme', next); } catch (e) {}
+        applyThemeIcon();
+    }
+
+    (function init() {
+        let saved = 'id';
+        try { saved = localStorage.getItem('freesia_lang') || 'id'; } catch (e) {}
+        setLang(saved);
+    })();
+</script>
+</body>
+</html>

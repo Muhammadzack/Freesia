@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://liteforge.rpc.caldera.xyz; frame-ancestors 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Verifikasi — Freesia DEX</title>
+<meta name="description" content="Setiap kontrak Freesia DEX, diperiksa langsung dari blockchain di browser Anda.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cg%20transform%3D%22translate%2840%2C40%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%232E6F68%22%20transform%3D%22rotate%28-12%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%233E8A80%22%20transform%3D%22rotate%2848%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%2357A99B%22%20transform%3D%22rotate%28108%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%236FC2B4%22%20transform%3D%22rotate%28168%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%237FD0C2%22%20transform%3D%22rotate%28228%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%238CDCCB%22%20transform%3D%22rotate%28288%29%20scale%280.94%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    :root, [data-theme="dark"] {
+        --bg-primary:#0A1210; --bg-secondary:#111B17; --bg-tertiary:#18241F;
+        --border-color:#27352F; --text-primary:#EDF5F0; --text-secondary:#93A89D;
+        --accent:#00e676; --accent-dim:#00b25c; --accent-glow:rgba(0,230,118,0.22);
+        --mint:#d4ff5c; --danger:#ff4d4d; --warning:#ffb020;
+        --card-shadow:0 0 0 1px rgba(0,230,118,0.09), 0 24px 70px -26px rgba(0,230,118,0.22), 0 10px 30px rgba(0,0,0,0.45);
+        --logo-grad-a:#8CDCCB; --logo-grad-b:#00e676;
+        --body-bg:
+            radial-gradient(ellipse 1000px 620px at 12% -12%, rgba(0,230,118,0.13), transparent 62%),
+            radial-gradient(ellipse 820px 540px at 100% 6%, rgba(212,255,92,0.07), transparent 58%),
+            radial-gradient(ellipse 760px 520px at 50% 112%, rgba(0,178,92,0.10), transparent 60%),
+            linear-gradient(180deg, #0C1512 0%, #080E0C 100%);
+    }
+    [data-theme="light"] {
+        --bg-primary:#F5F7F8; --bg-secondary:#FFFFFF; --bg-tertiary:#EEF1F2;
+        --border-color:#D9E2DD; --text-primary:#142B25; --text-secondary:#5C7A73;
+        --accent:#49B76B; --accent-dim:#3B5A53; --accent-glow:rgba(73,183,107,0.14);
+        --mint:#8FBF2E; --danger:#d1342c; --warning:#b07d10;
+        --card-shadow:0 0 0 1px rgba(73,183,107,0.10), 0 12px 32px -12px rgba(20,43,37,0.12), 0 2px 8px rgba(20,43,37,0.05);
+        --logo-grad-a:#2E6F68; --logo-grad-b:#49B76B;
+        --body-bg:
+            radial-gradient(ellipse 900px 500px at 15% -10%, rgba(73,183,107,0.10), transparent 60%),
+            radial-gradient(ellipse 700px 500px at 100% 15%, rgba(212,255,92,0.14), transparent 55%),
+            #F5F7F8;
+    }
+    body {
+        font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif;
+        background:var(--body-bg); color:var(--text-primary); min-height:100vh;
+        padding:24px 16px 40px; transition:background .35s ease, color .35s ease;
+    }
+    .wrap { width:100%; max-width:680px; margin:0 auto; }
+    .mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+
+    /* Header */
+    .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:28px; flex-wrap:wrap; }
+    .logo { display:flex; align-items:center; gap:10px; font-size:19px; font-weight:700; color:var(--text-primary); text-decoration:none; }
+    .logo-icon { width:34px; height:34px; flex-shrink:0; }
+    .logo-name { background:linear-gradient(100deg, var(--logo-grad-a) 0%, var(--logo-grad-b) 100%);
+        -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:800; }
+    .logo-suffix { color:var(--text-secondary); font-weight:700; font-size:0.86em; letter-spacing:0.06em; }
+    .top-actions { display:flex; align-items:center; gap:8px; }
+    .lang-switch { display:inline-flex; border:1px solid var(--border-color); border-radius:99px; overflow:hidden; background:var(--bg-secondary); }
+    .lang-btn { border:0; background:transparent; color:var(--text-secondary); font-size:11.5px; font-weight:700;
+                padding:6px 10px; cursor:pointer; letter-spacing:.03em; line-height:1; }
+    .lang-btn.active { background:var(--accent); color:#fff; }
+    .icon-btn { width:34px; height:34px; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-tertiary);
+        color:var(--text-secondary); display:flex; align-items:center; justify-content:center; cursor:pointer; line-height:0; }
+    .icon-btn:hover { color:var(--text-primary); }
+    .back-link { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:10px;
+        border:1px solid var(--border-color); background:var(--bg-secondary); color:var(--text-secondary);
+        font-size:13px; font-weight:600; text-decoration:none; }
+    .back-link:hover { color:var(--accent); border-color:var(--accent-dim); }
+
+    /* Hero — tesis halaman */
+    .hero { margin-bottom:10px; }
+    .hero h1 { font-size:clamp(30px, 8vw, 46px); font-weight:800; letter-spacing:-.03em; line-height:1.05; margin-bottom:12px; }
+    .hero h1 .em { color:var(--accent); }
+    .hero p { font-size:14.5px; line-height:1.65; color:var(--text-secondary); max-width:52ch; }
+
+    /* Papan hitung: bukti berjalan di depan mata */
+    .probe { margin:22px 0 26px; padding:16px 18px; border-radius:16px; background:var(--bg-secondary);
+        border:1px solid var(--border-color); box-shadow:var(--card-shadow); }
+    .probe-row { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .probe-count { font-size:34px; font-weight:800; letter-spacing:-.03em; line-height:1; font-variant-numeric:tabular-nums; }
+    .probe-label { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-secondary); }
+    .probe-bar { height:6px; border-radius:99px; background:var(--bg-tertiary); border:1px solid var(--border-color); overflow:hidden; }
+    .probe-fill { height:100%; width:0; background:linear-gradient(90deg, var(--accent-dim), var(--accent)); transition:width .4s ease; }
+    .probe-note { font-size:11.5px; line-height:1.5; color:var(--text-secondary); margin-top:10px; }
+    .probe-note b { color:var(--text-primary); font-weight:600; }
+
+    /* Bagian */
+    .sec { margin-bottom:26px; }
+    .sec-head { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
+    .sec-head h2 { font-size:13px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--text-secondary); }
+    .sec-head .rule { flex:1; height:1px; background:var(--border-color); }
+    .sec-sub { font-size:12px; line-height:1.55; color:var(--text-secondary); margin-bottom:12px; }
+
+    /* Baris kontrak */
+    .item { background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:14px;
+        padding:14px 15px; margin-bottom:9px; }
+    .item-top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
+    .item-name { font-size:14.5px; font-weight:700; color:var(--text-primary); }
+    .item-kind { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .pill { font-size:10.5px; font-weight:700; letter-spacing:.04em; padding:4px 9px; border-radius:99px;
+        border:1px solid var(--border-color); color:var(--text-secondary); white-space:nowrap; flex-shrink:0; }
+    .pill.live { color:var(--accent); border-color:var(--accent-dim); background:var(--accent-glow); }
+    .pill.bad  { color:var(--danger); border-color:var(--danger); background:rgba(255,77,77,.10); }
+    .pill.wait { opacity:.75; }
+    .addr-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+    .addr { flex:1; min-width:0; font-size:11.5px; color:var(--text-secondary); word-break:break-all; line-height:1.45; }
+    .mini-btn { flex-shrink:0; border:1px solid var(--border-color); background:var(--bg-tertiary); color:var(--text-secondary);
+        font-size:10.5px; font-weight:700; padding:4px 8px; border-radius:7px; cursor:pointer; text-decoration:none; }
+    .mini-btn:hover { color:var(--accent); border-color:var(--accent-dim); }
+    .readout { font-size:11.5px; line-height:1.6; color:var(--text-secondary); padding-top:8px; border-top:1px dashed var(--border-color); }
+    .readout b { color:var(--text-primary); font-weight:600; font-variant-numeric:tabular-nums; }
+    .flag { margin-top:8px; font-size:11.5px; line-height:1.55; color:var(--text-secondary);
+        padding:8px 10px; border-radius:9px; background:var(--bg-tertiary); border:1px solid var(--border-color); border-left:3px solid var(--warning); }
+    .flag b { color:var(--warning); }
+
+    /* Batas kejujuran */
+    .limits { margin-top:30px; padding:18px; border-radius:16px; background:var(--bg-secondary);
+        border:1px solid var(--border-color); border-left:3px solid var(--warning); }
+    .limits h2 { font-size:15px; font-weight:700; margin-bottom:10px; }
+    .limits li { list-style:none; font-size:12.5px; line-height:1.65; color:var(--text-secondary);
+        padding-left:16px; position:relative; margin-bottom:7px; }
+    .limits li::before { content:'—'; position:absolute; left:0; color:var(--warning); }
+    .limits li b { color:var(--text-primary); font-weight:600; }
+
+    .foot { margin-top:30px; padding-top:18px; border-top:1px solid var(--border-color);
+        text-align:center; font-size:12px; color:var(--text-secondary); line-height:1.6; }
+    .foot a { color:var(--accent); text-decoration:none; font-weight:600; }
+    .foot a:hover { text-decoration:underline; }
+
+    a:focus-visible, button:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+    @media (prefers-reduced-motion:reduce) { * { transition-duration:.001ms !important; animation-duration:.001ms !important; } }
+</style>
+<script>
+    (function () {
+        var saved;
+        try { saved = localStorage.getItem('freesia_theme'); } catch (e) { saved = null; }
+        if (saved !== 'light' && saved !== 'dark') {
+            saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', saved);
+    })();
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top">
+    <a href="/" class="logo"><svg class="logo-icon" viewBox="0 0 80 80" role="img" aria-label="Freesia"><g transform="translate(40,40)"><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#2E6F68" transform="rotate(-12) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#3E8A80" transform="rotate(48) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#57A99B" transform="rotate(108) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#6FC2B4" transform="rotate(168) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#7FD0C2" transform="rotate(228) scale(0.94)"/><path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#8CDCCB" transform="rotate(288) scale(0.94)"/></g></svg><span><span class="logo-name">Freesia</span> <span class="logo-suffix">DEX</span></span></a>
+    <div class="top-actions">
+        <div class="lang-switch" role="group" aria-label="Bahasa / Language">
+            <button type="button" data-langbtn="id" class="lang-btn active" onclick="setLang('id')">ID</button>
+            <button type="button" data-langbtn="en" class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Tema"></button>
+        <a class="back-link" href="/" data-i18n="back">← Buka DEX</a>
+    </div>
+</div>
+
+<div class="hero">
+    <h1><span data-i18n="hero_1">Jangan percaya.</span><br><span class="em" data-i18n="hero_2">Periksa.</span></h1>
+    <p data-i18n="hero_p">Halaman ini tidak menyimpan apa pun. Saat Anda membukanya, browser Anda sendiri yang menghubungi RPC LitVM dan membaca tiap kontrak di bawah — langsung dari blockchain, tanpa melewati server kami. Yang Anda lihat adalah keadaan rantai saat ini, bukan klaim kami.</p>
+</div>
+
+<div class="probe">
+    <div class="probe-row">
+        <span class="probe-count mono" id="probeCount">0 / 19</span>
+        <span class="probe-label" id="probeState" data-i18n="probe_wait">Menunggu</span>
+    </div>
+    <div class="probe-bar"><div class="probe-fill" id="probeFill"></div></div>
+    <div class="probe-note" id="probeNote" data-i18n="probe_note">Menghubungi RPC LitVM…</div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_pools">Pool likuiditas</h2><span class="rule"></span></div>
+    <p class="sec-sub" data-i18n="sub_pools">Tempat dana Anda benar-benar berada saat menyediakan likuiditas. Cadangan di bawah dibaca hidup dari kontrak.</p>
+    <div id="listPools"></div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_staking">Kontrak staking</h2><span class="rule"></span></div>
+    <p class="sec-sub" data-i18n="sub_staking">Tiap pool punya kontrak staking sendiri. Yang menyimpan LP Anda saat di-stake.</p>
+    <div id="listStaking"></div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_tokens">Token</h2><span class="rule"></span></div>
+    <p class="sec-sub" data-i18n="sub_tokens">Semua token testnet. Tidak bernilai uang nyata.</p>
+    <div id="listTokens"></div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_infra">Infrastruktur</h2><span class="rule"></span></div>
+    <div id="listInfra"></div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_oracle">Oracle DIA</h2><span class="rule"></span></div>
+    <p class="sec-sub" data-i18n="sub_oracle">Harga referensi pasar. Dipakai HANYA sebagai pembanding di tampilan — tidak menyentuh logika swap.</p>
+    <div id="listOracle"></div>
+</div>
+
+<div class="limits">
+    <h2 data-i18n="lim_title">Yang TIDAK bisa dibuktikan halaman ini</h2>
+    <ul>
+        <li data-i18n="lim_1"><b>Belum ada audit profesional.</b> Kontrak ditinjau sendiri oleh pembuatnya. Tinjauan sendiri bukan pengganti audit, dan kami tidak akan menyebutnya begitu.</li>
+        <li data-i18n="lim_2"><b>Ini testnet.</b> Semua token di sini tanpa nilai. Jangan perlakukan hasil apa pun di sini sebagai janji untuk mainnet.</li>
+        <li data-i18n="lim_3"><b>Pool USDC/DAI lahir sebelum SimpleLiquidityPoolV3</b> dan kode sumbernya hilang. Kami memverifikasi ia punya proteksi slippage saat penarikan likuiditas — proteksi lainnya tidak dapat kami konfirmasi. Pool KOPDES/USDC dan MBG/USDC di-deploy dari V3 dan aman sejak lahir.</li>
+        <li data-i18n="lim_4"><b>Kecocokan kode sumber tidak dibaca dari sini.</b> Halaman ini membuktikan kontrak ada dan hidup, bukan bahwa kode sumbernya sudah diverifikasi. Untuk itu, buka tautan explorer tiap kontrak dan periksa tab kode sumbernya sendiri.</li>
+        <li data-i18n="lim_5"><b>Kalau salah satu baris di atas merah</b>, sesuatu memang salah. Kami memilih menampilkannya daripada menyembunyikannya.</li>
+    </ul>
+</div>
+
+<div class="foot">
+    <span data-i18n="foot_1">Ada yang tidak cocok?</span>
+    <a href="https://x.com/freesiadex" target="_blank" rel="noopener noreferrer">@freesiadex</a> ·
+    <a href="/insiden" data-i18n="foot_log">Catatan insiden</a> ·
+    <a href="https://liteforge.explorer.caldera.xyz" target="_blank" rel="noopener noreferrer">Explorer LitVM ↗</a>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    // Sumber kebenaran alamat = sama persis dengan yang dipakai aplikasi swap.
+    const RPC = 'https://liteforge.rpc.caldera.xyz/infra-partner-http';
+    const CHAIN_ID = 4441;
+    const EXPLORER = 'https://liteforge.explorer.caldera.xyz';
+
+    const TOKENS = {
+        USDC:   { name:'USD Coin',            address:'0x6c567a7Fb7A2b4968D230A644D3C76E731e34837' },
+        DAI:    { name:'Dai',                 address:'0xd06C4C54837e1BBd458948C45E306DA38b19a0Bc' },
+        USDT:   { name:'Tether USD (Testnet)',address:'0x903C7412e771eBb595Ae7B0108BA32a9A7a755d5' },
+        MBG:    { name:'MBG Token',           address:'0xD8aA8416d1C0d5290d99390c3ce38B2160c49167' },
+        KOPDES: { name:'Koperasi Desa',       address:'0x21D274F95d9Cd7b859E66bFA970Ad52fb41F6533' }
+    };
+    const POOLS = [
+        { key:'USDC-DAI',    label:'USDC / DAI',    a:'USDC',   b:'DAI',  addr:'0x79989f44c13B8ed41a2bA68Cd0a584e158cD11E8', legacy:true },
+        { key:'KOPDES-USDC', label:'KOPDES / USDC', a:'KOPDES', b:'USDC', addr:'0xBAE8787b417AE7b56458A4FEB904c65cd8018F8a' },
+        { key:'MBG-USDC',    label:'MBG / USDC',    a:'MBG',    b:'USDC', addr:'0x17F9b1ea3f6ceC4e5605f7cEDfa90674e3D3Faaf' },
+        { key:'MBG-USDT',    label:'MBG / USDT',    a:'MBG',    b:'USDT', addr:'0xd54598e60712684EcEFA810E4cCA0c30C2F41B54', legacy:true }
+    ];
+    const STAKING = [
+        { label:'Staking USDC/DAI',    addr:'0x5810F270dd7643Caa60858b1f5CC4a250BA38C13' },
+        { label:'Staking KOPDES/USDC', addr:'0xb7f9c24854c0B0d281913269026E719cc55157cb' },
+        { label:'Staking MBG/USDC',    addr:'0x881aBE426863F1172d435ad3f6dbcE0c876eD2Ef' }
+    ];
+    const INFRA = [
+        { label:'Faucet',       kind:'faucet', addr:'0xe72f37B2AE5295A723C2c885cdf47D4a752A804E' },
+        { label:'FREE (reward)',kind:'token',  addr:'0x5072FE98CD78604d8750a935fa39039F06b6e800' }
+    ];
+    const DIA_FEEDS = [
+        { label:'LTC / USD',  addr:'0x45dDa5d881BD2C917976CCfde74fFd6f6412da29' },
+        { label:'USDC / USD', addr:'0x4f91a950ed73c8B6F28dFE460f9444ed8866894f' },
+        { label:'USDT / USD', addr:'0xd7ff0A3DdE1FdC2137Ff4CaAde5396f009739645' },
+        { label:'ETH / USD',  addr:'0xc760B46beF9eD3F9A3d2b825164324D6703F0185' },
+        { label:'BTC / USD',  addr:'0x7d0445782E383223c7B4B660bb96b87213e9b605' }
+    ];
+
+    const POOL_ABI = [
+        'function reserveA() view returns (uint256)',
+        'function reserveB() view returns (uint256)',
+        'function tokenA() view returns (address)',
+        'function totalSupply() view returns (uint256)'
+    ];
+    const STAKING_ABI = [
+        'function totalSupply() view returns (uint256)',
+        'function periodFinish() view returns (uint256)'
+    ];
+    const ERC20_ABI = ['function totalSupply() view returns (uint256)'];
+    const DIA_ABI = ['function latestRoundData() view returns (uint80,int256,uint256,uint256,uint80)'];
+
+    const TOTAL = POOLS.length + STAKING.length + Object.keys(TOKENS).length + INFRA.length + DIA_FEEDS.length;
+    let checked = 0, failed = 0;
+
+    // ── Dwibahasa ──
+    const I18N = {
+        back:      ["← Buka DEX", "← Open DEX"],
+        hero_1:    ["Jangan percaya.", "Don't trust."],
+        hero_2:    ["Periksa.", "Verify."],
+        hero_p:    ["Halaman ini tidak menyimpan apa pun. Saat Anda membukanya, browser Anda sendiri yang menghubungi RPC LitVM dan membaca tiap kontrak di bawah — langsung dari blockchain, tanpa melewati server kami. Yang Anda lihat adalah keadaan rantai saat ini, bukan klaim kami.",
+                    "This page stores nothing. When you open it, your own browser contacts the LitVM RPC and reads every contract below — straight from the blockchain, never through our servers. What you see is the current state of the chain, not our claim about it."],
+        probe_wait:["Menunggu", "Waiting"],
+        probe_run: ["Memeriksa", "Checking"],
+        probe_done:["Selesai", "Done"],
+        probe_note:["Menghubungi RPC LitVM…", "Contacting the LitVM RPC…"],
+        probe_ok:  ["Semua <b>{n}</b> kontrak ada dan hidup di LitVM Testnet (chainId 4441). Diperiksa dari browser Anda, {t}.",
+                    "All <b>{n}</b> contracts exist and are live on LitVM Testnet (chainId 4441). Checked from your browser at {t}."],
+        probe_bad: ["<b>{f}</b> dari {n} kontrak tidak menjawab. Baris merah di bawah menunjukkan yang mana.",
+                    "<b>{f}</b> of {n} contracts didn't respond. The red rows below show which."],
+        probe_fail:["Tidak bisa menghubungi RPC LitVM. Mungkin jaringan Anda, mungkin RPC-nya sedang turun — dua-duanya berarti halaman ini belum membuktikan apa pun.",
+                    "Couldn't reach the LitVM RPC. Might be your network, might be the RPC being down — either way, this page hasn't proven anything yet."],
+        sec_pools: ["Pool likuiditas", "Liquidity pools"],
+        sub_pools: ["Tempat dana Anda benar-benar berada saat menyediakan likuiditas. Cadangan di bawah dibaca hidup dari kontrak.",
+                    "Where your funds actually sit when you provide liquidity. The reserves below are read live from the contract."],
+        sec_staking:["Kontrak staking", "Staking contracts"],
+        sub_staking:["Tiap pool punya kontrak staking sendiri. Yang menyimpan LP Anda saat di-stake.",
+                     "Each pool has its own staking contract. This is what holds your LP while it's staked."],
+        sec_tokens:["Token", "Tokens"],
+        sub_tokens:["Semua token testnet. Tidak bernilai uang nyata.", "All testnet tokens. Worth no real money."],
+        sec_infra: ["Infrastruktur", "Infrastructure"],
+        sec_oracle:["Oracle DIA", "DIA oracle"],
+        sub_oracle:["Harga referensi pasar. Dipakai HANYA sebagai pembanding di tampilan — tidak menyentuh logika swap.",
+                    "Market reference prices. Used ONLY as a benchmark in the interface — never in swap logic."],
+        p_wait:    ["memeriksa…", "checking…"],
+        p_live:    ["hidup di chain", "live on chain"],
+        p_bad:     ["tidak menjawab", "no response"],
+        p_none:    ["tidak ada kontrak", "no contract"],
+        r_bytecode:["Bytecode <b>{n}</b> byte di alamat ini.", "Bytecode <b>{n}</b> bytes at this address."],
+        r_reserves:["Cadangan: <b>{a}</b> {sa> } · <b>{b}</b> {sb}. Suplai LP <b>{ts}</b>.", ""],
+        r_pool:    ["Cadangan <b>{a}</b> {sa} + <b>{b}</b> {sb} · suplai LP <b>{ts}</b>",
+                    "Reserves <b>{a}</b> {sa} + <b>{b}</b> {sb} · LP supply <b>{ts}</b>"],
+        r_stake:   ["Total LP di-stake <b>{n}</b> · periode reward berakhir <b>{d}</b>",
+                    "Total LP staked <b>{n}</b> · reward period ends <b>{d}</b>"],
+        r_supply:  ["Suplai <b>{n}</b>", "Supply <b>{n}</b>"],
+        r_feed:    ["Harga <b>${p}</b> · diperbarui <b>{a}</b> lalu", "Price <b>${p}</b> · updated <b>{a}</b> ago"],
+        r_feed_old:["Harga <b>${p}</b> · <b>basi</b> ({a})", "Price <b>${p}</b> · <b>stale</b> ({a})"],
+        r_code:    ["Kontrak ada · bytecode <b>{n}</b> byte", "Contract exists · <b>{n}</b> bytes of bytecode"],
+        r_err:     ["Alamat ini tidak menjawab panggilan baca. Jangan pakai.", "This address doesn't answer read calls. Don't use it."],
+        never:     ["belum pernah", "never"],
+        legacy_pool:["<b>Pool generasi awal.</b> Di-deploy sebelum SimpleLiquidityPoolV3 dan kode sumbernya hilang. Proteksi slippage saat penarikan likuiditas terverifikasi; proteksi lain tidak dapat kami konfirmasi. Pool dari V3 di bawah lebih aman.",
+                     "<b>Early-generation pool.</b> Deployed before SimpleLiquidityPoolV3, and its source is lost. Slippage protection on liquidity removal is verified; the other protections we can't confirm. The V3 pools below are safer."],
+        copy:      ["Salin", "Copy"],
+        copied:    ["Tersalin", "Copied"],
+        lim_title: ["Yang TIDAK bisa dibuktikan halaman ini", "What this page can NOT prove"],
+        lim_1:     ["<b>Belum ada audit profesional.</b> Kontrak ditinjau sendiri oleh pembuatnya. Tinjauan sendiri bukan pengganti audit, dan kami tidak akan menyebutnya begitu.",
+                    "<b>No professional audit yet.</b> The contracts were reviewed by the person who wrote them. A self-review is not an audit, and we won't call it one."],
+        lim_2:     ["<b>Ini testnet.</b> Semua token di sini tanpa nilai. Jangan perlakukan hasil apa pun di sini sebagai janji untuk mainnet.",
+                    "<b>This is a testnet.</b> Every token here is worthless. Don't treat anything that happens here as a promise about mainnet."],
+        lim_3:     ["<b>Pool USDC/DAI lahir sebelum SimpleLiquidityPoolV3</b> dan kode sumbernya hilang. Kami memverifikasi ia punya proteksi slippage saat penarikan likuiditas — proteksi lainnya tidak dapat kami konfirmasi. Pool KOPDES/USDC dan MBG/USDC di-deploy dari V3 dan aman sejak lahir.",
+                    "<b>The USDC/DAI pool predates SimpleLiquidityPoolV3</b> and its source is lost. We verified it has slippage protection on liquidity removal — the rest we can't confirm. The KOPDES/USDC and MBG/USDC pools were deployed from V3 and are safe by birth."],
+        lim_4:     ["<b>Kecocokan kode sumber tidak dibaca dari sini.</b> Halaman ini membuktikan kontrak ada dan hidup, bukan bahwa kode sumbernya sudah diverifikasi. Untuk itu, buka tautan explorer tiap kontrak dan periksa tab kode sumbernya sendiri.",
+                    "<b>Source-code verification isn't read here.</b> This page proves the contracts exist and are live — not that their source is verified. For that, open each contract's explorer link and check its source tab yourself."],
+        lim_5:     ["<b>Kalau salah satu baris di atas merah</b>, sesuatu memang salah. Kami memilih menampilkannya daripada menyembunyikannya.",
+                    "<b>If any row above is red</b>, something really is wrong. We'd rather show it than hide it."],
+        foot_1:    ["Ada yang tidak cocok?", "Something doesn't add up?"],
+        foot_log:  ["Catatan insiden", "Incident log"],
+        theme_dark:["Ganti ke tema gelap", "Switch to dark theme"],
+        theme_light:["Ganti ke tema terang", "Switch to light theme"]
+    };
+    let LANG = 'id';
+    const t = (k) => { const e = I18N[k]; return e ? (LANG === 'en' ? e[1] : e[0]) : k; };
+    function setLang(l) {
+        LANG = (l === 'en') ? 'en' : 'id';
+        try { localStorage.setItem('freesia_lang', LANG); } catch (e) {}
+        document.documentElement.lang = LANG;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const v = t(el.getAttribute('data-i18n'));
+            if (v.includes('<')) el.innerHTML = v; else el.textContent = v;
+        });
+        document.querySelectorAll('[data-langbtn]').forEach(b =>
+            b.classList.toggle('active', b.getAttribute('data-langbtn') === LANG));
+        applyThemeIcon();
+        renderAll();          // baris kontrak ikut bahasa
+        paintProbe();
+    }
+
+    // ── Tema ──
+    const currentTheme = () => document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    function applyThemeIcon() {
+        const btn = document.getElementById('themeBtn');
+        if (!btn) return;
+        const isLight = currentTheme() === 'light';
+        btn.innerHTML = isLight
+            ? '<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a1 1 0 0 0-1.3-1.2A10.3 10.3 0 1 0 21.7 15.5a1 1 0 0 0-1.2-1.3z"/></svg>'
+            : '<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 2.4v2.4M12 19.2v2.4M4.5 4.5l1.7 1.7M17.8 17.8l1.7 1.7M2.4 12h2.4M19.2 12h2.4M4.5 19.5l1.7-1.7M17.8 6.2l1.7-1.7"/></g></svg>';
+        btn.title = isLight ? t('theme_dark') : t('theme_light');
+    }
+    function toggleTheme() {
+        const next = currentTheme() === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try { localStorage.setItem('freesia_theme', next); } catch (e) {}
+        applyThemeIcon();
+    }
+
+    // ── Status tiap kontrak (diisi oleh pemeriksaan) ──
+    const results = {};   // addr -> { state:'wait'|'live'|'bad', readout:string }
+    const fmt = (n, d=2) => isFinite(n) ? n.toLocaleString('en-US', { maximumFractionDigits:d }) : '—';
+
+    function row(label, kind, addr, flagHtml) {
+        const r = results[addr.toLowerCase()] || { state:'wait' };
+        const pill = r.state === 'live' ? `<span class="pill live">● ${t('p_live')}</span>`
+                   : r.state === 'bad'  ? `<span class="pill bad">✕ ${t('p_bad')}</span>`
+                   : `<span class="pill wait">${t('p_wait')}</span>`;
+        return `<div class="item">
+            <div class="item-top">
+                <div><div class="item-name">${label}</div><div class="item-kind">${kind}</div></div>
+                ${pill}
+            </div>
+            <div class="addr-row">
+                <code class="addr mono">${addr}</code>
+                <button class="mini-btn" onclick="copyAddr(this,'${addr}')">${t('copy')}</button>
+                <a class="mini-btn" href="${EXPLORER}/address/${addr}" target="_blank" rel="noopener noreferrer">Explorer ↗</a>
+            </div>
+            <div class="readout">${r.readout || '<span style="opacity:.6">' + t('p_wait') + '</span>'}</div>
+            ${flagHtml || ''}
+        </div>`;
+    }
+
+    function renderAll() {
+        document.getElementById('listPools').innerHTML = POOLS.map(p =>
+            row(p.label, 'SimpleLiquidityPool' + (p.legacy ? '' : ' V3'), p.addr,
+                p.legacy ? `<div class="flag">${t('legacy_pool')}</div>` : '')).join('');
+        document.getElementById('listStaking').innerHTML = STAKING.map(s =>
+            row(s.label, 'LPStakingRewards', s.addr, '')).join('');
+        document.getElementById('listTokens').innerHTML = Object.entries(TOKENS).map(([sym, tk]) =>
+            row(sym, tk.name, tk.address, '')).join('');
+        document.getElementById('listInfra').innerHTML = INFRA.map(i =>
+            row(i.label, i.kind === 'faucet' ? 'TestnetFaucet' : 'ERC20', i.addr, '')).join('');
+        document.getElementById('listOracle').innerHTML = DIA_FEEDS.map(f =>
+            row(f.label, 'DIA adapter', f.addr, '')).join('');
+    }
+
+    function copyAddr(btn, addr) {
+        navigator.clipboard?.writeText(addr).then(() => {
+            const old = btn.textContent;
+            btn.textContent = t('copied');
+            setTimeout(() => { btn.textContent = old; }, 1400);
+        }).catch(() => {});
+    }
+
+    function paintProbe() {
+        const done = checked;
+        document.getElementById('probeCount').textContent = `${done} / ${TOTAL}`;
+        document.getElementById('probeFill').style.width = (done / TOTAL * 100).toFixed(1) + '%';
+        const st = document.getElementById('probeState');
+        st.textContent = done === 0 ? t('probe_wait') : (done < TOTAL ? t('probe_run') : t('probe_done'));
+        const note = document.getElementById('probeNote');
+        if (done < TOTAL) return;
+        note.innerHTML = failed === 0
+            ? t('probe_ok').replace('{n}', TOTAL).replace('{t}', new Date().toLocaleTimeString())
+            : t('probe_bad').replace('{f}', failed).replace('{n}', TOTAL);
+    }
+
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+    function mark(addr, state, readout) {
+        results[addr.toLowerCase()] = { state, readout };
+        if (state === 'bad') failed++;
+        checked++;
+        renderAll();
+        paintProbe();
+    }
+    const ageText = (sec) => {
+        if (!isFinite(sec) || sec < 0) return '—';
+        if (sec < 60) return Math.round(sec) + 's';
+        if (sec < 3600) return Math.round(sec / 60) + 'm';
+        return Math.round(sec / 3600) + 'h';
+    };
+
+    async function run() {
+        let provider;
+        try {
+            provider = new ethers.JsonRpcProvider(RPC, { chainId: CHAIN_ID, name: 'LitVM Testnet' });
+            await provider.getBlockNumber();
+        } catch (e) {
+            document.getElementById('probeNote').textContent = t('probe_fail');
+            document.getElementById('probeState').textContent = '✕';
+            return;
+        }
+
+        // Cek dasar untuk SEMUA alamat: benarkah ada kontrak di sana?
+        const codeOk = async (addr) => {
+            const code = await provider.getCode(addr);
+            if (!code || code === '0x') throw new Error('no contract');
+            return (code.length - 2) / 2;   // byte
+        };
+
+        for (const p of POOLS) {
+            try {
+                const bytes = await codeOk(p.addr);
+                const c = new ethers.Contract(p.addr, POOL_ABI, provider);
+                const [rA, rB, tA, ts] = await Promise.all([c.reserveA(), c.reserveB(), c.tokenA(), c.totalSupply()]);
+                const ourA = (TOKENS[p.a].address || '').toLowerCase() === tA.toLowerCase();
+                const a = parseFloat(ethers.formatUnits(ourA ? rA : rB, 18));
+                const b = parseFloat(ethers.formatUnits(ourA ? rB : rA, 18));
+                mark(p.addr, 'live', t('r_pool')
+                    .replace('{a}', fmt(a)).replace('{sa}', p.a)
+                    .replace('{b}', fmt(b)).replace('{sb}', p.b)
+                    .replace('{ts}', fmt(parseFloat(ethers.formatUnits(ts, 18)), 4))
+                    + ` · ${t('r_bytecode').replace('{n}', fmt(bytes, 0))}`);
+            } catch (e) { mark(p.addr, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+
+        for (const s of STAKING) {
+            try {
+                await codeOk(s.addr);
+                const c = new ethers.Contract(s.addr, STAKING_ABI, provider);
+                const [ts, pf] = await Promise.all([c.totalSupply(), c.periodFinish()]);
+                const d = Number(pf) > 0 ? new Date(Number(pf) * 1000).toLocaleDateString() : t('never');
+                mark(s.addr, 'live', t('r_stake')
+                    .replace('{n}', fmt(parseFloat(ethers.formatUnits(ts, 18)), 4))
+                    .replace('{d}', d));
+            } catch (e) { mark(s.addr, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+
+        for (const [sym, tk] of Object.entries(TOKENS)) {
+            try {
+                await codeOk(tk.address);
+                const c = new ethers.Contract(tk.address, ERC20_ABI, provider);
+                const ts = await c.totalSupply();
+                mark(tk.address, 'live', t('r_supply').replace('{n}', fmt(parseFloat(ethers.formatUnits(ts, 18)), 0) + ' ' + sym));
+            } catch (e) { mark(tk.address, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+
+        for (const i of INFRA) {
+            try {
+                const bytes = await codeOk(i.addr);
+                if (i.kind === 'token') {
+                    const c = new ethers.Contract(i.addr, ERC20_ABI, provider);
+                    const ts = await c.totalSupply();
+                    mark(i.addr, 'live', t('r_supply').replace('{n}', fmt(parseFloat(ethers.formatUnits(ts, 18)), 0) + ' FREE'));
+                } else {
+                    mark(i.addr, 'live', t('r_code').replace('{n}', fmt(bytes, 0)));
+                }
+            } catch (e) { mark(i.addr, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+
+        for (const f of DIA_FEEDS) {
+            try {
+                await codeOk(f.addr);
+                const c = new ethers.Contract(f.addr, DIA_ABI, provider);
+                const [, answer, , updatedAt] = await c.latestRoundData();
+                const price = parseFloat(ethers.formatUnits(answer, 18));
+                const age = Math.floor(Date.now() / 1000) - Number(updatedAt);
+                const stale = age > 7200;
+                mark(f.addr, 'live', (stale ? t('r_feed_old') : t('r_feed'))
+                    .replace('{p}', price.toLocaleString('en-US', { maximumFractionDigits: price < 10 ? 4 : 0 }))
+                    .replace('{a}', ageText(age)));
+            } catch (e) { mark(f.addr, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+    }
+
+    // Muat bahasa tersimpan (dibagi dengan aplikasi swap)
+    (function init() {
+        let saved = 'id';
+        try { saved = localStorage.getItem('freesia_lang') || 'id'; } catch (e) {}
+        setLang(saved);
+        renderAll();
+        run();
+    })();
+</script>
+</body>
+</html>

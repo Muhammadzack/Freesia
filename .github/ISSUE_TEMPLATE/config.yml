@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: "🔒 Melaporkan kerentanan keamanan / Report a security vulnerability"
+    url: https://github.com/Muhammadzack/Freesia/security/policy
+    about: "JANGAN buka issue publik untuk kerentanan. Gunakan jalur privat ini — lihat SECURITY.md. | Do NOT open a public issue for vulnerabilities. Use this private channel."
+  - name: "🔍 Periksa kontrak sendiri / Verify the contracts yourself"
+    url: https://app.freesiadex.xyz/verify
+    about: "Sebelum melapor, halaman ini mungkin sudah menjawab: ia membaca tiap kontrak langsung dari blockchain. | This page may already answer your question — it reads every contract straight from the chain."
+  - name: "📜 Catatan insiden / Incident log"
+    url: https://app.freesiadex.xyz/insiden
+    about: "Mungkin kami sudah tahu. Semua kesalahan yang kami sadari tercatat di sini, termasuk yang masih terbuka. | We might already know. Every mistake we're aware of is logged here."
+  - name: "💬 Ngobrol langsung / Talk to the developer"
+    url: https://x.com/0xzackbh
+    about: "Untuk hal yang tidak cocok jadi issue. | For anything that doesn't fit an issue."
