@@ -1,0 +1,20 @@
+{
+  "name": "freesia-contracts",
+  "version": "3.0.0",
+  "description": "Smart contract Freesia DEX - SimpleLiquidityPoolV3 (perbaikan audit) untuk LitVM Testnet",
+  "license": "MIT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network litvmTestnet",
+    "seed:testnet": "hardhat run scripts/seed-liquidity.js --network litvmTestnet",
+    "deploy:factory": "hardhat run scripts/deploy-factory.js --network litvmTestnet",
+    "deploy:mbg-usdt": "hardhat run scripts/deploy-mbg-usdt.js --network litvmTestnet",
+    "create-pool:mbg-usdt": "hardhat run scripts/create-pool-mbg-usdt.js --network litvmTestnet"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0",
+    "dotenv": "^16.4.0"
+  }
+}
