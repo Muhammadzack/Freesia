@@ -811,12 +811,11 @@ async function loadUserTxHistory() {
     }
   }
   try {
-    const latest = await readProvider.getBlockNumber();
-    const from = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
     const [depLogs, wdLogs] = await Promise.all([
-      vaultRead.queryFilter(vaultRead.filters.Deposit(null, user), from, latest),
-      vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, user), from, latest)
+      scanBackwards((f, t) => vaultRead.queryFilter(vaultRead.filters.Deposit(null, user), f, t), 20),
+      scanBackwards((f, t) => vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, user), f, t), 20)
     ]);
+
     const txs = [];
     depLogs.forEach(l => txs.push({ type: "deposit", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
     wdLogs.forEach(l => txs.push({ type: "withdraw", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
