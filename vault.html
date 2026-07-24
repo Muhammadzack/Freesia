@@ -744,6 +744,26 @@ async function querySubgraph(query) {
   } catch (e) { clearTimeout(timeout); return null; }
 }
 
+// LitVM ~4 blok/detik, jadi rentang blok pendek = riwayat hilang dalam hitungan
+// menit. Kita telusuri mundur per potongan (RPC menolak rentang terlalu lebar)
+// dan berhenti begitu cukup entri terkumpul — yang terbaru ketemu duluan.
+async function scanBackwards(runQuery, wanted) {
+  const latest = await readProvider.getBlockNumber();
+  const floor = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
+  const found = [];
+  let to = latest;
+  while (to > floor && found.length < wanted) {
+    const from = Math.max(floor, to - CONFIG.HISTORY_CHUNK + 1);
+    try {
+      const logs = await runQuery(from, to);
+      if (logs.length) found.unshift(...logs);
+    } catch (e) { /* rentang ditolak RPC — lewati saja */ }
+    to = from - 1;
+    await new Promise(r => setTimeout(r, 40));
+  }
+  return found;
+}
+
 async function loadAiHistory() {
   const box = document.getElementById("aiList");
   if (CONFIG.SUBGRAPH) {
