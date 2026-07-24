@@ -104,6 +104,9 @@
   .empty { color: var(--text-dim); font-size: 0.88rem; text-align: center; padding: 18px 0; }
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(128,128,128,0.25); border-top-color: var(--text); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  /* Penanda halus bahwa daftar sedang disegarkan dari blockchain di latar. */
+  .refreshing { display: flex; align-items: center; justify-content: center; gap: 7px;
+    font-size: 0.74rem; color: var(--text-dim); padding: 12px 0 2px; }
   #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.88rem; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; max-width: 90%; z-index: 50; }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   #toast.err { border-color: var(--red); color: var(--red); }
@@ -288,6 +291,7 @@ const CONFIG = {
   EXPLORER: "https://liteforge.explorer.caldera.xyz",
   HISTORY_BLOCK_RANGE: 300000,
   HISTORY_CHUNK: 4000,
+  SCAN_DELAY_MS: 250,
   SUBGRAPH: null,
   // Domain yang benar-benar dipakai. Tambahkan domain preview Vercel di sini
   // kalau kamu sering mengujinya, supaya peringatan palsu tidak muncul.
@@ -419,7 +423,8 @@ const I18N = {
     txEmpty: "Belum ada transaksi.", txDeposit: "Deposit", txWithdraw: "Withdraw",
     txView: "Lihat tx →", discTitle: "Putuskan dompet?",
     discBody: "Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.",
-    cancel: "Batal", disconnected: "Dompet diputuskan."
+    cancel: "Batal", disconnected: "Dompet diputuskan.",
+    syncing: "Menyegarkan dari blockchain…"
   },
   en: {
     allocNote: "This allocation is recorded on-chain as an AI decision, but it does not move any funds yet. The vault still holds all USDC and earns no yield. Real capital movement is still on the roadmap.",
@@ -452,7 +457,8 @@ const I18N = {
     txEmpty: "No transactions yet.", txDeposit: "Deposit", txWithdraw: "Withdraw",
     txView: "View tx →", discTitle: "Disconnect wallet?",
     discBody: "You will leave this session. Your funds stay safe in the contract.",
-    cancel: "Cancel", disconnected: "Wallet disconnected."
+    cancel: "Cancel", disconnected: "Wallet disconnected.",
+    syncing: "Refreshing from the blockchain…"
   }
 };
 let LANG = localStorage.getItem("freesia_lang") || "id";
@@ -461,6 +467,7 @@ function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
 let aiHistoryCache = null;
 let isTxPending = false;
 let userTxCache = null;
+let aiSyncing = false, txSyncing = false;
 
 function applyI18n() {
   document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -749,24 +756,131 @@ async function querySubgraph(query) {
   } catch (e) { clearTimeout(timeout); return null; }
 }
 
-// LitVM ~4 blok/detik, jadi rentang blok pendek = riwayat hilang dalam hitungan
-// menit. Kita telusuri mundur per potongan (RPC menolak rentang terlalu lebar)
-// dan berhenti begitu cukup entri terkumpul — yang terbaru ketemu duluan.
-async function scanBackwards(runQuery, wanted) {
+/* ══════════════════════════════════════════════════════════════════
+   CACHE RIWAYAT DI BROWSER
+
+   LitVM menghasilkan ~345.000 blok per hari. Artinya rentang blok
+   berapa pun akan selalu jadi jendela sempit: keputusan lama lenyap
+   dari tampilan padahal tetap tercatat permanen di blockchain.
+
+   Solusinya: begitu sebuah entri ditemukan lewat pemindaian, simpan
+   di browser. Sekali ketemu, tidak pernah hilang lagi — dan muat
+   berikutnya hanya perlu memindai blok BARU saja, bukan mengulang
+   dari awal.
+
+   CATATAN KEPERCAYAAN: cache ini hanya mempercepat, bukan menjadi
+   sumber kebenaran. Datanya tetap dibaca langsung dari blockchain
+   oleh browser pengunjung — tidak ada server perantara yang perlu
+   dipercaya, dan tiap entri tetap bisa diverifikasi di explorer
+   lewat hash transaksinya.
+   ══════════════════════════════════════════════════════════════════ */
+const CACHE_VERSION = 1;
+const CACHE_MAX_ITEMS = 60;
+
+function cacheKey(kind, who) {
+  return "freesia_vault_" + kind + (who ? "_" + String(who).toLowerCase() : "");
+}
+function loadCache(kind, who) {
+  try {
+    const raw = localStorage.getItem(cacheKey(kind, who));
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (!obj || obj.v !== CACHE_VERSION || !Array.isArray(obj.items)) return null;
+    return obj;
+  } catch (e) { return null; }
+}
+function saveCache(kind, who, items, lastScannedBlock) {
+  try {
+    localStorage.setItem(cacheKey(kind, who), JSON.stringify({
+      v: CACHE_VERSION,
+      updatedAt: Date.now(),
+      lastScannedBlock: lastScannedBlock || 0,
+      items: items.slice(0, CACHE_MAX_ITEMS)
+    }));
+  } catch (e) { console.warn("cache tidak bisa disimpan:", e); }
+}
+
+// Satu transaksi bisa memuat beberapa event, jadi hash saja tidak cukup unik.
+function logId(x) { return String(x.txHash || "") + ":" + (x.logIndex != null ? x.logIndex : 0); }
+function mergeById(oldItems, newItems) {
+  const map = new Map();
+  for (const item of oldItems) map.set(logId(item), item);
+  for (const item of newItems) map.set(logId(item), item);   // hasil segar menang
+  return [...map.values()].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
+}
+
+// Event diubah jadi objek biasa (BigInt -> string) supaya bisa masuk JSON.
+// Fungsi render memakai Number()/String() sehingga bentuknya tetap cocok.
+function logIndexOf(l) { return l.index != null ? l.index : (l.logIndex != null ? l.logIndex : 0); }
+
+function normalizeRebalanced(l) {
+  return {
+    blockNumber: l.blockNumber,
+    txHash: l.transactionHash,
+    logIndex: logIndexOf(l),
+    args: {
+      round: l.args.round.toString(),
+      targetAllocationBps: Number(l.args.targetAllocationBps),
+      volatilitySignal: l.args.volatilitySignal.toString(),
+      reason: String(l.args.reason),
+      timestamp: l.args.timestamp.toString()
+    }
+  };
+}
+function normalizeTx(l, type) {
+  return {
+    type: type,
+    assets: l.args.assets.toString(),
+    shares: l.args.shares.toString(),
+    blockNumber: l.blockNumber,
+    txHash: l.transactionHash,
+    logIndex: logIndexOf(l),
+    timestamp: 0
+  };
+}
+
+function setSyncIndicator(boxId, on) {
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  const existing = box.querySelector(".refreshing");
+  if (!on) { if (existing) existing.remove(); return; }
+  if (existing) return;
+  const div = document.createElement("div");
+  div.className = "refreshing";
+  const sp = document.createElement("span"); sp.className = "spinner";
+  div.appendChild(sp);
+  div.appendChild(document.createTextNode(" " + t("syncing")));
+  box.appendChild(div);
+}
+
+// Telusuri mundur per potongan. `sinceBlock` membuat pemindaian berikutnya
+// hanya menyentuh blok baru — inilah yang membuat pemuatan jadi instan.
+async function scanBackwards(runQuery, wanted, sinceBlock) {
   const latest = await readProvider.getBlockNumber();
-  const floor = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
+  const hardFloor = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
+  const floor = Math.max(hardFloor, sinceBlock || 0);
   const found = [];
-  let to = latest;
+  let to = latest, okCount = 0, failCount = 0, lastErr = null;
+
   while (to > floor && found.length < wanted) {
     const from = Math.max(floor, to - CONFIG.HISTORY_CHUNK + 1);
     try {
       const logs = await runQuery(from, to);
+      okCount++;
       if (logs.length) found.unshift(...logs);
-    } catch (e) { /* rentang ditolak RPC — lewati saja */ }
+    } catch (e) {
+      failCount++; lastErr = e;
+      console.warn("getLogs gagal", from, to, (e && (e.shortMessage || e.message)) || e);
+    }
     to = from - 1;
-    await new Promise(r => setTimeout(r, 40));
+    await new Promise(r => setTimeout(r, CONFIG.SCAN_DELAY_MS));
   }
-  return found;
+
+  // Kalau SEMUA potongan gagal, jangan diam-diam bilang "belum ada data" —
+  // itu menyesatkan. Lempar errornya supaya UI jujur bahwa ia gagal memuat.
+  if (okCount === 0 && failCount > 0) throw lastErr;
+
+  return { logs: found, scannedTo: latest, complete: failCount === 0 };
 }
 
 async function loadAiHistory() {
@@ -774,29 +888,58 @@ async function loadAiHistory() {
   if (CONFIG.SUBGRAPH) {
     const data = await querySubgraph(`{ rebalanceds(orderBy: blockTimestamp, orderDirection: desc, first: 12) { round targetAllocationBps volatilitySignal reason blockTimestamp } }`);
     if (data && data.rebalanceds) {
-      aiHistoryCache = data.rebalanceds.map(r => ({ args: { round: BigInt(r.round), targetAllocationBps: Number(r.targetAllocationBps), volatilitySignal: BigInt(r.volatilitySignal), reason: r.reason, timestamp: BigInt(r.blockTimestamp) } }));
+      aiHistoryCache = data.rebalanceds.map(r => ({ args: { round: String(r.round), targetAllocationBps: Number(r.targetAllocationBps), volatilitySignal: String(r.volatilitySignal), reason: r.reason, timestamp: String(r.blockTimestamp) } }));
       renderAiHistory(); return;
     }
   }
+
+  // 1) Tampilkan cache lebih dulu — instan, tanpa menunggu jaringan.
+  const cached = loadCache("ai", null);
+  if (cached && cached.items.length) {
+    aiHistoryCache = cached.items;
+    renderAiHistory();
+  }
+
+  // 2) Lalu pindai blok baru di latar dan gabungkan.
+  aiSyncing = true;
+  setSyncIndicator("aiList", true);
   try {
-    const logs = await scanBackwards((f, t) => vaultRead.queryFilter("Rebalanced", f, t), 12);
-    aiHistoryCache = logs; renderAiHistory();
-  } catch (e) { console.warn("loadAiHistory failed:", e); box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>'; }
+    const since = cached ? cached.lastScannedBlock : 0;
+    const res = await scanBackwards(function (f, tb) { return vaultRead.queryFilter("Rebalanced", f, tb); }, 12, since);
+    const fresh = res.logs.map(normalizeRebalanced);
+    const merged = mergeById(cached ? cached.items : [], fresh);
+    aiHistoryCache = merged;
+    // Titik pindai hanya maju kalau semua potongan berhasil. Kalau ada yang
+    // gagal, jangan lompati blok itu — biar dicoba lagi di pemuatan berikutnya.
+    saveCache("ai", null, merged, res.complete ? res.scannedTo : since);
+    aiSyncing = false;
+    renderAiHistory();
+  } catch (e) {
+    console.warn("loadAiHistory failed:", e);
+    aiSyncing = false;
+    if (!aiHistoryCache || !aiHistoryCache.length) {
+      box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
+    } else {
+      setSyncIndicator("aiList", false);
+    }
+  }
 }
 
 function renderAiHistory() {
   const box = document.getElementById("aiList");
   if (!aiHistoryCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
   if (aiHistoryCache.length === 0) { box.innerHTML = '<div class="empty">' + t("noAi") + '</div>'; return; }
-  const sorted = [...aiHistoryCache]; if (!CONFIG.SUBGRAPH) sorted.reverse();
+  // Terbaru di atas. Subgraph sudah desc; hasil gabungan juga sudah diurutkan.
+  const sorted = [...aiHistoryCache].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
   box.innerHTML = sorted.slice(0, 12).map(l => {
-    const round = l.args.round.toString();
+    const round = String(l.args.round);
     const bps = Number(l.args.targetAllocationBps);
     const vol = Number(l.args.volatilitySignal);
     const reason = String(l.args.reason);
     const when = new Date(Number(l.args.timestamp) * 1000).toLocaleString(LANG === "id" ? "id-ID" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-    return `<div class="ai-item"><div class="ai-head"><span class="ai-round">${t("rebalance")}${round}</span><span class="ai-time">${when}</span></div><div class="ai-reason">${escapeHtml(reason)}</div><div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div></div>`;
+    return `<div class="ai-item"><div class="ai-head"><span class="ai-round">${t("rebalance")}${escapeHtml(round)}</span><span class="ai-time">${when}</span></div><div class="ai-reason">${escapeHtml(reason)}</div><div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div></div>`;
   }).join("");
+  if (aiSyncing) setSyncIndicator("aiList", true);
 }
 
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -804,36 +947,67 @@ const TX_HASH_RE = /^0x[0-9a-fA-F]{64}$/;
 
 async function loadUserTxHistory() {
   if (!user) return;
+  const who = user;
   const box = document.getElementById("txList");
-  box.innerHTML = '<div class="empty"><span class="spinner"></span> ' + t("loading") + '</div>';
+
   if (CONFIG.SUBGRAPH) {
     const data = await querySubgraph(`{ deposits(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } withdraws(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } }`);
     if (data && (data.deposits || data.withdraws)) {
       const txs = [];
-      (data.deposits || []).forEach(d => txs.push({ type: "deposit", assets: BigInt(d.assets), shares: BigInt(d.shares), blockNumber: Number(d.blockNumber), txHash: d.transactionHash, timestamp: BigInt(d.blockTimestamp) }));
-      (data.withdraws || []).forEach(w => txs.push({ type: "withdraw", assets: BigInt(w.assets), shares: BigInt(w.shares), blockNumber: Number(w.blockNumber), txHash: w.transactionHash, timestamp: BigInt(w.blockTimestamp) }));
+      (data.deposits || []).forEach(d => txs.push({ type: "deposit", assets: String(d.assets), shares: String(d.shares), blockNumber: Number(d.blockNumber), txHash: d.transactionHash, logIndex: 0, timestamp: String(d.blockTimestamp) }));
+      (data.withdraws || []).forEach(w => txs.push({ type: "withdraw", assets: String(w.assets), shares: String(w.shares), blockNumber: Number(w.blockNumber), txHash: w.transactionHash, logIndex: 1, timestamp: String(w.blockTimestamp) }));
       txs.sort((a, b) => b.blockNumber - a.blockNumber); userTxCache = txs; renderUserTxHistory(); return;
     }
   }
+
+  // 1) Cache dulu — riwayat alamat ini dari kunjungan sebelumnya.
+  const cached = loadCache("tx", who);
+  if (cached && cached.items.length) {
+    userTxCache = cached.items;
+    renderUserTxHistory();
+  } else {
+    box.innerHTML = '<div class="empty"><span class="spinner"></span> ' + t("loading") + '</div>';
+  }
+
+  // 2) Pindai blok baru saja, lalu gabungkan.
+  txSyncing = true;
+  setSyncIndicator("txList", true);
   try {
-    const [depLogs, wdLogs] = await Promise.all([
-      scanBackwards((f, t) => vaultRead.queryFilter(vaultRead.filters.Deposit(null, user), f, t), 20),
-      scanBackwards((f, t) => vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, user), f, t), 20)
-    ]);
+    const since = cached ? cached.lastScannedBlock : 0;
+    const resDep = await scanBackwards(function (f, tb) { return vaultRead.queryFilter(vaultRead.filters.Deposit(null, who), f, tb); }, 20, since);
+    const resWd  = await scanBackwards(function (f, tb) { return vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, who), f, tb); }, 20, since);
 
-    const txs = [];
-    depLogs.forEach(l => txs.push({ type: "deposit", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
-    wdLogs.forEach(l => txs.push({ type: "withdraw", assets: l.args.assets, shares: l.args.shares, blockNumber: l.blockNumber, txHash: l.transactionHash, timestamp: 0 }));
-    txs.sort((a, b) => b.blockNumber - a.blockNumber);
+    // Wallet bisa berganti selagi pemindaian berjalan — buang hasil basi.
+    if (who !== user) { txSyncing = false; return; }
 
-    // Ambil waktu blok untuk 8 transaksi teratas saja — cukup untuk tampilan,
-    // tanpa membanjiri RPC. Sisanya tetap menampilkan nomor blok.
-    await Promise.all(txs.slice(0, 8).map(async tx => {
-      try { const b = await readProvider.getBlock(tx.blockNumber); if (b) tx.timestamp = b.timestamp; } catch (e) {}
-    }));
+    const fresh = resDep.logs.map(l => normalizeTx(l, "deposit"))
+      .concat(resWd.logs.map(l => normalizeTx(l, "withdraw")));
+    const merged = mergeById(cached ? cached.items : [], fresh);
 
-    userTxCache = txs; renderUserTxHistory();
-  } catch (e) { console.warn("loadUserTxHistory failed:", e); box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>'; }
+    // Waktu blok hanya untuk 8 teratas yang belum punya stempel waktu.
+    const needTime = merged.slice(0, 8).filter(tx => !tx.timestamp);
+    for (const tx of needTime) {
+      try {
+        const b = await readProvider.getBlock(tx.blockNumber);
+        if (b) tx.timestamp = String(b.timestamp);
+      } catch (e) { /* biarkan tampil sebagai nomor blok */ }
+    }
+
+    userTxCache = merged;
+    const complete = resDep.complete && resWd.complete;
+    const scannedTo = Math.min(resDep.scannedTo, resWd.scannedTo);
+    saveCache("tx", who, merged, complete ? scannedTo : since);
+    txSyncing = false;
+    renderUserTxHistory();
+  } catch (e) {
+    console.warn("loadUserTxHistory failed:", e);
+    txSyncing = false;
+    if (!userTxCache || !userTxCache.length) {
+      box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
+    } else {
+      setSyncIndicator("txList", false);
+    }
+  }
 }
 
 function renderUserTxHistory() {
@@ -841,7 +1015,8 @@ function renderUserTxHistory() {
   if (!user) { box.innerHTML = '<div class="empty">' + t("txConnect") + '</div>'; return; }
   if (!userTxCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
   if (userTxCache.length === 0) { box.innerHTML = '<div class="empty">' + t("txEmpty") + '</div>'; return; }
-  box.innerHTML = userTxCache.slice(0, 20).map(tx => {
+  const sorted = [...userTxCache].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
+  box.innerHTML = sorted.slice(0, 20).map(tx => {
     const isIn = tx.type === "deposit";
     const sign = isIn ? "+" : "−";
     const amt = fmt(tx.assets);
@@ -858,6 +1033,7 @@ function renderUserTxHistory() {
       : `<span class="tx-link">—</span>`;
     return `<div class="tx-item"><div class="tx-icon ${cls}">${icon}</div><div class="tx-body"><div class="tx-row"><span class="tx-type">${label}<span class="tx-pill ${cls}">${isIn ? "IN" : "OUT"}</span></span><span class="tx-amt ${cls}">${sign}${amt} USDC</span></div><div class="tx-meta"><span class="tx-time">${when}</span>${link}</div></div></div>`;
   }).join("");
+  if (txSyncing) setSyncIndicator("txList", true);
 }
 
 async function doDeposit() {
