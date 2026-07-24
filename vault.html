@@ -774,9 +774,7 @@ async function loadAiHistory() {
     }
   }
   try {
-    const latest = await readProvider.getBlockNumber();
-    const from = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
-    const logs = await vaultRead.queryFilter("Rebalanced", from, latest);
+    const logs = await scanBackwards((f, t) => vaultRead.queryFilter("Rebalanced", f, t), 12);
     aiHistoryCache = logs; renderAiHistory();
   } catch (e) { console.warn("loadAiHistory failed:", e); box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>'; }
 }
