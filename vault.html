@@ -189,11 +189,12 @@
       </span>
     </a>
     <div class="header-right">
-      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <button type="button" class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
       <div class="lang-toggle">
-        <button id="langId" onclick="setLang('id')">ID</button>
-        <button id="langEn" onclick="setLang('en')">EN</button>
+        <button type="button" id="langId" onclick="setLang('id')">ID</button>
+        <button type="button" id="langEn" onclick="setLang('en')">EN</button>
       </div>
+      <button type="button" class="btn-connect" id="connectBtn" onclick="onConnectBtn()">Connect</button>
       <a class="backlink" href="/" data-i18n="back">← DEX</a>
     </div>
   </header>
@@ -214,7 +215,7 @@
   <div class="card" id="faucetCard">
     <h2 data-i18n="faucetTitle">Klaim USDC Uji</h2>
     <p style="margin:0 0 14px;font-size:0.86rem;color:var(--text-dim);" data-i18n="faucetHint">Belum punya USDC uji? Klaim gratis dulu untuk mencoba vault.</p>
-    <button class="btn btn-ghost" id="faucetBtn" onclick="doFaucet()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
+    <button type="button" class="btn btn-ghost" id="faucetBtn" onclick="doFaucet()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
   </div>
 
   <div class="card" id="actionCard">
@@ -227,22 +228,22 @@
         <label data-i18n="depLabel">Jumlah USDC untuk disetor</label>
         <div class="input-group" id="depGroup">
           <input id="depAmt" type="text" inputmode="decimal" placeholder="0.0" oninput="sanitizeInput(this)" maxlength="24" />
-          <button class="max" onclick="setMax('deposit')" data-i18n="max">MAKS</button>
+          <button type="button" class="max" onclick="setMax('deposit')" data-i18n="max">MAKS</button>
         </div>
         <div class="balance-hint" id="depHint"></div>
       </div>
-      <button class="btn btn-primary" id="depBtn" onclick="doDeposit()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
+      <button type="button" class="btn btn-primary" id="depBtn" onclick="doDeposit()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
     </div>
     <div id="paneWithdraw" style="display:none;">
       <div class="field">
         <label data-i18n="wdLabel">Jumlah USDC untuk ditarik</label>
         <div class="input-group" id="wdGroup">
           <input id="wdAmt" type="text" inputmode="decimal" placeholder="0.0" oninput="sanitizeInput(this)" maxlength="24" />
-          <button class="max" onclick="setMax('withdraw')" data-i18n="max">MAKS</button>
+          <button type="button" class="max" onclick="setMax('withdraw')" data-i18n="max">MAKS</button>
         </div>
         <div class="balance-hint" id="wdHint"></div>
       </div>
-      <button class="btn btn-primary" id="wdBtn" onclick="doWithdraw()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
+      <button type="button" class="btn btn-primary" id="wdBtn" onclick="doWithdraw()" disabled data-i18n="connectFirst">Hubungkan dompet dulu</button>
     </div>
     <p class="disclaimer" data-i18n="wdNote">Withdraw selalu tersedia — dana kamu tidak bisa dikunci oleh admin.</p>
   </div>
@@ -270,8 +271,8 @@
     <h3 id="discTitle">Putuskan dompet?</h3>
     <p id="discBody">Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.</p>
     <div class="m-actions">
-      <button class="m-cancel" id="discCancel">Batal</button>
-      <button class="m-confirm" id="discConfirm">Putuskan</button>
+      <button type="button" class="m-cancel" id="discCancel">Batal</button>
+      <button type="button" class="m-confirm" id="discConfirm">Putuskan</button>
     </div>
   </div>
 </div>
@@ -388,6 +389,7 @@ function showSecWarning(msg) {
 
 const I18N = {
   id: {
+    allocNote: "Alokasi ini tercatat on-chain sebagai keputusan AI, tapi belum memindahkan dana. Vault masih menyimpan seluruh USDC dan belum menghasilkan imbal hasil. Perpindahan dana nyata masih dalam roadmap.",
     back: "← DEX", title: "Vault Dikelola AI",
     subtitle: "Setor USDC, terima share, biarkan agen AI mengelola alokasi. Setiap keputusan tercatat on-chain — terbuka untuk kamu periksa.",
     overview: "Ringkasan Vault", uWalletL: "USDC di dompet", uSharesL: "Share kamu (faUSDC)",
@@ -692,8 +694,11 @@ function openDiscModal() {
 function closeDiscModal() { document.getElementById("discModal").classList.remove("show"); }
 function setConnectedBtn(cb, addr) {
   cb.classList.add("connected");
-  cb.innerHTML = '<span class="dot"></span><span class="addr">' + short(addr) +
-    '</span><span class="disc-label">' + t("disconnect") + '</span>';
+  cb.textContent = "";
+  const dot = document.createElement("span"); dot.className = "dot";
+  const addrSpan = document.createElement("span"); addrSpan.className = "addr"; addrSpan.textContent = short(addr);
+  const discSpan = document.createElement("span"); discSpan.className = "disc-label"; discSpan.textContent = t("disconnect");
+  cb.appendChild(dot); cb.appendChild(addrSpan); cb.appendChild(discSpan);
 }
 
 function friendlyErr(e) {
@@ -847,8 +852,9 @@ function renderUserTxHistory() {
     const cls = isIn ? "in" : "out";
     const icon = isIn ? "↓" : "↑";
     // Link explorer hanya dibangun dari hash berformat sah.
+    const safeHash = escapeHtml(tx.txHash || "");
     const link = TX_HASH_RE.test(tx.txHash || "")
-      ? `<a class="tx-link" href="${CONFIG.EXPLORER}/tx/${tx.txHash}" target="_blank" rel="noopener noreferrer">${t("txView")}</a>`
+      ? `<a class="tx-link" href="${escapeHtml(CONFIG.EXPLORER)}/tx/${safeHash}" target="_blank" rel="noopener noreferrer">${escapeHtml(t("txView"))}</a>`
       : `<span class="tx-link">—</span>`;
     return `<div class="tx-item"><div class="tx-icon ${cls}">${icon}</div><div class="tx-body"><div class="tx-row"><span class="tx-type">${label}<span class="tx-pill ${cls}">${isIn ? "IN" : "OUT"}</span></span><span class="tx-amt ${cls}">${sign}${amt} USDC</span></div><div class="tx-meta"><span class="tx-time">${when}</span>${link}</div></div></div>`;
   }).join("");
@@ -940,12 +946,11 @@ async function doFaucet() {
 
 (function init() {
   applyTheme(); checkDomain();
-  const b = document.createElement("button");
-  b.className = "btn-connect"; b.id = "connectBtn"; b.textContent = "Connect"; b.onclick = onConnectBtn;
-  document.querySelector(".header-right").insertBefore(b, document.querySelector(".backlink"));
+  // Tombol connect sudah ada di HTML statis (id="connectBtn")
   document.getElementById("discCancel").onclick = closeDiscModal;
   document.getElementById("discConfirm").onclick = () => { closeDiscModal(); disconnect(); };
   document.getElementById("discModal").onclick = (e) => { if (e.target.id === "discModal") closeDiscModal(); };
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDiscModal(); });
 
   applyI18n();
   loadShareDecimals().then(() => { if (user) refreshUser(true); });
