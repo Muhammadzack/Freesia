@@ -512,7 +512,7 @@ async function loadShareDecimals() {
   catch (e) { console.warn("decimals() tidak tersedia, pakai default:", e); }
 }
 
-document.getElementById("vaultLink").href = CONFIG.EXPLORER + "/address/" + CONFIG.VAULT;
+const vl = document.getElementById("vaultLink"); vl.href = CONFIG.EXPLORER + "/address/" + CONFIG.VAULT; vl.textContent = CONFIG.VAULT.slice(0,6) + "..." + CONFIG.VAULT.slice(-5);
 
 function fmt(bi, dec = CONFIG.USDC_DECIMALS, places = 2) {
   const s = ethers.formatUnits(bi, dec);
