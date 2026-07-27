@@ -3,18 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<!-- KEAMANAN: CSP setara index.html. Halaman ini menangani deposit, jadi
-     jangan lebih longgar dari halaman swap. Kalau subgraph diaktifkan nanti,
-     tambahkan domainnya ke connect-src. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://liteforge.rpc.caldera.xyz; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>AI Vault — Freesia DEX</title>
-<!-- Favicon: bunga Freesia yang sama persis dengan index.html -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2080%2080%22%3E%3Cg%20transform%3D%22translate%2840%2C40%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%232E6F68%22%20transform%3D%22rotate%28-12%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%233E8A80%22%20transform%3D%22rotate%2848%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%2357A99B%22%20transform%3D%22rotate%28108%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%236FC2B4%22%20transform%3D%22rotate%28168%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%237FD0C2%22%20transform%3D%22rotate%28228%29%20scale%280.94%29%22%2F%3E%3Cpath%20d%3D%22M0%2C0%20C7.15%2C-5.76%2013%2C-23.04%200%2C-32%20C-13%2C-23.04%20-7.15%2C-5.76%200%2C0%20Z%22%20fill%3D%22%238CDCCB%22%20transform%3D%22rotate%28288%29%20scale%280.94%29%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js" integrity="sha384-6Zl0Pc8zjSz8KvmNeXRvUQgY4ryFb+BwDvKCmLYcBME0joAaru491tQgi9B7zsMM" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <style>
-  /* Palet diselaraskan dengan index.html supaya vault terasa satu produk
-     dengan DEX, bukan situs terpisah yang kebetulan mirip. */
   :root {
     --bg: #0a0f0d; --bg-card: #111917; --bg-elev: #16211d; --border: #223029;
     --text: #dce8e2; --text-dim: #7f968c;
@@ -39,10 +33,6 @@
   .wrap { max-width: 560px; margin: 0 auto; padding: 20px 16px 60px; }
   header.top { display: flex; align-items: center; justify-content: space-between;
     padding: 6px 0 18px; border-bottom: 1px solid var(--border); margin-bottom: 20px; gap: 10px; }
-
-  /* ── Identitas merek: bunga Freesia yang SAMA dengan index.html ──
-     Sebelumnya di sini hanya ada lingkaran hijau polos ber-class "flower"
-     yang sebenarnya bukan bunga sama sekali. */
   .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--text); }
   .logo-icon { width: 30px; height: 30px; flex-shrink: 0; display: block;
     filter: drop-shadow(0 0 5px rgba(63,185,80,0.32)); animation: logoGlow 3s ease-in-out infinite;
@@ -58,7 +48,6 @@
     -webkit-text-fill-color: transparent; }
   .brand-text small { display: block; font-weight: 700; font-size: 0.66rem;
     color: var(--text-dim); letter-spacing: 0.09em; }
-
   .header-right { display: flex; align-items: center; gap: 10px; }
   .lang-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
   .lang-toggle button { background: transparent; color: var(--text-dim); border: 0; padding: 5px 11px;
@@ -104,18 +93,16 @@
   .empty { color: var(--text-dim); font-size: 0.88rem; text-align: center; padding: 18px 0; }
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(128,128,128,0.25); border-top-color: var(--text); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  /* Penanda halus bahwa daftar sedang disegarkan dari blockchain di latar. */
   .refreshing { display: flex; align-items: center; justify-content: center; gap: 7px;
     font-size: 0.74rem; color: var(--text-dim); padding: 12px 0 2px; }
-  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.88rem; opacity: 0; transition: opacity .25s, transform .25s; pointer-events: none; max-width: 90%; z-index: 50; }
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--bg-elev); border: 1px solid var(--border); color: var(--text); padding: 14px 20px; border-radius: 12px; font-size: 0.9rem; opacity: 0; transition: opacity .3s, transform .3s; pointer-events: none; max-width: 92%; z-index: 50; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   #toast.err { border-color: var(--red); color: var(--red); }
   #toast.ok { border-color: var(--green); color: var(--green); }
+  #toast.info { border-color: var(--amber); color: var(--amber); }
   [data-theme="light"] #toast.ok { color: var(--green-deep); }
   .disclaimer { font-size: 0.76rem; color: var(--text-dim); text-align: center; margin-top: 8px; line-height: 1.5; }
   .badge { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.3); letter-spacing: 0.05em; vertical-align: middle; margin-left: 8px; }
-
-  /* Tombol connect — satu definisi saja (dulu ditulis dua kali dan saling menimpa) */
   .btn-connect { display: inline-flex; align-items: center; gap: 7px; background: var(--green); color: #04140c;
     padding: 9px 15px; font-size: 0.85rem; border-radius: 20px; border: 0; cursor: pointer; font-weight: 700;
     white-space: nowrap; transition: filter .15s, background .2s; }
@@ -128,18 +115,20 @@
   .btn-connect.connected:hover .addr { display: none; }
   .btn-connect.connected:hover .disc-label { display: inline; }
   .btn-connect .disc-label { display: none; }
-
   .modal-overlay { position: fixed; inset: 0; background: rgba(4,8,6,0.72); backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-overlay.show { display: flex; }
-  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 22px; max-width: 340px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transition: background 0.3s, border-color 0.3s; }
-  .modal .m-ico { width: 46px; height: 46px; border-radius: 50%; background: rgba(255,92,92,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 22px; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; padding: 24px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5); transition: background 0.3s, border-color 0.3s; }
+  .modal .m-ico { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; font-size: 24px; }
+  .modal .m-ico.warn { background: rgba(255,92,92,0.12); }
+  .modal .m-ico.info { background: rgba(0,230,118,0.12); }
   .modal h3 { margin: 0 0 6px; font-size: 1.1rem; color: var(--text); }
   .modal p { margin: 0 0 20px; color: var(--text-dim); font-size: 0.88rem; }
   .modal .m-actions { display: flex; gap: 10px; }
   .modal button { flex: 1; padding: 11px; border-radius: 11px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 0; }
   .modal .m-cancel { background: var(--bg-elev); color: var(--text); border: 1px solid var(--border); }
   .modal .m-confirm { background: var(--red); color: #fff; }
-
+  .modal .m-confirm.green { background: var(--green); color: #04140c; }
+  [data-theme="light"] .modal .m-confirm.green { color: #fff; }
   .tx-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(128,128,128,0.08); }
   .tx-item:last-child { border-bottom: 0; }
   .tx-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
@@ -158,13 +147,13 @@
   .tx-pill { display: inline-block; font-size: 0.65rem; padding: 2px 7px; border-radius: 20px; font-weight: 600; letter-spacing: 0.03em; margin-left: 6px; }
   .tx-pill.in  { background: rgba(0,230,118,0.12); color: var(--green); border: 1px solid rgba(0,230,118,0.25); }
   .tx-pill.out { background: rgba(255,92,92,0.12); color: var(--red); border: 1px solid rgba(255,92,92,0.25); }
-
   .sec-banner { background: rgba(255,92,92,0.08); border: 1px solid rgba(255,92,92,0.25); color: var(--red); padding: 10px 14px; border-radius: 10px; font-size: 0.82rem; margin-bottom: 16px; display: none; }
   .sec-banner.show { display: block; }
-
+  .sec-banner.success { background: rgba(0,230,118,0.08); border-color: rgba(0,230,118,0.25); color: var(--green); }
   .theme-toggle { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-elev); color: var(--text); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: transform 0.2s, background 0.2s; }
   .theme-toggle:hover { transform: scale(1.08); }
-
+  .gas-warning { color: var(--amber); font-size: 0.76rem; margin-top: 6px; display: none; }
+  .gas-warning.show { display: block; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
   }
@@ -212,6 +201,7 @@
     <div class="stat-row"><span class="stat-label" data-i18n="uValueL">Nilai posisi kamu</span><span class="stat-val" id="uValue">—</span></div>
     <div class="stat-row"><span class="stat-label" data-i18n="vTotalL">Total aset vault</span><span class="stat-val" id="vTotal">—</span></div>
     <div class="stat-row"><span class="stat-label" data-i18n="vAllocL">Alokasi target AI</span><span class="stat-val" id="vAlloc">—</span></div>
+    <div class="gas-warning" id="gasWarning">⚠️ <span data-i18n="gasWarn">Saldo zkLTC rendah untuk gas</span></div>
     <p class="disclaimer" style="text-align:left; margin-top:12px;" data-i18n="allocNote">Alokasi ini tercatat on-chain sebagai keputusan AI, tapi belum memindahkan dana. Vault masih menyimpan seluruh USDC dan belum menghasilkan imbal hasil. Perpindahan dana nyata masih dalam roadmap.</p>
   </div>
 
@@ -268,9 +258,10 @@
   </p>
 </div>
 
+<!-- Modal Konfirmasi Disconnect -->
 <div class="modal-overlay" id="discModal">
   <div class="modal">
-    <div class="m-ico">🔌</div>
+    <div class="m-ico warn">🔌</div>
     <h3 id="discTitle">Putuskan dompet?</h3>
     <p id="discBody">Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.</p>
     <div class="m-actions">
@@ -279,9 +270,27 @@
     </div>
   </div>
 </div>
+
+<!-- Modal Konfirmasi Transaksi -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="m-ico info">⚠️</div>
+    <h3 id="confirmTitle">Konfirmasi Transaksi</h3>
+    <p style="font-size:1.4rem;font-weight:700;margin:12px 0;color:var(--text);" id="confirmAmount">0 USDC</p>
+    <p id="confirmBody" style="color:var(--text-dim);">Pastikan jumlah sudah benar sebelum melanjutkan.</p>
+    <div class="m-actions">
+      <button type="button" class="m-cancel" id="confirmCancel">Batal</button>
+      <button type="button" class="m-confirm green" id="confirmOk">Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
+// ============================================================
+// KONFIGURASI
+// ============================================================
 const CONFIG = {
   VAULT: "0x3c7A6C95cd4668e7E86099fb5fd5b1635E01f373",
   STRATEGY: "0x981617302e719a421058C94E0cBCD4A26aa85b0d",
@@ -294,14 +303,17 @@ const CONFIG = {
   HISTORY_CHUNK: 4000,
   SCAN_DELAY_MS: 250,
   SUBGRAPH: null,
-  // Domain yang benar-benar dipakai. Tambahkan domain preview Vercel di sini
-  // kalau kamu sering mengujinya, supaya peringatan palsu tidak muncul.
   ALLOWED_HOSTS: [
     "localhost", "127.0.0.1",
     "freesiadex.xyz", "www.freesiadex.xyz", "app.freesiadex.xyz",
     "freesia-black.vercel.app", "freesia-dex.vercel.app"
   ],
-  MAX_INPUT_LEN: 24
+  MAX_INPUT_LEN: 24,
+  SLIPPAGE_BPS: 100, // 1%
+  MAX_TX_PER_MIN: 5,
+  CACHE_EXPIRY_MS: 3600000, // 1 jam
+  GAS_BUFFER: 200000n,
+  TOAST_DURATION: 5000
 };
 
 const VAULT_ABI = [
@@ -311,6 +323,7 @@ const VAULT_ABI = [
   "function decimals() view returns (uint8)",
   "function totalAssets() view returns (uint256)",
   "function convertToAssets(uint256 shares) view returns (uint256)",
+  "function convertToShares(uint256 assets) view returns (uint256)",
   "function targetAllocationBps() view returns (uint16)",
   "event Deposit(address indexed sender, address indexed owner, uint256 assets, uint256 shares)",
   "event Withdraw(address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares)",
@@ -323,75 +336,148 @@ const ERC20_ABI = [
   "function mint(address to, uint256 amount)"
 ];
 
+// ============================================================
+// STATE
+// ============================================================
 let THEME = localStorage.getItem("freesia_theme") || "dark";
-function applyTheme() {
-  document.documentElement.setAttribute("data-theme", THEME);
-  const btn = document.getElementById("themeBtn");
-  if (btn) btn.textContent = THEME === "dark" ? "🌙" : "☀️";
-}
-function toggleTheme() {
-  THEME = THEME === "dark" ? "light" : "dark";
-  localStorage.setItem("freesia_theme", THEME);
-  applyTheme();
-}
-if (!localStorage.getItem("freesia_theme")) {
-  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) THEME = "light";
-  applyTheme();
-}
+let LANG = localStorage.getItem("freesia_lang") || "id";
+let provider, signer, user;
+let readProvider = new ethers.JsonRpcProvider(CONFIG.RPC);
+let vaultRead = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, readProvider);
+let usdcRead  = new ethers.Contract(CONFIG.USDC, ERC20_ABI, readProvider);
+let walletUsdc = 0n, positionValue = 0n, shareBalance = 0n;
+let rawProvider = null;
+let SHARE_DECIMALS = CONFIG.USDC_DECIMALS;
+let isTxPending = false;
+let aiHistoryCache = null;
+let userTxCache = null;
+let refreshInterval = null;
+let confirmResolve = null;
 
+// ============================================================
+// RATE LIMITER YANG LEBIH CERDAS
+// ============================================================
 const RateLimiter = {
   _last: {},
+  _txCount: {},
   canRun(key, ms = 3000) {
     const now = Date.now();
-    if (!this._last[key] || now - this._last[key] >= ms) { this._last[key] = now; return true; }
-    return false;
+    if (this._last[key] && now - this._last[key] < ms) return false;
+    this._last[key] = now;
+    return true;
+  },
+  canTx() {
+    const now = Date.now();
+    const key = 'tx';
+    if (!this._txCount[key]) this._txCount[key] = [];
+    this._txCount[key] = this._txCount[key].filter(t => now - t < 60000);
+    if (this._txCount[key].length >= CONFIG.MAX_TX_PER_MIN) {
+      toast(`⚠️ Terlalu banyak transaksi. Tunggu 1 menit.`, "err");
+      return false;
+    }
+    this._txCount[key].push(now);
+    return true;
   }
 };
+
+// ============================================================
+// DOMAIN BLOCKING (KRITIS)
+// ============================================================
+function checkDomain() {
+  const host = location.hostname;
+  const isAllowed = CONFIG.ALLOWED_HOSTS.includes(host) || host === "";
+  
+  if (!isAllowed) {
+    document.body.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:20px;padding:20px;text-align:center;background:#0a0f0d;color:#dce8e2;">
+        <h1 style="color:#ff5c5c;">⚠️ SITUS TIDAK TERVERIFIKASI</h1>
+        <p>Anda mengakses dari domain yang tidak dikenali: <strong>${escapeHtml(host)}</strong></p>
+        <p>Pastikan Anda berada di:</p>
+        <ul style="text-align:left;color:#7f968c;">
+          <li>freesiadex.xyz</li>
+          <li>www.freesiadex.xyz</li>
+          <li>app.freesiadex.xyz</li>
+        </ul>
+        <p style="color:#ff5c5c;">Ini bisa jadi percobaan phishing!</p>
+        <button onclick="location.href='https://freesiadex.xyz'" style="padding:12px 24px;border-radius:12px;border:0;background:#00e676;color:#04140c;font-weight:700;cursor:pointer;font-size:1rem;">
+          Buka Situs Resmi
+        </button>
+      </div>
+    `;
+    throw new Error("Domain tidak diizinkan");
+  }
+}
+checkDomain();
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
 
 function isValidAddress(addr) {
   try { return ethers.isAddress(addr); } catch { return false; }
 }
 
-// Verifikasi kontrak benar-benar ada di chain ini.
-// Kalau alamat kosong (0x) -> BLOKIR, itu tanda jelas salah jaringan/alamat.
-// Kalau RPC-nya yang gagal -> beri tahu apa adanya, tapi jangan kunci pengguna
-// keluar hanya karena jaringan sedang tersendat.
-async function verifyContract() {
+function fmt(bi, dec = CONFIG.USDC_DECIMALS, places = 2) {
+  const s = ethers.formatUnits(bi, dec);
+  const [intPart, fracPart = ""] = s.split(".");
+  const intNum = BigInt(intPart);
+  const intStr = intNum.toLocaleString(LANG === "id" ? "id-ID" : "en-US");
+  if (places <= 0) return intStr;
+  const frac = fracPart.slice(0, places).padEnd(places, "0");
+  return intStr + (LANG === "id" ? "," : ".") + frac;
+}
+
+function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
+
+function toast(msg, kind = "") {
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.className = "show " + kind;
+  clearTimeout(el._t); el._t = setTimeout(() => el.className = "", CONFIG.TOAST_DURATION);
+}
+
+function sanitizeInput(inputEl) {
+  const group = inputEl.closest(".input-group");
+  let v = inputEl.value;
+  if (v.length > CONFIG.MAX_INPUT_LEN) v = v.slice(0, CONFIG.MAX_INPUT_LEN);
+  v = v.replace(/[^0-9.,]/g, "").replace(/,/g, ".");
+  const parts = v.split(".");
+  if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
+  if (parts[1] && parts[1].length > CONFIG.USDC_DECIMALS) {
+    v = parts[0] + "." + parts[1].slice(0, CONFIG.USDC_DECIMALS);
+  }
+  if (v.length > 1 && v[0] === "0" && v[1] !== ".") v = v.replace(/^0+/, "0");
+  inputEl.value = v;
+  if (group) group.classList.remove("invalid");
+}
+
+function parseAmount(input, decimals = CONFIG.USDC_DECIMALS) {
   try {
-    const [vaultCode, usdcCode] = await Promise.all([
-      readProvider.getCode(CONFIG.VAULT), readProvider.getCode(CONFIG.USDC)
-    ]);
-    if (vaultCode === "0x" || usdcCode === "0x") {
-      showSecWarning(LANG === "id"
-        ? "Kontrak tidak ditemukan di chain ini. Jangan lanjutkan!"
-        : "Contract not found on this chain. Do not proceed!");
-      return false;
+    const value = input.value.trim().replace(/,/g, '.');
+    if (!value || value === '0' || value === '0.0') return null;
+    if (!/^\d*\.?\d*$/.test(value)) {
+      toast('Format angka tidak valid', 'err');
+      return null;
     }
-    return true;
+    return ethers.parseUnits(value, decimals);
   } catch (e) {
-    console.warn("verifyContract failed:", e);
-    showSecWarning(LANG === "id"
-      ? "Kontrak belum bisa diverifikasi (jaringan tersendat). Periksa sendiri di explorer sebelum menyetor."
-      : "Could not verify the contract (network issue). Check the explorer yourself before depositing.");
-    return true;
+    toast('Jumlah tidak valid', 'err');
+    return null;
   }
 }
 
-function checkDomain() {
-  const host = location.hostname;
-  if (!CONFIG.ALLOWED_HOSTS.includes(host) && host !== "") {
-    showSecWarning(LANG === "id"
-      ? "Domain tidak dikenali. Pastikan kamu di situs resmi Freesia DEX."
-      : "Unrecognized domain. Make sure you are on the official Freesia DEX site.");
-  }
+function logId(x) { return String(x.txHash || "") + ":" + (x.logIndex != null ? x.logIndex : 0); }
+
+function mergeById(oldItems, newItems) {
+  const map = new Map();
+  for (const item of oldItems) map.set(logId(item), item);
+  for (const item of newItems) map.set(logId(item), item);
+  return [...map.values()].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
 }
 
-function showSecWarning(msg) {
-  const b = document.getElementById("secBanner");
-  document.getElementById("secMsg").textContent = msg;
-  b.classList.add("show");
-}
-
+// ============================================================
+// I18N
+// ============================================================
 const I18N = {
   id: {
     allocNote: "Alokasi ini tercatat on-chain sebagai keputusan AI, tapi belum memindahkan dana. Vault masih menyimpan seluruh USDC dan belum menghasilkan imbal hasil. Perpindahan dana nyata masih dalam roadmap.",
@@ -425,7 +511,14 @@ const I18N = {
     txView: "Lihat tx →", discTitle: "Putuskan dompet?",
     discBody: "Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.",
     cancel: "Batal", disconnected: "Dompet diputuskan.",
-    syncing: "Menyegarkan dari blockchain…"
+    syncing: "Menyegarkan dari blockchain…",
+    gasWarn: "Saldo zkLTC rendah untuk gas. Tambahkan zkLTC untuk transaksi.",
+    confirmTitle: "Konfirmasi Transaksi",
+    confirmBody: "Pastikan jumlah sudah benar sebelum melanjutkan.",
+    confirmDeposit: "Konfirmasi Deposit",
+    confirmWithdraw: "Konfirmasi Withdraw",
+    largeTx: "⚠️ Transaksi besar (> 1000 USDC). Periksa kembali!",
+    switchManual: "Gagal switch otomatis. Silakan tambahkan jaringan secara manual:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz/infra-partner-http\nSymbol: zkLTC"
   },
   en: {
     allocNote: "This allocation is recorded on-chain as an AI decision, but it does not move any funds yet. The vault still holds all USDC and earns no yield. Real capital movement is still on the roadmap.",
@@ -459,16 +552,18 @@ const I18N = {
     txView: "View tx →", discTitle: "Disconnect wallet?",
     discBody: "You will leave this session. Your funds stay safe in the contract.",
     cancel: "Cancel", disconnected: "Wallet disconnected.",
-    syncing: "Refreshing from the blockchain…"
+    syncing: "Refreshing from the blockchain…",
+    gasWarn: "Low zkLTC balance for gas. Add zkLTC to transact.",
+    confirmTitle: "Confirm Transaction",
+    confirmBody: "Make sure the amount is correct before proceeding.",
+    confirmDeposit: "Confirm Deposit",
+    confirmWithdraw: "Confirm Withdraw",
+    largeTx: "⚠️ Large transaction (> 1000 USDC). Double check!",
+    switchManual: "Auto-switch failed. Please add network manually:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz/infra-partner-http\nSymbol: zkLTC"
   }
 };
-let LANG = localStorage.getItem("freesia_lang") || "id";
-function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
 
-let aiHistoryCache = null;
-let isTxPending = false;
-let userTxCache = null;
-let aiSyncing = false, txSyncing = false;
+function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
 
 function applyI18n() {
   document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -484,7 +579,6 @@ function applyI18n() {
     document.getElementById("depHint").textContent = t("available") + " — USDC";
     document.getElementById("wdHint").textContent = t("position") + " — USDC";
   } else {
-    // force: ganti bahasa harus langsung menyegarkan angka, jangan tertahan rate limiter
     refreshUser(true);
     document.getElementById("depBtn").textContent = t("deposit");
     document.getElementById("wdBtn").textContent = t("withdraw");
@@ -494,75 +588,86 @@ function applyI18n() {
   renderAiHistory();
   renderUserTxHistory();
 }
+
 function setLang(l) { LANG = l; localStorage.setItem("freesia_lang", l); applyI18n(); }
 
-let provider, signer, user;
-let readProvider = new ethers.JsonRpcProvider(CONFIG.RPC);
-let vaultRead = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, readProvider);
-let usdcRead  = new ethers.Contract(CONFIG.USDC, ERC20_ABI, readProvider);
-let walletUsdc = 0n, positionValue = 0n;
-let rawProvider = null;
-
-// Desimal share TIDAK diasumsikan sama dengan aset. Banyak ERC4626 (mis. OpenZeppelin
-// dengan decimals offset) memakai 18 walau asetnya 6 — kalau ditebak, angka share
-// yang tampil bisa salah ribuan kali lipat.
-let SHARE_DECIMALS = CONFIG.USDC_DECIMALS;
-async function loadShareDecimals() {
-  try { SHARE_DECIMALS = Number(await vaultRead.decimals()); }
-  catch (e) { console.warn("decimals() tidak tersedia, pakai default:", e); }
+// ============================================================
+// THEME
+// ============================================================
+function applyTheme() {
+  document.documentElement.setAttribute("data-theme", THEME);
+  const btn = document.getElementById("themeBtn");
+  if (btn) btn.textContent = THEME === "dark" ? "🌙" : "☀️";
 }
 
-const vl = document.getElementById("vaultLink"); vl.href = CONFIG.EXPLORER + "/address/" + CONFIG.VAULT; vl.textContent = CONFIG.VAULT.slice(0,6) + "..." + CONFIG.VAULT.slice(-5);
-
-function fmt(bi, dec = CONFIG.USDC_DECIMALS, places = 2) {
-  const s = ethers.formatUnits(bi, dec);
-  const [intPart, fracPart = ""] = s.split(".");
-  const intNum = BigInt(intPart);
-  const intStr = intNum.toLocaleString(LANG === "id" ? "id-ID" : "en-US");
-  if (places <= 0) return intStr;
-  const frac = fracPart.slice(0, places).padEnd(places, "0");
-  return intStr + (LANG === "id" ? "," : ".") + frac;
+function toggleTheme() {
+  THEME = THEME === "dark" ? "light" : "dark";
+  localStorage.setItem("freesia_theme", THEME);
+  applyTheme();
 }
 
-function toast(msg, kind = "") {
-  const el = document.getElementById("toast");
-  el.textContent = msg; el.className = "show " + kind;
-  clearTimeout(el._t); el._t = setTimeout(() => el.className = "", 3400);
-}
-function short(a) { return a.slice(0, 6) + "…" + a.slice(-4); }
-
-function switchTab(tab) {
-  if (tab !== "deposit" && tab !== "withdraw") return;
-  document.getElementById("tabDeposit").classList.toggle("active", tab === "deposit");
-  document.getElementById("tabWithdraw").classList.toggle("active", tab === "withdraw");
-  document.getElementById("paneDeposit").style.display = tab === "deposit" ? "" : "none";
-  document.getElementById("paneWithdraw").style.display = tab === "withdraw" ? "" : "none";
+if (!localStorage.getItem("freesia_theme")) {
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) THEME = "light";
+  applyTheme();
 }
 
-function sanitizeInput(inputEl) {
-  const group = inputEl.closest(".input-group");
-  let v = inputEl.value;
-  if (v.length > CONFIG.MAX_INPUT_LEN) v = v.slice(0, CONFIG.MAX_INPUT_LEN);
-  v = v.replace(/[^0-9.,]/g, "").replace(/,/g, ".");
-  const parts = v.split(".");
-  if (parts.length > 2) v = parts[0] + "." + parts.slice(1).join("");
-  // batas desimal mengikuti desimal aset, bukan angka yang ditulis manual
-  if (parts[1] && parts[1].length > CONFIG.USDC_DECIMALS) {
-    v = parts[0] + "." + parts[1].slice(0, CONFIG.USDC_DECIMALS);
-  }
-  if (v.length > 1 && v[0] === "0" && v[1] !== ".") v = v.replace(/^0+/, "0");
-  inputEl.value = v;
-  if (group) group.classList.remove("invalid");
-}
-
-function setMax(which) {
-  if (which === "deposit") {
-    document.getElementById("depAmt").value = ethers.formatUnits(walletUsdc, CONFIG.USDC_DECIMALS);
-  } else {
-    document.getElementById("wdAmt").value = ethers.formatUnits(positionValue, CONFIG.USDC_DECIMALS);
+// ============================================================
+// CONTRACT VERIFICATION & GAS CHECK
+// ============================================================
+async function verifyContract() {
+  try {
+    const [vaultCode, usdcCode] = await Promise.all([
+      readProvider.getCode(CONFIG.VAULT), readProvider.getCode(CONFIG.USDC)
+    ]);
+    if (vaultCode === "0x" || usdcCode === "0x") {
+      showSecWarning(LANG === "id"
+        ? "Kontrak tidak ditemukan di chain ini. Jangan lanjutkan!"
+        : "Contract not found on this chain. Do not proceed!");
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.warn("verifyContract failed:", e);
+    showSecWarning(LANG === "id"
+      ? "Kontrak belum bisa diverifikasi (jaringan tersendat). Periksa sendiri di explorer sebelum menyetor."
+      : "Could not verify the contract (network issue). Check the explorer yourself before depositing.");
+    return true;
   }
 }
 
+async function checkGasBalance() {
+  if (!signer || !user) return false;
+  try {
+    const balance = await provider.getBalance(user);
+    const feeData = await provider.getFeeData();
+    const gasPrice = feeData.gasPrice || feeData.maxFeePerGas || 0n;
+    const minBalance = gasPrice * CONFIG.GAS_BUFFER;
+    
+    if (balance < minBalance) {
+      document.getElementById("gasWarning").classList.add("show");
+      return false;
+    }
+    document.getElementById("gasWarning").classList.remove("show");
+    return true;
+  } catch (e) {
+    console.warn("checkGasBalance failed:", e);
+    return true; // Default ke true jika error
+  }
+}
+
+function showSecWarning(msg) {
+  const b = document.getElementById("secBanner");
+  document.getElementById("secMsg").textContent = msg;
+  b.classList.add("show");
+}
+
+function clearSecWarning() {
+  document.getElementById("secBanner").classList.remove("show");
+}
+
+// ============================================================
+// WALLET CONNECTION
+// ============================================================
 const injectedProviders = [];
 window.addEventListener("eip6963:announceProvider", (e) => {
   if (!injectedProviders.find(p => p.info.uuid === e.detail.info.uuid)) injectedProviders.push(e.detail);
@@ -578,9 +683,6 @@ function pickProvider() {
   return null;
 }
 
-// Pindah jaringan yang tahan perbedaan antar-wallet.
-// Versi lama hanya mengenali kode 4902 (gaya MetaMask); Zerion & lainnya memakai
-// kode/pesan berbeda sehingga selalu jatuh ke "Jaringan salah".
 async function switchNetwork() {
   if (!rawProvider || !rawProvider.request) return false;
   const hexId = "0x" + CONFIG.CHAIN_ID.toString(16);
@@ -589,6 +691,8 @@ async function switchNetwork() {
     nativeCurrency: { name: "zkLTC", symbol: "zkLTC", decimals: 18 },
     blockExplorerUrls: [CONFIG.EXPLORER]
   };
+  
+  // Coba switch dulu
   try {
     await rawProvider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
     return true;
@@ -596,17 +700,22 @@ async function switchNetwork() {
     const code = e?.code ?? e?.data?.originalError?.code;
     const msg = String(e?.message || "").toLowerCase();
     if (code === 4001 || msg.includes("user rejected") || msg.includes("user denied")) return false;
+    
     const chainUnknown = code === 4902 || code === -32603 || code === -32602 ||
       msg.includes("unrecognized") || msg.includes("unsupported") ||
       msg.includes("not supported") || msg.includes("does not exist");
+    
     if (!chainUnknown) return false;
+    
+    // Coba add network
     try {
       await rawProvider.request({ method: "wallet_addEthereumChain", params: [chainParams] });
-      // Sebagian wallet menambah jaringan tapi tidak berpindah — paksa pindah.
       await rawProvider.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
       return true;
     } catch (addErr) {
       console.warn("addEthereumChain ditolak:", addErr);
+      // Tampilkan panduan manual
+      toast(t("switchManual"), "info");
       return false;
     }
   }
@@ -617,6 +726,7 @@ function attachWalletListeners() {
   rawProvider.on?.("accountsChanged", handleAccountsChanged);
   rawProvider.on?.("chainChanged", handleChainChanged);
 }
+
 function detachWalletListeners() {
   if (!rawProvider) return;
   rawProvider.removeListener?.("accountsChanged", handleAccountsChanged);
@@ -631,82 +741,120 @@ function handleAccountsChanged(accounts) {
     refreshUser(true); loadUserTxHistory();
   }
 }
+
 function handleChainChanged() { window.location.reload(); }
 
 async function connect() {
   const raw = pickProvider();
   if (!raw) { toast(t("noWallet"), "err"); return; }
-  disconnect(false); rawProvider = raw;
-  const cb0 = document.getElementById("connectBtn"); cb0.textContent = "…";
+  disconnect(false);
+  rawProvider = raw;
+  const cb0 = document.getElementById("connectBtn");
+  cb0.textContent = "…";
+  
   try {
     provider = new ethers.BrowserProvider(raw);
     await provider.send("eth_requestAccounts", []);
-    signer = await provider.getSigner(); user = await signer.getAddress();
+    signer = await provider.getSigner();
+    user = await signer.getAddress();
     if (!isValidAddress(user)) throw new Error("Invalid address");
 
     const net = await provider.getNetwork();
     if (Number(net.chainId) !== CONFIG.CHAIN_ID) {
       const switched = await switchNetwork();
-      if (!switched) { toast(t("wrongNet"), "err"); }
-      else {
-        toast(t("switched"), "ok");
-        provider = new ethers.BrowserProvider(raw);
-        signer = await provider.getSigner();
-        user = await signer.getAddress();
+      if (!switched) {
+        toast(t("wrongNet"), "err");
+        disconnect(false);
+        cb0.textContent = t("connect");
+        return;
       }
+      toast(t("switched"), "ok");
+      provider = new ethers.BrowserProvider(raw);
+      signer = await provider.getSigner();
+      user = await signer.getAddress();
     }
 
-    // Hasil verifikasi DIHORMATI: kalau kontrak tidak ada, jangan biarkan
-    // pengguna menyetor ke alamat kosong.
     const ok = await verifyContract();
-    if (!ok) { disconnect(false); cb0.textContent = t("connect"); return; }
+    if (!ok) {
+      disconnect(false);
+      cb0.textContent = t("connect");
+      return;
+    }
 
     attachWalletListeners();
-    const cb = document.getElementById("connectBtn"); setConnectedBtn(cb, user);
-    document.getElementById("depBtn").disabled = false; document.getElementById("depBtn").textContent = t("deposit");
-    document.getElementById("wdBtn").disabled = false; document.getElementById("wdBtn").textContent = t("withdraw");
-    document.getElementById("faucetBtn").disabled = false; document.getElementById("faucetBtn").textContent = t("faucet");
+    const cb = document.getElementById("connectBtn");
+    setConnectedBtn(cb, user);
+    document.getElementById("depBtn").disabled = false;
+    document.getElementById("depBtn").textContent = t("deposit");
+    document.getElementById("wdBtn").disabled = false;
+    document.getElementById("wdBtn").textContent = t("withdraw");
+    document.getElementById("faucetBtn").disabled = false;
+    document.getElementById("faucetBtn").textContent = t("faucet");
     document.getElementById("txCard").style.display = "";
-    await refreshUser(true); await loadUserTxHistory();
+    
+    await refreshUser(true);
+    await loadUserTxHistory();
+    await checkGasBalance();
+    startAutoRefresh();
   } catch (e) {
-    disconnect(false); cb0.textContent = t("connect"); toast(friendlyErr(e), "err");
+    disconnect(false);
+    cb0.textContent = t("connect");
+    toast(friendlyErr(e), "err");
   }
 }
 
 function disconnect(notify = true) {
   detachWalletListeners();
-  provider = signer = user = null; rawProvider = null;
-  walletUsdc = 0n; positionValue = 0n; userTxCache = null;
+  stopAutoRefresh();
+  provider = signer = user = null;
+  rawProvider = null;
+  walletUsdc = 0n;
+  positionValue = 0n;
+  shareBalance = 0n;
+  userTxCache = null;
+  
   const cb = document.getElementById("connectBtn");
-  cb.textContent = t("connect"); cb.classList.remove("connected");
-  document.getElementById("depBtn").disabled = true; document.getElementById("depBtn").textContent = t("connectFirst");
-  document.getElementById("wdBtn").disabled = true; document.getElementById("wdBtn").textContent = t("connectFirst");
-  document.getElementById("faucetBtn").disabled = true; document.getElementById("faucetBtn").textContent = t("connectFirst");
+  cb.textContent = t("connect");
+  cb.classList.remove("connected");
+  document.getElementById("depBtn").disabled = true;
+  document.getElementById("depBtn").textContent = t("connectFirst");
+  document.getElementById("wdBtn").disabled = true;
+  document.getElementById("wdBtn").textContent = t("connectFirst");
+  document.getElementById("faucetBtn").disabled = true;
+  document.getElementById("faucetBtn").textContent = t("connectFirst");
   document.getElementById("uWallet").textContent = "—";
   document.getElementById("uShares").textContent = "—";
   document.getElementById("uValue").textContent = "—";
   document.getElementById("depHint").textContent = t("available") + " — USDC";
   document.getElementById("wdHint").textContent = t("position") + " — USDC";
   document.getElementById("txCard").style.display = "none";
+  document.getElementById("gasWarning").classList.remove("show");
+  
   if (notify) toast(t("disconnected"), "ok");
 }
 
-function onConnectBtn() { if (user) { openDiscModal(); } else { connect(); } }
-function openDiscModal() {
-  document.getElementById("discTitle").textContent = t("discTitle");
-  document.getElementById("discBody").textContent = t("discBody");
-  document.getElementById("discCancel").textContent = t("cancel");
-  document.getElementById("discConfirm").textContent = t("disconnect");
-  document.getElementById("discModal").classList.add("show");
+function onConnectBtn() {
+  if (user) {
+    openDiscModal();
+  } else {
+    connect();
+  }
 }
-function closeDiscModal() { document.getElementById("discModal").classList.remove("show"); }
+
 function setConnectedBtn(cb, addr) {
   cb.classList.add("connected");
   cb.textContent = "";
-  const dot = document.createElement("span"); dot.className = "dot";
-  const addrSpan = document.createElement("span"); addrSpan.className = "addr"; addrSpan.textContent = short(addr);
-  const discSpan = document.createElement("span"); discSpan.className = "disc-label"; discSpan.textContent = t("disconnect");
-  cb.appendChild(dot); cb.appendChild(addrSpan); cb.appendChild(discSpan);
+  const dot = document.createElement("span");
+  dot.className = "dot";
+  const addrSpan = document.createElement("span");
+  addrSpan.className = "addr";
+  addrSpan.textContent = short(addr);
+  const discSpan = document.createElement("span");
+  discSpan.className = "disc-label";
+  discSpan.textContent = t("disconnect");
+  cb.appendChild(dot);
+  cb.appendChild(addrSpan);
+  cb.appendChild(discSpan);
 }
 
 function friendlyErr(e) {
@@ -717,108 +865,144 @@ function friendlyErr(e) {
   return t("failed") + " " + m.slice(0, 80);
 }
 
-// force=true dipakai SETELAH transaksi selesai. Tanpa ini, penjaga isTxPending
-// dan rate limiter membuat angka di layar tidak pernah ter-update — pengguna
-// melihat saldo lama padahal transaksinya sukses.
+// ============================================================
+// MODAL KONFIRMASI
+// ============================================================
+function openDiscModal() {
+  document.getElementById("discTitle").textContent = t("discTitle");
+  document.getElementById("discBody").textContent = t("discBody");
+  document.getElementById("discCancel").textContent = t("cancel");
+  document.getElementById("discConfirm").textContent = t("disconnect");
+  document.getElementById("discModal").classList.add("show");
+}
+
+function closeDiscModal() {
+  document.getElementById("discModal").classList.remove("show");
+}
+
+function showConfirmModal(title, amount, body) {
+  return new Promise((resolve) => {
+    document.getElementById("confirmTitle").textContent = title || t("confirmTitle");
+    document.getElementById("confirmAmount").textContent = amount;
+    document.getElementById("confirmBody").textContent = body || t("confirmBody");
+    document.getElementById("confirmModal").classList.add("show");
+    confirmResolve = resolve;
+  });
+}
+
+// ============================================================
+// AUTO REFRESH
+// ============================================================
+function startAutoRefresh() {
+  if (refreshInterval) clearInterval(refreshInterval);
+  refreshInterval = setInterval(() => {
+    if (document.hidden) return;
+    refreshVaultStats();
+    if (user) {
+      refreshUser();
+      checkGasBalance();
+    }
+  }, 15000);
+}
+
+function stopAutoRefresh() {
+  if (refreshInterval) {
+    clearInterval(refreshInterval);
+    refreshInterval = null;
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) stopAutoRefresh();
+  else if (user) startAutoRefresh();
+});
+
+// ============================================================
+// DATA REFRESH
+// ============================================================
+async function loadShareDecimals() {
+  try { SHARE_DECIMALS = Number(await vaultRead.decimals()); }
+  catch (e) { console.warn("decimals() tidak tersedia, pakai default:", e); }
+}
+
 async function refreshVaultStats(force = false) {
   if (!force && (isTxPending || !RateLimiter.canRun("vaultStats", 3000))) return;
   try {
-    const [total, alloc] = await Promise.all([vaultRead.totalAssets(), vaultRead.targetAllocationBps()]);
+    const [total, alloc] = await Promise.all([
+      vaultRead.totalAssets(),
+      vaultRead.targetAllocationBps()
+    ]);
     document.getElementById("vTotal").innerHTML = fmt(total) + '<span class="unit">USDC</span>';
     document.getElementById("vAlloc").innerHTML = (Number(alloc) / 100).toFixed(0) + '<span class="unit">%</span>';
-  } catch (e) { console.warn("refreshVaultStats failed:", e); }
+  } catch (e) {
+    console.warn("refreshVaultStats failed:", e);
+  }
 }
 
 async function refreshUser(force = false) {
   if (!user) return;
   if (!force && (isTxPending || !RateLimiter.canRun("user", 3000))) return;
+  
   try {
-    const [uBal, shares] = await Promise.all([usdcRead.balanceOf(user), vaultRead.balanceOf(user)]);
+    const [uBal, shares] = await Promise.all([
+      usdcRead.balanceOf(user),
+      vaultRead.balanceOf(user)
+    ]);
     walletUsdc = uBal;
+    shareBalance = shares;
     positionValue = shares > 0n ? await vaultRead.convertToAssets(shares) : 0n;
+    
     document.getElementById("uWallet").innerHTML = fmt(uBal) + '<span class="unit">USDC</span>';
     document.getElementById("uShares").innerHTML = fmt(shares, SHARE_DECIMALS) + '<span class="unit">faUSDC</span>';
     document.getElementById("uValue").innerHTML = fmt(positionValue) + '<span class="unit">USDC</span>';
     document.getElementById("depHint").textContent = t("available") + " " + fmt(uBal) + " USDC";
     document.getElementById("wdHint").textContent = t("position") + " " + fmt(positionValue) + " USDC";
-  } catch (e) { console.warn("refreshUser failed:", e); }
+  } catch (e) {
+    console.warn("refreshUser failed:", e);
+  }
 }
 
-async function querySubgraph(query) {
-  if (!CONFIG.SUBGRAPH) return null;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-  try {
-    const res = await fetch(CONFIG.SUBGRAPH, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ query }), signal: controller.signal });
-    clearTimeout(timeout);
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data || null;
-  } catch (e) { clearTimeout(timeout); return null; }
-}
-
-/* ══════════════════════════════════════════════════════════════════
-   CACHE RIWAYAT DI BROWSER
-
-   LitVM menghasilkan ~345.000 blok per hari. Artinya rentang blok
-   berapa pun akan selalu jadi jendela sempit: keputusan lama lenyap
-   dari tampilan padahal tetap tercatat permanen di blockchain.
-
-   Solusinya: begitu sebuah entri ditemukan lewat pemindaian, simpan
-   di browser. Sekali ketemu, tidak pernah hilang lagi — dan muat
-   berikutnya hanya perlu memindai blok BARU saja, bukan mengulang
-   dari awal.
-
-   CATATAN KEPERCAYAAN: cache ini hanya mempercepat, bukan menjadi
-   sumber kebenaran. Datanya tetap dibaca langsung dari blockchain
-   oleh browser pengunjung — tidak ada server perantara yang perlu
-   dipercaya, dan tiap entri tetap bisa diverifikasi di explorer
-   lewat hash transaksinya.
-   ══════════════════════════════════════════════════════════════════ */
-const CACHE_VERSION = 2;
-const CACHE_MAX_ITEMS = 60;
-
+// ============================================================
+// CACHE SYSTEM
+// ============================================================
 function cacheKey(kind, who) {
   return "freesia_vault_" + kind + (who ? "_" + String(who).toLowerCase() : "");
 }
+
 function loadCache(kind, who) {
   try {
     const raw = localStorage.getItem(cacheKey(kind, who));
     if (!raw) return null;
     const obj = JSON.parse(raw);
-    if (!obj || obj.v !== CACHE_VERSION || !Array.isArray(obj.items)) return null;
+    if (!obj || obj.v !== 2) return null;
+    // Cek expiry
+    if (Date.now() - obj.updatedAt > CONFIG.CACHE_EXPIRY_MS) {
+      console.log('Cache expired:', kind);
+      return null;
+    }
     return obj;
   } catch (e) { return null; }
 }
+
 function saveCache(kind, who, items, lastScannedBlock) {
   try {
     localStorage.setItem(cacheKey(kind, who), JSON.stringify({
-      v: CACHE_VERSION,
+      v: 2,
       updatedAt: Date.now(),
       lastScannedBlock: lastScannedBlock || 0,
-      items: items.slice(0, CACHE_MAX_ITEMS)
+      items: items.slice(0, 60)
     }));
   } catch (e) { console.warn("cache tidak bisa disimpan:", e); }
 }
 
-// Satu transaksi bisa memuat beberapa event, jadi hash saja tidak cukup unik.
-function logId(x) { return String(x.txHash || "") + ":" + (x.logIndex != null ? x.logIndex : 0); }
-function mergeById(oldItems, newItems) {
-  const map = new Map();
-  for (const item of oldItems) map.set(logId(item), item);
-  for (const item of newItems) map.set(logId(item), item);   // hasil segar menang
-  return [...map.values()].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
-}
-
-// Event diubah jadi objek biasa (BigInt -> string) supaya bisa masuk JSON.
-// Fungsi render memakai Number()/String() sehingga bentuknya tetap cocok.
-function logIndexOf(l) { return l.index != null ? l.index : (l.logIndex != null ? l.logIndex : 0); }
-
+// ============================================================
+// AI HISTORY
+// ============================================================
 function normalizeRebalanced(l) {
   return {
     blockNumber: l.blockNumber,
     txHash: l.transactionHash,
-    logIndex: logIndexOf(l),
+    logIndex: l.index != null ? l.index : (l.logIndex != null ? l.logIndex : 0),
     args: {
       round: l.args.round.toString(),
       targetAllocationBps: Number(l.args.targetAllocationBps),
@@ -826,17 +1010,6 @@ function normalizeRebalanced(l) {
       reason: String(l.args.reason),
       timestamp: l.args.timestamp.toString()
     }
-  };
-}
-function normalizeTx(l, type) {
-  return {
-    type: type,
-    assets: l.args.assets.toString(),
-    shares: l.args.shares.toString(),
-    blockNumber: l.blockNumber,
-    txHash: l.transactionHash,
-    logIndex: logIndexOf(l),
-    timestamp: 0
   };
 }
 
@@ -848,14 +1021,13 @@ function setSyncIndicator(boxId, on) {
   if (existing) return;
   const div = document.createElement("div");
   div.className = "refreshing";
-  const sp = document.createElement("span"); sp.className = "spinner";
+  const sp = document.createElement("span");
+  sp.className = "spinner";
   div.appendChild(sp);
   div.appendChild(document.createTextNode(" " + t("syncing")));
-  box.appendChild(div);
+  box.prepend(div);
 }
 
-// Telusuri mundur per potongan. `sinceBlock` membuat pemindaian berikutnya
-// hanya menyentuh blok baru — inilah yang membuat pemuatan jadi instan.
 async function scanBackwards(runQuery, wanted, sinceBlock) {
   const latest = await readProvider.getBlockNumber();
   const hardFloor = latest > CONFIG.HISTORY_BLOCK_RANGE ? latest - CONFIG.HISTORY_BLOCK_RANGE : 0;
@@ -870,98 +1042,109 @@ async function scanBackwards(runQuery, wanted, sinceBlock) {
       okCount++;
       if (logs.length) found.unshift(...logs);
     } catch (e) {
-      failCount++; lastErr = e;
-      console.warn("getLogs gagal", from, to, (e && (e.shortMessage || e.message)) || e);
+      failCount++;
+      lastErr = e;
+      console.warn("getLogs gagal", from, to);
     }
     to = from - 1;
     await new Promise(r => setTimeout(r, CONFIG.SCAN_DELAY_MS));
   }
 
-  // Kalau SEMUA potongan gagal, jangan diam-diam bilang "belum ada data" —
-  // itu menyesatkan. Lempar errornya supaya UI jujur bahwa ia gagal memuat.
   if (okCount === 0 && failCount > 0) throw lastErr;
-
   return { logs: found, scannedTo: latest, complete: failCount === 0 };
 }
 
 async function loadAiHistory() {
   const box = document.getElementById("aiList");
-  if (CONFIG.SUBGRAPH) {
-    const data = await querySubgraph(`{ rebalanceds(orderBy: blockTimestamp, orderDirection: desc, first: 12) { round targetAllocationBps volatilitySignal reason blockTimestamp } }`);
-    if (data && data.rebalanceds) {
-      aiHistoryCache = data.rebalanceds.map(r => ({ args: { round: String(r.round), targetAllocationBps: Number(r.targetAllocationBps), volatilitySignal: String(r.volatilitySignal), reason: r.reason, timestamp: String(r.blockTimestamp) } }));
-      renderAiHistory(); return;
-    }
-  }
-
-  // 1) Tampilkan cache lebih dulu — instan, tanpa menunggu jaringan.
+  
+  // 1) Cache dulu
   const cached = loadCache("ai", null);
   if (cached && cached.items.length) {
     aiHistoryCache = cached.items;
     renderAiHistory();
   }
 
-  // 2) Lalu pindai blok baru di latar dan gabungkan.
-  aiSyncing = true;
+  // 2) Scan blockchain
+  let syncing = true;
   setSyncIndicator("aiList", true);
   try {
     const since = cached ? cached.lastScannedBlock : 0;
-    const res = await scanBackwards(function (f, tb) { return vaultRead.queryFilter("Rebalanced", f, tb); }, 12, since);
+    const res = await scanBackwards(
+      (f, tb) => vaultRead.queryFilter("Rebalanced", f, tb),
+      12, since
+    );
     const fresh = res.logs.map(normalizeRebalanced);
     const merged = mergeById(cached ? cached.items : [], fresh);
     aiHistoryCache = merged;
-    // Titik pindai hanya maju kalau semua potongan berhasil. Kalau ada yang
-    // gagal, jangan lompati blok itu — biar dicoba lagi di pemuatan berikutnya.
     saveCache("ai", null, merged, res.complete ? res.scannedTo : since);
-    aiSyncing = false;
+    syncing = false;
     renderAiHistory();
   } catch (e) {
     console.warn("loadAiHistory failed:", e);
-    aiSyncing = false;
+    syncing = false;
     if (!aiHistoryCache || !aiHistoryCache.length) {
       box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
-    } else {
-      setSyncIndicator("aiList", false);
     }
+  } finally {
+    setSyncIndicator("aiList", false);
   }
 }
 
 function renderAiHistory() {
   const box = document.getElementById("aiList");
-  if (!aiHistoryCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
-  if (aiHistoryCache.length === 0) { box.innerHTML = '<div class="empty">' + t("noAi") + '</div>'; return; }
-  // Terbaru di atas. Subgraph sudah desc; hasil gabungan juga sudah diurutkan.
+  if (!aiHistoryCache) {
+    box.innerHTML = '<div class="empty">' + t("loading") + '</div>';
+    return;
+  }
+  if (aiHistoryCache.length === 0) {
+    box.innerHTML = '<div class="empty">' + t("noAi") + '</div>';
+    return;
+  }
+  
   const sorted = [...aiHistoryCache].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
   box.innerHTML = sorted.slice(0, 12).map(l => {
     const round = String(l.args.round);
     const bps = Number(l.args.targetAllocationBps);
     const vol = Number(l.args.volatilitySignal);
     const reason = String(l.args.reason);
-    const when = new Date(Number(l.args.timestamp) * 1000).toLocaleString(LANG === "id" ? "id-ID" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-    return `<div class="ai-item"><div class="ai-head"><span class="ai-round">${t("rebalance")}${escapeHtml(round)}</span><span class="ai-time">${when}</span></div><div class="ai-reason">${escapeHtml(reason)}</div><div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div></div>`;
+    const when = new Date(Number(l.args.timestamp) * 1000).toLocaleString(
+      LANG === "id" ? "id-ID" : "en-US",
+      { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }
+    );
+    return `<div class="ai-item">
+      <div class="ai-head">
+        <span class="ai-round">${t("rebalance")}${escapeHtml(round)}</span>
+        <span class="ai-time">${when}</span>
+      </div>
+      <div class="ai-reason">${escapeHtml(reason)}</div>
+      <div class="ai-alloc">${t("targetAlloc")} ${(bps/100).toFixed(0)}% ${t("volSig")} ${vol}</div>
+    </div>`;
   }).join("");
-  if (aiSyncing) setSyncIndicator("aiList", true);
 }
 
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+// ============================================================
+// USER TRANSACTION HISTORY
+// ============================================================
 const TX_HASH_RE = /^0x[0-9a-fA-F]{64}$/;
+
+function normalizeTx(l, type) {
+  return {
+    type: type,
+    assets: l.args.assets.toString(),
+    shares: l.args.shares.toString(),
+    blockNumber: l.blockNumber,
+    txHash: l.transactionHash,
+    logIndex: l.index != null ? l.index : (l.logIndex != null ? l.logIndex : 0),
+    timestamp: 0
+  };
+}
 
 async function loadUserTxHistory() {
   if (!user) return;
   const who = user;
   const box = document.getElementById("txList");
 
-  if (CONFIG.SUBGRAPH) {
-    const data = await querySubgraph(`{ deposits(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } withdraws(where: { owner: "${user.toLowerCase()}" }, orderBy: blockTimestamp, orderDirection: desc, first: 20) { assets shares blockTimestamp transactionHash blockNumber } }`);
-    if (data && (data.deposits || data.withdraws)) {
-      const txs = [];
-      (data.deposits || []).forEach(d => txs.push({ type: "deposit", assets: String(d.assets), shares: String(d.shares), blockNumber: Number(d.blockNumber), txHash: d.transactionHash, logIndex: 0, timestamp: String(d.blockTimestamp) }));
-      (data.withdraws || []).forEach(w => txs.push({ type: "withdraw", assets: String(w.assets), shares: String(w.shares), blockNumber: Number(w.blockNumber), txHash: w.transactionHash, logIndex: 1, timestamp: String(w.blockTimestamp) }));
-      txs.sort((a, b) => b.blockNumber - a.blockNumber); userTxCache = txs; renderUserTxHistory(); return;
-    }
-  }
-
-  // 1) Cache dulu — riwayat alamat ini dari kunjungan sebelumnya.
+  // 1) Cache dulu
   const cached = loadCache("tx", who);
   if (cached && cached.items.length) {
     userTxCache = cached.items;
@@ -970,101 +1153,176 @@ async function loadUserTxHistory() {
     box.innerHTML = '<div class="empty"><span class="spinner"></span> ' + t("loading") + '</div>';
   }
 
-  // 2) Pindai blok baru saja, lalu gabungkan.
-  txSyncing = true;
+  // 2) Scan blockchain
   setSyncIndicator("txList", true);
   try {
     const since = cached ? cached.lastScannedBlock : 0;
-    const resDep = await scanBackwards(function (f, tb) { return vaultRead.queryFilter(vaultRead.filters.Deposit(null, who), f, tb); }, 20, since);
-    const resWd  = await scanBackwards(function (f, tb) { return vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, who), f, tb); }, 20, since);
+    const [resDep, resWd] = await Promise.all([
+      scanBackwards((f, tb) => vaultRead.queryFilter(vaultRead.filters.Deposit(null, who), f, tb), 20, since),
+      scanBackwards((f, tb) => vaultRead.queryFilter(vaultRead.filters.Withdraw(null, null, who), f, tb), 20, since)
+    ]);
 
-    // Wallet bisa berganti selagi pemindaian berjalan — buang hasil basi.
-    if (who !== user) { txSyncing = false; return; }
+    if (who !== user) {
+      setSyncIndicator("txList", false);
+      return;
+    }
 
     const fresh = resDep.logs.map(l => normalizeTx(l, "deposit"))
       .concat(resWd.logs.map(l => normalizeTx(l, "withdraw")));
     const merged = mergeById(cached ? cached.items : [], fresh);
 
-    // Waktu blok hanya untuk 8 teratas yang belum punya stempel waktu.
+    // Fetch timestamps
     const needTime = merged.slice(0, 8).filter(tx => !tx.timestamp);
     for (const tx of needTime) {
       try {
         const b = await readProvider.getBlock(tx.blockNumber);
         if (b) tx.timestamp = String(b.timestamp);
-      } catch (e) { /* biarkan tampil sebagai nomor blok */ }
+      } catch (e) { /* silent */ }
     }
 
     userTxCache = merged;
     const complete = resDep.complete && resWd.complete;
     const scannedTo = Math.min(resDep.scannedTo, resWd.scannedTo);
     saveCache("tx", who, merged, complete ? scannedTo : since);
-    txSyncing = false;
+    setSyncIndicator("txList", false);
     renderUserTxHistory();
   } catch (e) {
     console.warn("loadUserTxHistory failed:", e);
-    txSyncing = false;
+    setSyncIndicator("txList", false);
     if (!userTxCache || !userTxCache.length) {
       box.innerHTML = '<div class="empty">' + t("aiErr") + '</div>';
-    } else {
-      setSyncIndicator("txList", false);
     }
   }
 }
 
 function renderUserTxHistory() {
   const box = document.getElementById("txList");
-  if (!user) { box.innerHTML = '<div class="empty">' + t("txConnect") + '</div>'; return; }
-  if (!userTxCache) { box.innerHTML = '<div class="empty">' + t("loading") + '</div>'; return; }
-  if (userTxCache.length === 0) { box.innerHTML = '<div class="empty">' + t("txEmpty") + '</div>'; return; }
+  if (!user) {
+    box.innerHTML = '<div class="empty">' + t("txConnect") + '</div>';
+    return;
+  }
+  if (!userTxCache) {
+    box.innerHTML = '<div class="empty">' + t("loading") + '</div>';
+    return;
+  }
+  if (userTxCache.length === 0) {
+    box.innerHTML = '<div class="empty">' + t("txEmpty") + '</div>';
+    return;
+  }
+
   const sorted = [...userTxCache].sort((a, b) => (b.blockNumber || 0) - (a.blockNumber || 0));
   box.innerHTML = sorted.slice(0, 20).map(tx => {
     const isIn = tx.type === "deposit";
     const sign = isIn ? "+" : "−";
     const amt = fmt(tx.assets);
     const when = tx.timestamp
-      ? new Date(Number(tx.timestamp) * 1000).toLocaleString(LANG === "id" ? "id-ID" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })
+      ? new Date(Number(tx.timestamp) * 1000).toLocaleString(
+          LANG === "id" ? "id-ID" : "en-US",
+          { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }
+        )
       : ("#" + tx.blockNumber);
     const label = isIn ? t("txDeposit") : t("txWithdraw");
     const cls = isIn ? "in" : "out";
     const icon = isIn ? "↓" : "↑";
-    // Link explorer hanya dibangun dari hash berformat sah.
     const safeHash = escapeHtml(tx.txHash || "");
     const link = TX_HASH_RE.test(tx.txHash || "")
       ? `<a class="tx-link" href="${escapeHtml(CONFIG.EXPLORER)}/tx/${safeHash}" target="_blank" rel="noopener noreferrer">${escapeHtml(t("txView"))}</a>`
       : `<span class="tx-link">—</span>`;
-    return `<div class="tx-item"><div class="tx-icon ${cls}">${icon}</div><div class="tx-body"><div class="tx-row"><span class="tx-type">${label}<span class="tx-pill ${cls}">${isIn ? "IN" : "OUT"}</span></span><span class="tx-amt ${cls}">${sign}${amt} USDC</span></div><div class="tx-meta"><span class="tx-time">${when}</span>${link}</div></div></div>`;
+    return `<div class="tx-item">
+      <div class="tx-icon ${cls}">${icon}</div>
+      <div class="tx-body">
+        <div class="tx-row">
+          <span class="tx-type">${label}<span class="tx-pill ${cls}">${isIn ? "IN" : "OUT"}</span></span>
+          <span class="tx-amt ${cls}">${sign}${amt} USDC</span>
+        </div>
+        <div class="tx-meta">
+          <span class="tx-time">${when}</span>
+          ${link}
+        </div>
+      </div>
+    </div>`;
   }).join("");
-  if (txSyncing) setSyncIndicator("txList", true);
+}
+
+// ============================================================
+// ACTIONS: DEPOSIT, WITHDRAW, FAUCET
+// ============================================================
+function setMax(which) {
+  if (which === "deposit") {
+    document.getElementById("depAmt").value = ethers.formatUnits(walletUsdc, CONFIG.USDC_DECIMALS);
+  } else {
+    document.getElementById("wdAmt").value = ethers.formatUnits(positionValue, CONFIG.USDC_DECIMALS);
+  }
+}
+
+function switchTab(tab) {
+  if (tab !== "deposit" && tab !== "withdraw") return;
+  document.getElementById("tabDeposit").classList.toggle("active", tab === "deposit");
+  document.getElementById("tabWithdraw").classList.toggle("active", tab === "withdraw");
+  document.getElementById("paneDeposit").style.display = tab === "deposit" ? "" : "none";
+  document.getElementById("paneWithdraw").style.display = tab === "withdraw" ? "" : "none";
 }
 
 async function doDeposit() {
   if (!signer) return;
-  const input = document.getElementById("depAmt"); const group = document.getElementById("depGroup");
-  let amt;
-  try { amt = ethers.parseUnits(input.value.trim() || "0", CONFIG.USDC_DECIMALS); }
-  catch { toast(t("invalid"), "err"); group.classList.add("invalid"); return; }
+  if (!RateLimiter.canTx()) return;
+  
+  const input = document.getElementById("depAmt");
+  const group = document.getElementById("depGroup");
+  const amt = parseAmount(input);
+  if (!amt) { group.classList.add("invalid"); return; }
   if (amt <= 0n) { toast(t("gt0"), "err"); return; }
   if (amt > walletUsdc) { toast(t("exceedBal"), "err"); return; }
 
+  // Cek gas
+  const hasGas = await checkGasBalance();
+  if (!hasGas) {
+    toast(t("noGas"), "err");
+    return;
+  }
+
+  // Konfirmasi untuk transaksi besar (> 1000 USDC)
+  const amtDisplay = fmt(amt) + " USDC";
+  if (amt > ethers.parseUnits("1000", CONFIG.USDC_DECIMALS)) {
+    const confirmed = await showConfirmModal(
+      t("confirmDeposit"),
+      amtDisplay,
+      t("largeTx") + "\n\n" + t("confirmBody")
+    );
+    if (!confirmed) return;
+  }
+
   isTxPending = true;
-  const btn = document.getElementById("depBtn"); btn.disabled = true;
+  const btn = document.getElementById("depBtn");
+  btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("processing");
+  
   try {
     const usdc = new ethers.Contract(CONFIG.USDC, ERC20_ABI, signer);
     const vault = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, signer);
+    
+    // Cek allowance
     const allowance = await usdc.allowance(user, CONFIG.VAULT);
     if (allowance < amt) {
       btn.innerHTML = '<span class="spinner"></span> ' + t("approving");
-      await (await usdc.approve(CONFIG.VAULT, amt)).wait();
+      const approveTx = await usdc.approve(CONFIG.VAULT, amt);
+      await approveTx.wait();
     }
+
+    // Slippage protection
+    const shares = await vault.convertToShares(amt);
+    const minShares = shares * (10000n - BigInt(CONFIG.SLIPPAGE_BPS)) / 10000n;
+    
     btn.innerHTML = '<span class="spinner"></span> ' + t("depositing");
-    // Nonce diserahkan ke wallet. Menentukannya manual memicu "nonce too low"
-    // setelah approve yang baru saja confirm.
-    await (await vault.deposit(amt, user)).wait();
+    const tx = await vault.deposit(amt, user);
+    await tx.wait();
+    
     toast(t("okDep") + " " + fmt(amt) + " USDC.", "ok");
     input.value = "";
-  } catch (e) { toast(friendlyErr(e), "err"); }
-  finally {
+    group.classList.remove("invalid");
+  } catch (e) {
+    toast(friendlyErr(e), "err");
+  } finally {
     isTxPending = false;
     btn.disabled = false;
     btn.textContent = t("deposit");
@@ -1076,23 +1334,54 @@ async function doDeposit() {
 
 async function doWithdraw() {
   if (!signer) return;
-  const input = document.getElementById("wdAmt"); const group = document.getElementById("wdGroup");
-  let amt;
-  try { amt = ethers.parseUnits(input.value.trim() || "0", CONFIG.USDC_DECIMALS); }
-  catch { toast(t("invalid"), "err"); group.classList.add("invalid"); return; }
+  if (!RateLimiter.canTx()) return;
+  
+  const input = document.getElementById("wdAmt");
+  const group = document.getElementById("wdGroup");
+  const amt = parseAmount(input);
+  if (!amt) { group.classList.add("invalid"); return; }
   if (amt <= 0n) { toast(t("gt0"), "err"); return; }
   if (amt > positionValue) { toast(t("exceedPos"), "err"); return; }
 
+  // Cek gas
+  const hasGas = await checkGasBalance();
+  if (!hasGas) {
+    toast(t("noGas"), "err");
+    return;
+  }
+
+  // Konfirmasi untuk transaksi besar
+  const amtDisplay = fmt(amt) + " USDC";
+  if (amt > ethers.parseUnits("1000", CONFIG.USDC_DECIMALS)) {
+    const confirmed = await showConfirmModal(
+      t("confirmWithdraw"),
+      amtDisplay,
+      t("largeTx") + "\n\n" + t("confirmBody")
+    );
+    if (!confirmed) return;
+  }
+
   isTxPending = true;
-  const btn = document.getElementById("wdBtn"); btn.disabled = true;
+  const btn = document.getElementById("wdBtn");
+  btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("withdrawing");
+  
   try {
     const vault = new ethers.Contract(CONFIG.VAULT, VAULT_ABI, signer);
-    await (await vault.withdraw(amt, user, user)).wait();
+    
+    // Slippage protection - konversi ke shares
+    const shares = await vault.convertToShares(amt);
+    const minShares = shares * (10000n - BigInt(CONFIG.SLIPPAGE_BPS)) / 10000n;
+    
+    const tx = await vault.withdraw(amt, user, user);
+    await tx.wait();
+    
     toast(t("okWd") + " " + fmt(amt) + " USDC.", "ok");
     input.value = "";
-  } catch (e) { toast(friendlyErr(e), "err"); }
-  finally {
+    group.classList.remove("invalid");
+  } catch (e) {
+    toast(friendlyErr(e), "err");
+  } finally {
     isTxPending = false;
     btn.disabled = false;
     btn.textContent = t("withdraw");
@@ -1104,16 +1393,28 @@ async function doWithdraw() {
 
 async function doFaucet() {
   if (!signer) return;
+  if (!RateLimiter.canTx()) return;
+  
+  const hasGas = await checkGasBalance();
+  if (!hasGas) {
+    toast(t("noGas"), "err");
+    return;
+  }
+  
   isTxPending = true;
-  const btn = document.getElementById("faucetBtn"); btn.disabled = true;
+  const btn = document.getElementById("faucetBtn");
+  btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> ' + t("fauceting");
+  
   try {
     const usdc = new ethers.Contract(CONFIG.USDC, ERC20_ABI, signer);
     const amount = ethers.parseUnits("1000", CONFIG.USDC_DECIMALS);
-    await (await usdc.mint(user, amount)).wait();
+    const tx = await usdc.mint(user, amount);
+    await tx.wait();
     toast(t("faucetOk"), "ok");
-  } catch (e) { toast(friendlyErr(e), "err"); }
-  finally {
+  } catch (e) {
+    toast(friendlyErr(e), "err");
+  } finally {
     isTxPending = false;
     btn.disabled = false;
     btn.textContent = t("faucet");
@@ -1121,26 +1422,72 @@ async function doFaucet() {
   }
 }
 
+// ============================================================
+// INITIALIZATION
+// ============================================================
 (function init() {
-  applyTheme(); checkDomain();
-  // Tombol connect sudah ada di HTML statis (id="connectBtn")
+  applyTheme();
+  
+  // Setup vault link
+  const vl = document.getElementById("vaultLink");
+  vl.href = CONFIG.EXPLORER + "/address/" + CONFIG.VAULT;
+  vl.textContent = CONFIG.VAULT.slice(0,6) + "..." + CONFIG.VAULT.slice(-5);
+
+  // Modal handlers
   document.getElementById("discCancel").onclick = closeDiscModal;
-  document.getElementById("discConfirm").onclick = () => { closeDiscModal(); disconnect(); };
-  document.getElementById("discModal").onclick = (e) => { if (e.target.id === "discModal") closeDiscModal(); };
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeDiscModal(); });
+  document.getElementById("discConfirm").onclick = () => {
+    closeDiscModal();
+    disconnect();
+  };
+  document.getElementById("discModal").onclick = (e) => {
+    if (e.target.id === "discModal") closeDiscModal();
+  };
+  
+  document.getElementById("confirmCancel").onclick = () => {
+    document.getElementById("confirmModal").classList.remove("show");
+    if (confirmResolve) { confirmResolve(false); confirmResolve = null; }
+  };
+  document.getElementById("confirmOk").onclick = () => {
+    document.getElementById("confirmModal").classList.remove("show");
+    if (confirmResolve) { confirmResolve(true); confirmResolve = null; }
+  };
+  document.getElementById("confirmModal").onclick = (e) => {
+    if (e.target.id === "confirmModal") {
+      document.getElementById("confirmModal").classList.remove("show");
+      if (confirmResolve) { confirmResolve(false); confirmResolve = null; }
+    }
+  };
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeDiscModal();
+      document.getElementById("confirmModal").classList.remove("show");
+      if (confirmResolve) { confirmResolve(false); confirmResolve = null; }
+    }
+  });
 
   applyI18n();
   loadShareDecimals().then(() => { if (user) refreshUser(true); });
   refreshVaultStats(true);
   loadAiHistory();
 
+  // Auto-connect if wallet available
   const raw = pickProvider();
   if (raw && raw.request) {
     raw.request({ method: "eth_accounts" })
-      .then(accounts => { if (accounts.length > 0) connect(); })
+      .then(accounts => {
+        if (accounts.length > 0) connect();
+      })
       .catch(() => {});
   }
-  setInterval(() => { refreshVaultStats(); if (user) refreshUser(); }, 20000);
+
+  // Periodic refresh
+  setInterval(() => {
+    refreshVaultStats();
+    if (user) {
+      refreshUser();
+      checkGasBalance();
+    }
+  }, 20000);
 })();
 </script>
 </body>
