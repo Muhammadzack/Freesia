@@ -108,6 +108,8 @@
     .flag { margin-top:8px; font-size:11.5px; line-height:1.55; color:var(--text-secondary);
         padding:8px 10px; border-radius:9px; background:var(--bg-tertiary); border:1px solid var(--border-color); border-left:3px solid var(--warning); }
     .flag b { color:var(--warning); }
+    .flag.dead { border-left-color:var(--danger); }
+    .flag.dead b { color:var(--danger); }
 
     /* Batas kejujuran */
     .limits { margin-top:30px; padding:18px; border-radius:16px; background:var(--bg-secondary);
@@ -159,7 +161,7 @@
 
 <div class="probe">
     <div class="probe-row">
-        <span class="probe-count mono" id="probeCount">0 / 19</span>
+        <span class="probe-count mono" id="probeCount">0 / 23</span>
         <span class="probe-label" id="probeState" data-i18n="probe_wait">Menunggu</span>
     </div>
     <div class="probe-bar"><div class="probe-fill" id="probeFill"></div></div>
@@ -176,6 +178,12 @@
     <div class="sec-head"><h2 data-i18n="sec_staking">Kontrak staking</h2><span class="rule"></span></div>
     <p class="sec-sub" data-i18n="sub_staking">Tiap pool punya kontrak staking sendiri. Yang menyimpan LP Anda saat di-stake.</p>
     <div id="listStaking"></div>
+</div>
+
+<div class="sec">
+    <div class="sec-head"><h2 data-i18n="sec_vault">AI Vault</h2><span class="rule"></span></div>
+    <p class="sec-sub" data-i18n="sub_vault">Vault ERC-4626 yang agennya dibatasi di tingkat kontrak. Angka pagar di bawah dibaca hidup dari rantai — bukan klaim kami. Alamat versi pertama sengaja tetap ditampilkan, ditandai ditinggalkan.</p>
+    <div id="listVault"></div>
 </div>
 
 <div class="sec">
@@ -201,6 +209,7 @@
         <li data-i18n="lim_1"><b>Belum ada audit profesional.</b> Kontrak ditinjau sendiri oleh pembuatnya. Tinjauan sendiri bukan pengganti audit, dan kami tidak akan menyebutnya begitu.</li>
         <li data-i18n="lim_2"><b>Ini testnet.</b> Semua token di sini tanpa nilai. Jangan perlakukan hasil apa pun di sini sebagai janji untuk mainnet.</li>
         <li data-i18n="lim_3"><b>Pool USDC/DAI lahir sebelum SimpleLiquidityPoolV3</b> dan kode sumbernya hilang. Kami memverifikasi ia punya proteksi slippage saat penarikan likuiditas — proteksi lainnya tidak dapat kami konfirmasi. Pool KOPDES/USDC dan MBG/USDC di-deploy dari V3 dan aman sejak lahir.</li>
+        <li data-i18n="lim_6"><b>AI Vault tidak menghasilkan apa pun.</b> Strategi yang terpasang adalah IdleStrategy — ia sengaja tidak melakukan apa-apa, jadi imbal hasilnya nol. Angka pagar di atas membuktikan agennya terkurung, bukan bahwa vaultnya menguntungkan.</li>
         <li data-i18n="lim_4"><b>Kecocokan kode sumber tidak dibaca dari sini.</b> Halaman ini membuktikan kontrak ada dan hidup, bukan bahwa kode sumbernya sudah diverifikasi. Untuk itu, buka tautan explorer tiap kontrak dan periksa tab kode sumbernya sendiri.</li>
         <li data-i18n="lim_5"><b>Kalau salah satu baris di atas merah</b>, sesuatu memang salah. Kami memilih menampilkannya daripada menyembunyikannya.</li>
     </ul>
@@ -240,6 +249,14 @@
         { label:'Staking KOPDES/USDC', addr:'0xb7f9c24854c0B0d281913269026E719cc55157cb' },
         { label:'Staking MBG/USDC',    addr:'0x881aBE426863F1172d435ad3f6dbcE0c876eD2Ef' }
     ];
+    // AI Vault. Alamat v1 sengaja dipertahankan di daftar dan ditandai ditinggalkan —
+    // alamat itu pernah diumumkan, jadi orang berhak melihat statusnya di sini.
+    const VAULT = [
+        { label:'AI Vault',       kindKey:'k_vault',    addr:'0x3c7A6C95cd4668e7E86099fb5fd5b1635E01f373', role:'vault' },
+        { label:'IdleStrategy',   kindKey:'k_strategy', addr:'0x981617302e719a421058C94E0cBCD4A26aa85b0d', role:'code'  },
+        { label:'MockUSDC',       kindKey:'k_vusdc',    addr:'0xD8508E5e783F88E669070cf7DF80cb0b56097bCF', role:'usdc'  },
+        { label:'AI Vault v1',    kindKey:'k_dead',     addr:'0x49e513d6dbF7D93Fa60A7fF1f0d5762851D6547a', role:'dead'  }
+    ];
     const INFRA = [
         { label:'Faucet',       kind:'faucet', addr:'0xe72f37B2AE5295A723C2c885cdf47D4a752A804E' },
         { label:'FREE (reward)',kind:'token',  addr:'0x5072FE98CD78604d8750a935fa39039F06b6e800' }
@@ -264,8 +281,17 @@
     ];
     const ERC20_ABI = ['function totalSupply() view returns (uint256)'];
     const DIA_ABI = ['function latestRoundData() view returns (uint80,int256,uint256,uint256,uint80)'];
+    const VAULT_ABI = [
+        'function totalAssets() view returns (uint256)',
+        'function targetAllocationBps() view returns (uint16)',
+        'function maxTargetBps() view returns (uint16)',
+        'function maxDeltaBps() view returns (uint16)',
+        'function minRebalanceInterval() view returns (uint256)'
+    ];
+    const VAULT_V1_ABI = ['function totalAssets() view returns (uint256)'];
 
-    const TOTAL = POOLS.length + STAKING.length + Object.keys(TOKENS).length + INFRA.length + DIA_FEEDS.length;
+    const TOTAL = POOLS.length + STAKING.length + VAULT.length
+                + Object.keys(TOKENS).length + INFRA.length + DIA_FEEDS.length;
     let checked = 0, failed = 0;
 
     // ── Dwibahasa ──
@@ -291,18 +317,24 @@
         sec_staking:["Kontrak staking", "Staking contracts"],
         sub_staking:["Tiap pool punya kontrak staking sendiri. Yang menyimpan LP Anda saat di-stake.",
                      "Each pool has its own staking contract. This is what holds your LP while it's staked."],
+        sec_vault: ["AI Vault", "AI Vault"],
+        sub_vault: ["Vault ERC-4626 yang agennya dibatasi di tingkat kontrak. Angka pagar di bawah dibaca hidup dari rantai — bukan klaim kami. Alamat versi pertama sengaja tetap ditampilkan, ditandai ditinggalkan.",
+                    "An ERC-4626 vault whose agent is bounded at the contract level. The limits below are read live from the chain — not claimed by us. The first-version address is deliberately kept on this list, marked abandoned."],
         sec_tokens:["Token", "Tokens"],
         sub_tokens:["Semua token testnet. Tidak bernilai uang nyata.", "All testnet tokens. Worth no real money."],
         sec_infra: ["Infrastruktur", "Infrastructure"],
         sec_oracle:["Oracle DIA", "DIA oracle"],
         sub_oracle:["Harga referensi pasar. Dipakai HANYA sebagai pembanding di tampilan — tidak menyentuh logika swap.",
                     "Market reference prices. Used ONLY as a benchmark in the interface — never in swap logic."],
+        k_vault:   ["AIAdaptiveVault v2 · ERC-4626", "AIAdaptiveVault v2 · ERC-4626"],
+        k_strategy:["Strategi yang terpasang", "Attached strategy"],
+        k_vusdc:   ["Aset dasar vault · 6 desimal", "Vault's underlying asset · 6 decimals"],
+        k_dead:    ["Versi pertama — ditinggalkan", "First version — abandoned"],
         p_wait:    ["memeriksa…", "checking…"],
         p_live:    ["hidup di chain", "live on chain"],
         p_bad:     ["tidak menjawab", "no response"],
         p_none:    ["tidak ada kontrak", "no contract"],
         r_bytecode:["Bytecode <b>{n}</b> byte di alamat ini.", "Bytecode <b>{n}</b> bytes at this address."],
-        r_reserves:["Cadangan: <b>{a}</b> {sa> } · <b>{b}</b> {sb}. Suplai LP <b>{ts}</b>.", ""],
         r_pool:    ["Cadangan <b>{a}</b> {sa} + <b>{b}</b> {sb} · suplai LP <b>{ts}</b>",
                     "Reserves <b>{a}</b> {sa} + <b>{b}</b> {sb} · LP supply <b>{ts}</b>"],
         r_stake:   ["Total LP di-stake <b>{n}</b> · periode reward berakhir <b>{d}</b>",
@@ -311,10 +343,15 @@
         r_feed:    ["Harga <b>${p}</b> · diperbarui <b>{a}</b> lalu", "Price <b>${p}</b> · updated <b>{a}</b> ago"],
         r_feed_old:["Harga <b>${p}</b> · <b>basi</b> ({a})", "Price <b>${p}</b> · <b>stale</b> ({a})"],
         r_code:    ["Kontrak ada · bytecode <b>{n}</b> byte", "Contract exists · <b>{n}</b> bytes of bytecode"],
+        r_vault:   ["Total aset <b>{a}</b> USDC · alokasi saat ini <b>{t}%</b> · atap <b>{c}%</b> · langkah maks <b>{d}</b> poin · jeda min <b>{m}</b> menit",
+                    "Total assets <b>{a}</b> USDC · current allocation <b>{t}%</b> · ceiling <b>{c}%</b> · max step <b>{d}</b> points · min interval <b>{m}</b> min"],
+        r_dead:    ["Ditinggalkan · saldo tersisa <b>{a}</b> USDC", "Abandoned · remaining balance <b>{a}</b> USDC"],
         r_err:     ["Alamat ini tidak menjawab panggilan baca. Jangan pakai.", "This address doesn't answer read calls. Don't use it."],
         never:     ["belum pernah", "never"],
         legacy_pool:["<b>Pool generasi awal.</b> Di-deploy sebelum SimpleLiquidityPoolV3 dan kode sumbernya hilang. Proteksi slippage saat penarikan likuiditas terverifikasi; proteksi lain tidak dapat kami konfirmasi. Pool dari V3 di bawah lebih aman.",
                      "<b>Early-generation pool.</b> Deployed before SimpleLiquidityPoolV3, and its source is lost. Slippage protection on liquidity removal is verified; the other protections we can't confirm. The V3 pools below are safer."],
+        dead_vault:["<b>Jangan pakai alamat ini.</b> Vault versi pertama, tanpa satu pun pembatas untuk agennya. Sudah dikosongkan dan tidak lagi dipantau. Alamat ini pernah kami umumkan, jadi kami menampilkannya di sini alih-alih menghapusnya diam-diam — kalau Anda menyimpannya, ganti dengan alamat AI Vault di atas.",
+                    "<b>Do not use this address.</b> First-version vault, with no limits on its agent at all. It has been emptied and is no longer monitored. We published this address once, so we show it here rather than quietly deleting it — if you saved it anywhere, replace it with the AI Vault address above."],
         copy:      ["Salin", "Copy"],
         copied:    ["Tersalin", "Copied"],
         lim_title: ["Yang TIDAK bisa dibuktikan halaman ini", "What this page can NOT prove"],
@@ -324,6 +361,8 @@
                     "<b>This is a testnet.</b> Every token here is worthless. Don't treat anything that happens here as a promise about mainnet."],
         lim_3:     ["<b>Pool USDC/DAI lahir sebelum SimpleLiquidityPoolV3</b> dan kode sumbernya hilang. Kami memverifikasi ia punya proteksi slippage saat penarikan likuiditas — proteksi lainnya tidak dapat kami konfirmasi. Pool KOPDES/USDC dan MBG/USDC di-deploy dari V3 dan aman sejak lahir.",
                     "<b>The USDC/DAI pool predates SimpleLiquidityPoolV3</b> and its source is lost. We verified it has slippage protection on liquidity removal — the rest we can't confirm. The KOPDES/USDC and MBG/USDC pools were deployed from V3 and are safe by birth."],
+        lim_6:     ["<b>AI Vault tidak menghasilkan apa pun.</b> Strategi yang terpasang adalah IdleStrategy — ia sengaja tidak melakukan apa-apa, jadi imbal hasilnya nol. Angka pagar di atas membuktikan agennya terkurung, bukan bahwa vaultnya menguntungkan.",
+                    "<b>The AI Vault earns nothing.</b> The attached strategy is IdleStrategy — it deliberately does nothing, so the yield is zero. The limits above prove the agent is caged, not that the vault is profitable."],
         lim_4:     ["<b>Kecocokan kode sumber tidak dibaca dari sini.</b> Halaman ini membuktikan kontrak ada dan hidup, bukan bahwa kode sumbernya sudah diverifikasi. Untuk itu, buka tautan explorer tiap kontrak dan periksa tab kode sumbernya sendiri.",
                     "<b>Source-code verification isn't read here.</b> This page proves the contracts exist and are live — not that their source is verified. For that, open each contract's explorer link and check its source tab yourself."],
         lim_5:     ["<b>Kalau salah satu baris di atas merah</b>, sesuatu memang salah. Kami memilih menampilkannya daripada menyembunyikannya.",
@@ -398,6 +437,9 @@
                 p.legacy ? `<div class="flag">${t('legacy_pool')}</div>` : '')).join('');
         document.getElementById('listStaking').innerHTML = STAKING.map(s =>
             row(s.label, 'LPStakingRewards', s.addr, '')).join('');
+        document.getElementById('listVault').innerHTML = VAULT.map(v =>
+            row(v.label, t(v.kindKey), v.addr,
+                v.role === 'dead' ? `<div class="flag dead">${t('dead_vault')}</div>` : '')).join('');
         document.getElementById('listTokens').innerHTML = Object.entries(TOKENS).map(([sym, tk]) =>
             row(sym, tk.name, tk.address, '')).join('');
         document.getElementById('listInfra').innerHTML = INFRA.map(i =>
@@ -487,6 +529,39 @@
                     .replace('{n}', fmt(parseFloat(ethers.formatUnits(ts, 18)), 4))
                     .replace('{d}', d));
             } catch (e) { mark(s.addr, 'bad', t('r_err')); }
+            await sleep(90);
+        }
+
+        // AI Vault — pagar dibaca langsung dari kontrak, bukan ditulis di halaman ini
+        for (const v of VAULT) {
+            try {
+                const bytes = await codeOk(v.addr);
+                if (v.role === 'vault') {
+                    const c = new ethers.Contract(v.addr, VAULT_ABI, provider);
+                    const [ta, tgt, maxT, maxD, minI] = await Promise.all([
+                        c.totalAssets(), c.targetAllocationBps(),
+                        c.maxTargetBps(), c.maxDeltaBps(), c.minRebalanceInterval()
+                    ]);
+                    mark(v.addr, 'live', t('r_vault')
+                        .replace('{a}', fmt(parseFloat(ethers.formatUnits(ta, 6)), 2))
+                        .replace('{t}', (Number(tgt) / 100).toFixed(0))
+                        .replace('{c}', (Number(maxT) / 100).toFixed(0))
+                        .replace('{d}', (Number(maxD) / 100).toFixed(0))
+                        .replace('{m}', Math.round(Number(minI) / 60)));
+                } else if (v.role === 'usdc') {
+                    const c = new ethers.Contract(v.addr, ERC20_ABI, provider);
+                    const ts = await c.totalSupply();
+                    mark(v.addr, 'live', t('r_supply')
+                        .replace('{n}', fmt(parseFloat(ethers.formatUnits(ts, 6)), 0) + ' USDC'));
+                } else if (v.role === 'dead') {
+                    const c = new ethers.Contract(v.addr, VAULT_V1_ABI, provider);
+                    const ta = await c.totalAssets();
+                    mark(v.addr, 'live', t('r_dead')
+                        .replace('{a}', fmt(parseFloat(ethers.formatUnits(ta, 6)), 2)));
+                } else {
+                    mark(v.addr, 'live', t('r_code').replace('{n}', fmt(bytes, 0)));
+                }
+            } catch (e) { mark(v.addr, 'bad', t('r_err')); }
             await sleep(90);
         }
 
