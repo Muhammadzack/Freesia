@@ -742,8 +742,28 @@ const I18N = {
     confirmDeposit: "Confirm Deposit",
     confirmWithdraw: "Confirm Withdraw",
     largeTx: "⚠️ Large transaction (> 1000 USDC). Double check!",
-    switchManual: "Auto-switch failed. Please add network manually:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz/infra-partner-http\nSymbol: zkLTC"
-}
+    switchManual: "Auto-switch failed. Please add network manually:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz/infra-partner-http\nSymbol: zkLTC",
+    calcTitle: "Deposit Calculator",
+    calcDesc: "Simulate estimated return based on 7-day vault performance.",
+    calcPlaceholder: "Amount USDC",
+    calcButton: "Calculate",
+    calcReturn: "Est. Return (7 days)",
+    calcApy: "APY (Annualized)",
+    calcFinal: "Est. Final Value",
+    calcShares: "Shares (faUSDC)",
+    calcDisclaimer: "⚠️ Estimate based on historical performance, not a guarantee.",
+    faqTitle: "❓ FAQ — Frequently Asked Questions",
+    faq1: "What is AI Vault?",
+    faq1a: "AI Vault is a vault managed by an AI agent (GARCH) to optimize asset allocation based on market volatility. Users deposit USDC and receive shares (faUSDC) that grow in value over time.",
+    faq2: "How does AI determine allocation?",
+    faq2a: "AI uses the GARCH model to predict market volatility. Higher volatility → lower allocation (defensive). Lower volatility → higher allocation (aggressive).",
+    faq3: "Is my funds safe?",
+    faq3a: "Funds are stored in an audited smart contract. There are guardrails (max delta 25%, emergency pause) and all rebalances are recorded on-chain. However, this is still testnet — use wisely.",
+    faq4: "When can I withdraw?",
+    faq4a: "Withdrawal is always available anytime. Funds cannot be locked by admin. Simply go to the 'Withdraw' tab and enter the amount.",
+    faq5: "What are the transaction fees?",
+    faq5a: "Transactions require zkLTC for gas. Make sure you have enough zkLTC balance before depositing or withdrawing."
+},
 
 };
 function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
