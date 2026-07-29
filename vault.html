@@ -683,7 +683,48 @@ const I18N = {
     largeTx: "⚠️ Transaksi besar (> 1000 USDC). Periksa kembali!",
     switchManual: "Gagal switch otomatis. Tambahkan jaringan manual:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz\nSymbol: zkLTC"
   },
-  en: { /* ... similar ... */ }
+  en: {
+    allocNote: "This allocation is recorded on-chain as an AI decision, but it does not move any funds yet. The vault still holds all USDC and earns no yield. Real capital movement is still on the roadmap.",
+    back: "← DEX", title: "AI-Managed Vault",
+    subtitle: "Deposit USDC, receive shares, and let the AI agent manage allocation. Every decision is recorded on-chain — open for you to verify.",
+    overview: "Vault Overview", uWalletL: "USDC in wallet", uSharesL: "Your shares (faUSDC)",
+    uValueL: "Your position value", vTotalL: "Total vault assets", vAllocL: "AI target allocation",
+    tabDeposit: "Deposit", tabWithdraw: "Withdraw", depLabel: "Amount of USDC to deposit",
+    wdLabel: "Amount of USDC to withdraw", max: "MAX", connectFirst: "Connect wallet first",
+    wdNote: "Withdraw is always available — your funds cannot be locked by an admin.",
+    aiTitle: "Recent AI Decisions", loading: "Loading history…",
+    disc: "This vault is a testnet MVP and unaudited. Testnet tokens have no real value.", contract: "Contract:",
+    connect: "Connect", disconnect: "Disconnect", deposit: "Deposit", withdraw: "Withdraw",
+    faucetTitle: "Claim Test USDC", faucet: "Claim 1,000 test USDC", fauceting: "Sending…",
+    faucetOk: "Claimed 1,000 test USDC!", faucetHint: "No test USDC yet? Claim some free to try the vault.",
+    available: "Available:", position: "Position value:",
+    noWallet: "No wallet detected. Open in a wallet browser or install an extension.",
+    wrongNet: "Wrong network — switch to LitVM (chain 4441) in your wallet.",
+    cancelled: "You cancelled the transaction.", noGas: "Not enough zkLTC for gas.",
+    noBal: "Insufficient USDC balance or allowance.", failed: "Failed:",
+    noAi: "No AI decisions yet. The agent has not rebalanced.",
+    aiErr: "Failed to load history. Try reloading.",
+    rebalance: "Rebalance #", targetAlloc: "Target allocation →", volSig: "· vol signal",
+    invalid: "Invalid amount.", gt0: "Enter an amount greater than 0.",
+    exceedBal: "Exceeds your USDC balance.", exceedPos: "Exceeds your position value.",
+    processing: "Processing…", approving: "Approving USDC…", depositing: "Depositing…", withdrawing: "Withdrawing…",
+    okDep: "Deposited", okWd: "Withdrew",
+    switchNet: "Switch to LitVM", switched: "Network switched successfully.",
+    txTitle: "Transaction History", txConnect: "Connect wallet to view history.",
+    txEmpty: "No transactions yet.", txDeposit: "Deposit", txWithdraw: "Withdraw",
+    txView: "View tx →", discTitle: "Disconnect wallet?",
+    discBody: "You will leave this session. Your funds stay safe in the contract.",
+    cancel: "Cancel", disconnected: "Wallet disconnected.",
+    syncing: "Refreshing from the blockchain…",
+    gasWarn: "Low zkLTC balance for gas. Add zkLTC to transact.",
+    confirmTitle: "Confirm Transaction",
+    confirmBody: "Make sure the amount is correct before proceeding.",
+    confirmDeposit: "Confirm Deposit",
+    confirmWithdraw: "Confirm Withdraw",
+    largeTx: "⚠️ Large transaction (> 1000 USDC). Double check!",
+    switchManual: "Auto-switch failed. Please add network manually:\nChain ID: 4441\nRPC: https://liteforge.rpc.caldera.xyz/infra-partner-http\nSymbol: zkLTC"
+}
+
 };
 function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
 
