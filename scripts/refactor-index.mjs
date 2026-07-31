@@ -16,12 +16,22 @@ if (styleMatches.length !== 1) {
   throw new Error(`Expected exactly 1 inline <style> block, found ${styleMatches.length}`);
 }
 
-if (inlineScriptMatches.length !== 1) {
-  throw new Error(`Expected exactly 1 inline <script> block, found ${inlineScriptMatches.length}`);
+if (inlineScriptMatches.length < 1) {
+  throw new Error('No inline <script> block found');
+}
+
+const appScriptMatch = inlineScriptMatches.find(
+  (match) => match[1].includes('CHAIN_ID_EXPECTED')
+);
+
+if (!appScriptMatch) {
+  throw new Error(
+    `Could not identify the Freesia application script among ${inlineScriptMatches.length} inline script blocks`
+  );
 }
 
 const css = styleMatches[0][1].trim() + '\n';
-const js = inlineScriptMatches[0][1].trim() + '\n';
+const js = appScriptMatch[1].trim() + '\n';
 
 if (!css.includes(':root') || !js.includes('CHAIN_ID_EXPECTED')) {
   throw new Error('Safety check failed: extracted content does not look like the Freesia application');
@@ -34,7 +44,7 @@ await writeFile(cssPath, css, 'utf8');
 await writeFile(jsPath, js, 'utf8');
 
 let nextHtml = html.replace(styleMatches[0][0], '    <link rel="stylesheet" href="/assets/css/app.css">');
-nextHtml = nextHtml.replace(inlineScriptMatches[0][0], '    <script src="/assets/js/app.js" defer></script>');
+nextHtml = nextHtml.replace(appScriptMatch[0], '    <script src="/assets/js/app.js" defer></script>');
 
 // Remove repeated empty lines without touching visible content.
 nextHtml = nextHtml.replace(/\n{4,}/g, '\n\n\n');
