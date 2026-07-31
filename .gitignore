@@ -9,3 +9,7 @@ assets/js/app.before-config.js
 index.backup.html
 index.before-config.html
 assets/js/app.before-config.js
+
+# Local refactor backups
+assets/js/*.before-*.js
+index.before-*.html
