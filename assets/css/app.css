@@ -2411,3 +2411,594 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 3B
+   Professional Earn / Staking Interface
+   ===================================================================== */
+
+#earnView {
+    position: relative;
+    overflow: visible;
+
+    padding: 26px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            620px 260px at 50% -90px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+
+    box-shadow:
+        0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#earnView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#earnView .swap-header {
+    margin-bottom: 17px;
+}
+
+#earnView .swap-title {
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 760;
+
+    letter-spacing: -.025em;
+}
+
+
+/* ---------- Pair / staking selector ---------- */
+
+#earnView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+
+    padding: 5px;
+    margin-bottom: 15px !important;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#earnView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    padding: 7px 8px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+    font-weight: 720;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#earnView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#earnView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#earnView > .slip-row .slip-btn:active {
+    transform: scale(.97);
+}
+
+
+/* ---------- Earn summary ---------- */
+
+#earnView .rate-box {
+    margin: 0 0 15px !important;
+    padding: 6px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 76%,
+            transparent
+        );
+}
+
+#earnView .rate-row {
+    min-height: 38px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+}
+
+#earnView .rate-row + .rate-row {
+    border-top:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--border-color) 58%,
+            transparent
+        );
+}
+
+#earnView .rate-row b {
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 680;
+
+    text-align: right;
+}
+
+
+/* Highlight reward-looking values */
+#earnView .rate-row b[id*="reward"],
+#earnView .rate-row b[id*="Reward"],
+#earnView [id*="apr"],
+#earnView [id*="APR"] {
+    color: var(--accent);
+}
+
+
+/* ---------- Stake / Unstake cards ---------- */
+
+#earnView .input-section {
+    position: relative;
+
+    margin-bottom: 11px;
+
+    padding: 15px 16px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 92%,
+                transparent
+            ),
+            color-mix(
+                in srgb,
+                var(--bg-secondary) 96%,
+                transparent
+            )
+        );
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+#earnView .input-section:focus-within {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 46%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#earnView .input-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: .065em;
+    text-transform: uppercase;
+}
+
+#earnView .balance-row {
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+#earnView .balance-row b {
+    color: var(--text-primary);
+}
+
+
+/* ---------- Amount inputs ---------- */
+
+#earnView .amount-input,
+#earnView #stakeAmount,
+#earnView #unstakeAmount {
+    width: 100%;
+
+    min-height: 56px;
+
+    padding: 8px 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.15;
+    font-weight: 620;
+
+    letter-spacing: -.035em;
+
+    text-align: left !important;
+}
+
+#earnView .amount-input::placeholder,
+#earnView #stakeAmount::placeholder,
+#earnView #unstakeAmount::placeholder {
+    color:
+        color-mix(
+            in srgb,
+            var(--text-secondary) 55%,
+            transparent
+        );
+}
+
+
+/* ---------- Percentage controls ---------- */
+
+#earnView .pct-btn {
+    min-height: 26px;
+
+    padding: 3px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 9px;
+    font-weight: 750;
+
+    transition:
+        color .18s ease,
+        border-color .18s ease,
+        background .18s ease;
+}
+
+#earnView .pct-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+
+/* ---------- Main staking actions ---------- */
+
+#earnView .swap-btn {
+    min-height: 52px;
+
+    margin-top: 12px;
+
+    border-radius: 15px;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    letter-spacing: -.01em;
+
+    box-shadow:
+        0 11px 28px rgba(63,185,80,.18);
+
+    transition:
+        transform .16s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+#earnView .swap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 15px 34px rgba(63,185,80,.26);
+}
+
+#earnView .swap-btn:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+#earnView .swap-btn:disabled {
+    box-shadow: none;
+}
+
+
+/* ---------- Claim reward becomes secondary premium action ---------- */
+
+#earnView #claimBtn {
+    min-height: 50px;
+
+    margin-top: 12px !important;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--accent) 30%,
+            var(--border-color)
+        );
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--accent) 15%,
+                var(--bg-tertiary)
+            ),
+            var(--bg-tertiary)
+        ) !important;
+
+    color: var(--accent);
+
+    box-shadow: none;
+}
+
+#earnView #claimBtn:hover:not(:disabled) {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 10px 26px var(--accent-glow);
+}
+
+
+/* ---------- Visual separation ---------- */
+
+#earnView #stakeAmount {
+    position: relative;
+}
+
+#earnView .input-section:first-of-type::before {
+    content: "STAKE";
+
+    position: absolute;
+
+    top: -9px;
+    left: 14px;
+
+    padding: 2px 7px;
+
+    background: var(--bg-secondary);
+    color: var(--accent);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: .11em;
+}
+
+
+/* ---------- Transaction pending ---------- */
+
+#earnView .swap-btn:disabled {
+    opacity: 1;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--bg-tertiary),
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 84%,
+                var(--accent) 16%
+            ),
+            var(--bg-tertiary)
+        );
+
+    background-size: 220% 100%;
+
+    color: var(--text-secondary);
+
+    border: 1px solid var(--border-color);
+
+    animation: freesiaEarnPending 2.2s linear infinite;
+}
+
+@keyframes freesiaEarnPending {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -20% 0;
+    }
+}
+
+
+/* ---------- Accessibility ---------- */
+
+#earnView button:focus-visible,
+#earnView input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+    #earnView {
+        max-width: 680px;
+
+        padding: 30px;
+    }
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        font-size: 34px;
+    }
+
+    #earnView .rate-box {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        column-gap: 18px;
+    }
+
+    #earnView .rate-row {
+        border-top: 0;
+    }
+
+    #earnView .rate-row:nth-child(n+3) {
+        border-top:
+            1px solid
+            color-mix(
+                in srgb,
+                var(--border-color) 58%,
+                transparent
+            );
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+    #earnView {
+        padding: 17px;
+
+        border-radius: 20px;
+    }
+
+    #earnView > .slip-row {
+        gap: 4px;
+    }
+
+    #earnView > .slip-row .slip-btn {
+        min-height: 38px;
+
+        padding: 5px;
+
+        font-size: 9.5px;
+    }
+
+    #earnView .input-section {
+        padding: 14px;
+
+        border-radius: 17px;
+    }
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        min-height: 50px;
+
+        font-size: 26px;
+    }
+
+    #earnView .swap-btn {
+        min-height: 51px;
+    }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #earnView {
+        padding: 14px;
+    }
+
+    #earnView > .slip-row {
+        grid-template-columns: 1fr;
+    }
+
+    #earnView .input-label {
+        align-items: flex-start;
+    }
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        font-size: 23px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #earnView .swap-btn:disabled {
+        animation: none;
+    }
+}
+
