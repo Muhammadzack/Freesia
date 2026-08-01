@@ -374,3 +374,151 @@
     @keyframes viewEnter { from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
     @keyframes drawChart { to { stroke-dashoffset:0; } }
     @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 1A
+   Desktop application shell
+   ===================================================================== */
+
+:root {
+    --shell-sidebar: 220px;
+    --shell-content: 760px;
+}
+
+@media (min-width: 900px) {
+    body {
+        align-items: stretch;
+        padding: 24px 32px 48px calc(var(--shell-sidebar) + 56px);
+    }
+
+    .header {
+        width: 100%;
+        max-width: var(--shell-content);
+        margin: 0 auto 24px;
+        gap: 0;
+    }
+
+    .header-top {
+        min-height: 58px;
+    }
+
+    /* Existing nav becomes desktop sidebar */
+    .nav-links {
+        position: fixed;
+        left: 24px;
+        top: 24px;
+        bottom: 24px;
+        width: var(--shell-sidebar);
+        z-index: 50;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 6px;
+
+        padding: 90px 14px 18px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        background: var(--bg-secondary);
+        box-shadow: var(--card-shadow);
+    }
+
+    .nav-links::before {
+        content: "FREESIA";
+        position: absolute;
+        top: 24px;
+        left: 20px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .16em;
+    }
+
+    .nav-links::after {
+        content: "DEX";
+        position: absolute;
+        top: 44px;
+        left: 20px;
+        color: var(--accent);
+        font-size: 22px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 650;
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
+    .nav-links a:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--border-color);
+        transform: translateX(2px);
+    }
+
+    .nav-links a.active {
+        color: var(--accent);
+        background: var(--accent-glow);
+        border-color: var(--accent-dim);
+    }
+
+    #statusBar,
+    .header,
+    .swap-card,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView,
+    .footer {
+        width: 100%;
+        max-width: var(--shell-content);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .swap-card {
+        padding: 28px;
+        border-radius: 22px;
+    }
+
+    #statusBar {
+        margin-bottom: 16px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+    body {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .header,
+    #statusBar,
+    .swap-card,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        max-width: 620px;
+    }
+}
+
