@@ -3684,3 +3684,425 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 4B
+   Professional Leaderboard
+   ===================================================================== */
+
+#leaderboardView {
+    position: relative;
+    overflow: visible;
+
+    padding: 26px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            620px 270px at 50% -100px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+
+    box-shadow:
+        0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#leaderboardView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#leaderboardView .swap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 42px;
+
+    margin-bottom: 17px;
+}
+
+#leaderboardView .swap-title {
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 760;
+
+    letter-spacing: -.025em;
+}
+
+#leaderboardView .icon-btn {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+
+    transition:
+        color .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        transform .3s ease;
+}
+
+#leaderboardView .icon-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+#leaderboardView .icon-btn:active {
+    transform: rotate(90deg);
+}
+
+
+/* ---------- Sort selector ---------- */
+
+#leaderboardView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+
+    margin-bottom: 17px !important;
+
+    padding: 5px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#leaderboardView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 720;
+
+    transition:
+        color .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#leaderboardView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#leaderboardView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+
+/* ---------- Ranking list ---------- */
+
+#leaderboardView #lbList {
+    display: flex !important;
+    flex-direction: column;
+
+    gap: 7px !important;
+}
+
+#leaderboardView #lbList > * {
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+/*
+ * leaderboard.js menggunakan row dinamis.
+ * Styling dibuat generik agar tidak tergantung class internal.
+ */
+#leaderboardView #lbList > div:not(.pf-empty) {
+    position: relative;
+
+    min-height: 65px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 11px 13px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+
+    overflow: hidden;
+}
+
+#leaderboardView #lbList > div:not(.pf-empty):hover {
+    transform: translateY(-1px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 33%,
+            var(--border-color)
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 90%,
+            var(--accent) 10%
+        );
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.10);
+}
+
+
+/* ---------- Top 3 ranking ---------- */
+
+#leaderboardView #lbList > div:nth-child(1):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #d4af37 38%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(212,175,55,.11),
+            var(--bg-tertiary)
+        );
+}
+
+#leaderboardView #lbList > div:nth-child(2):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #aab5c3 30%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(170,181,195,.08),
+            var(--bg-tertiary)
+        );
+}
+
+#leaderboardView #lbList > div:nth-child(3):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #b87333 30%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(184,115,51,.08),
+            var(--bg-tertiary)
+        );
+}
+
+
+/* subtle ranking accent */
+
+#leaderboardView #lbList > div:nth-child(-n+3):not(.pf-empty)::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 3px;
+
+    border-radius: 999px;
+}
+
+#leaderboardView #lbList > div:nth-child(1)::before {
+    background: #d4af37;
+}
+
+#leaderboardView #lbList > div:nth-child(2)::before {
+    background: #aab5c3;
+}
+
+#leaderboardView #lbList > div:nth-child(3)::before {
+    background: #b87333;
+}
+
+
+/* ---------- Loading / empty ---------- */
+
+#leaderboardView .pf-empty {
+    padding: 26px 14px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 55%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    text-align: center;
+}
+
+
+/* ---------- On-chain explanation ---------- */
+
+#leaderboardView .pf-note {
+    position: relative;
+
+    margin-top: 18px !important;
+
+    padding: 13px 14px 13px 17px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 72%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 10.8px;
+    line-height: 1.6;
+}
+
+#leaderboardView .pf-note::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 11px;
+    bottom: 11px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: var(--accent);
+}
+
+#leaderboardView .pf-note strong {
+    color: var(--text-primary);
+}
+
+#leaderboardView .pf-note b {
+    color: var(--accent);
+}
+
+
+/* ---------- Footer ---------- */
+
+#leaderboardView .footer-info {
+    margin-top: 14px;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+
+    opacity: .72;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+    #leaderboardView {
+        max-width: 680px;
+
+        padding: 30px;
+    }
+
+    #leaderboardView #lbList > div:not(.pf-empty) {
+        min-height: 70px;
+
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+    #leaderboardView {
+        padding: 17px;
+
+        border-radius: 20px;
+    }
+
+    #leaderboardView #lbList > div:not(.pf-empty) {
+        min-height: 61px;
+
+        padding: 10px 11px;
+    }
+}
+
