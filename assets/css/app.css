@@ -1823,3 +1823,591 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 3A
+   Professional Liquidity Pool Interface
+   ===================================================================== */
+
+#poolView {
+    position: relative;
+    overflow: visible;
+
+    padding: 26px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            620px 260px at 50% -90px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+
+    box-shadow:
+        0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#poolView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#poolView .swap-header {
+    margin-bottom: 17px;
+}
+
+#poolView .swap-title {
+    margin: 0;
+
+    font-size: 21px;
+    font-weight: 760;
+
+    letter-spacing: -.025em;
+}
+
+
+/* ---------- Pool selector ---------- */
+
+#poolView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+
+    margin-bottom: 15px !important;
+
+    padding: 5px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#poolView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    padding: 7px 8px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+    font-weight: 720;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#poolView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#poolView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#poolView > .slip-row .slip-btn:active {
+    transform: scale(.97);
+}
+
+
+/* ---------- Pool statistics ---------- */
+
+#poolView > .rate-box {
+    display: grid;
+
+    gap: 0;
+
+    margin: 0 0 15px !important;
+    padding: 6px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 76%,
+            transparent
+        );
+}
+
+#poolView > .rate-box .rate-row {
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+}
+
+#poolView > .rate-box .rate-row + .rate-row {
+    border-top:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--border-color) 58%,
+            transparent
+        );
+}
+
+#poolView > .rate-box .rate-row b {
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 680;
+
+    text-align: right;
+}
+
+
+/* ---------- Pool health ---------- */
+
+#poolView #poolHealth {
+    position: relative;
+
+    overflow: hidden;
+
+    margin-bottom: 15px !important;
+    padding: 13px 14px !important;
+
+    border-radius: 15px !important;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 78%,
+            transparent
+        ) !important;
+}
+
+#poolView #poolHealth::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background: var(--accent);
+}
+
+
+/* ---------- Liquidity inputs ---------- */
+
+#poolView .input-section {
+    position: relative;
+
+    margin-bottom: 10px;
+
+    padding: 15px 16px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 92%,
+                transparent
+            ),
+            color-mix(
+                in srgb,
+                var(--bg-secondary) 96%,
+                transparent
+            )
+        );
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+#poolView .input-section:focus-within {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 46%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#poolView .input-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+    font-weight: 750;
+
+    letter-spacing: .065em;
+    text-transform: uppercase;
+}
+
+#poolView .balance-row {
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+#poolView .balance-row b {
+    color: var(--text-primary);
+}
+
+
+/* ---------- Amount row ---------- */
+
+#poolView .input-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+#poolView .amount-input {
+    order: 1;
+
+    flex: 1;
+    min-width: 0;
+
+    padding: 3px 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.15;
+    font-weight: 620;
+
+    letter-spacing: -.035em;
+
+    text-align: left !important;
+}
+
+#poolView .token-select {
+    order: 2;
+
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 11px 6px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.09);
+}
+
+#poolView .token-select .token-icon {
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    font-size: 10px;
+}
+
+#poolView .token-symbol {
+    font-size: 13px;
+    font-weight: 750;
+}
+
+
+/* ---------- Add liquidity pair relationship ---------- */
+
+#poolView #addLiqSectionA {
+    margin-bottom: 7px;
+
+    border-radius: 18px 18px 13px 13px;
+}
+
+#poolView #addLiqSectionB {
+    margin-top: 0;
+
+    border-radius: 13px 13px 18px 18px;
+}
+
+
+/* ---------- Remove liquidity ---------- */
+
+#poolView #removeLpAmount {
+    width: 100%;
+
+    min-height: 50px;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+
+    outline: none;
+
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+
+    font-size: 23px;
+    font-weight: 620;
+
+    letter-spacing: -.025em;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#poolView #removeLpAmount:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#poolView #removeEstimate {
+    margin-top: 9px !important;
+    padding: 9px 11px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    background: var(--bg-tertiary);
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* ---------- Liquidity actions ---------- */
+
+#poolView .swap-btn {
+    min-height: 52px;
+
+    margin-top: 13px;
+
+    border-radius: 15px;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    letter-spacing: -.01em;
+
+    box-shadow:
+        0 11px 28px rgba(63,185,80,.18);
+
+    transition:
+        transform .16s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+#poolView .swap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 15px 34px rgba(63,185,80,.26);
+}
+
+#poolView .swap-btn:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+#poolView .swap-btn:disabled {
+    box-shadow: none;
+}
+
+
+/* ---------- Separate add/remove visual areas ---------- */
+
+#poolView #addLiqSectionA::before {
+    content: "ADD LIQUIDITY";
+
+    position: absolute;
+
+    top: -9px;
+    left: 14px;
+
+    padding: 2px 6px;
+
+    background: var(--bg-secondary);
+    color: var(--accent);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: .10em;
+}
+
+#poolView #removeLpAmount {
+    margin-top: 4px;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+    #poolView {
+        max-width: 680px;
+
+        padding: 30px;
+    }
+
+    #poolView .amount-input {
+        font-size: 34px;
+    }
+
+    #poolView > .rate-box {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        column-gap: 18px;
+    }
+
+    #poolView > .rate-box .rate-row {
+        border-top: 0;
+    }
+
+    #poolView > .rate-box .rate-row:nth-child(n+3) {
+        border-top:
+            1px solid
+            color-mix(
+                in srgb,
+                var(--border-color) 58%,
+                transparent
+            );
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+    #poolView {
+        padding: 17px;
+
+        border-radius: 20px;
+    }
+
+    #poolView > .slip-row {
+        gap: 4px;
+    }
+
+    #poolView > .slip-row .slip-btn {
+        min-height: 38px;
+
+        padding: 5px;
+
+        font-size: 9.5px;
+    }
+
+    #poolView .input-section {
+        padding: 14px;
+
+        border-radius: 17px;
+    }
+
+    #poolView .amount-input {
+        font-size: 26px;
+    }
+
+    #poolView .token-select {
+        min-height: 41px;
+    }
+
+    #poolView .swap-btn {
+        min-height: 51px;
+    }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #poolView {
+        padding: 14px;
+    }
+
+    #poolView > .slip-row {
+        grid-template-columns: 1fr;
+    }
+
+    #poolView .input-label {
+        align-items: flex-start;
+    }
+
+    #poolView .amount-input {
+        font-size: 23px;
+    }
+}
+
