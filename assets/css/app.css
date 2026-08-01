@@ -1456,3 +1456,370 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 2B
+   Settings, Risk & Transaction Feedback
+   ===================================================================== */
+
+/* ---------- Settings / History panel ---------- */
+
+#swapView #settingsPanel,
+#swapView #historyPanel {
+    padding: 15px;
+}
+
+#swapView #settingsPanel h5,
+#swapView #historyPanel h5 {
+    margin: 0 0 12px;
+
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: -.01em;
+}
+
+#swapView .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 7px;
+}
+
+#swapView .slip-btn {
+    min-height: 38px;
+
+    padding: 7px 9px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    font-weight: 700;
+
+    transition:
+        color .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#swapView .slip-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+}
+
+#swapView .slip-btn.active {
+    color: var(--accent);
+
+    background: var(--accent-glow);
+    border-color: var(--accent-dim);
+}
+
+#swapView .slip-btn:active {
+    transform: scale(.97);
+}
+
+#swapView .slip-custom {
+    width: 100%;
+
+    margin-top: 9px;
+    padding: 11px 12px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+
+    font-size: 12px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#swapView .slip-custom:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+
+/* ---------- History ---------- */
+
+#swapView #historyPanel #txList {
+    scrollbar-width: thin;
+}
+
+#swapView .tx-empty {
+    padding: 18px 10px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 11px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* ---------- Price impact visual states ---------- */
+
+#swapView #impactLabel {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 24px;
+
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    background: var(--accent-glow);
+
+    font-weight: 750;
+}
+
+
+/* ---------- Safety panel ---------- */
+
+#swapView #safetyCheck {
+    position: relative;
+
+    overflow: hidden;
+}
+
+#swapView #safetyCheck::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background: var(--accent);
+}
+
+#swapView #safetyTitle {
+    font-weight: 750;
+}
+
+#swapView #safetyBody {
+    padding-left: 26px;
+
+    font-size: 11.5px;
+    line-height: 1.55;
+}
+
+
+/* ---------- Loss / risky swap panel ---------- */
+
+#swapView .loss-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 14px;
+
+    border: 1px solid var(--border-color);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+}
+
+#swapView .loss-head {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+#swapView .loss-title {
+    font-size: 12px;
+    font-weight: 750;
+}
+
+#swapView .loss-amount {
+    margin-bottom: 6px;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: -.025em;
+}
+
+#swapView .loss-explain,
+#swapView .loss-advice {
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* ---------- Risk confirmation modal ---------- */
+
+.risk-modal {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.risk-modal .modal,
+.risk-modal .risk-card {
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+        0 28px 80px rgba(0,0,0,.40);
+}
+
+.risk-head {
+    align-items: flex-start;
+}
+
+.risk-badge {
+    border: 1px solid rgba(248,81,73,.22);
+
+    box-shadow:
+        0 0 0 5px rgba(248,81,73,.05);
+}
+
+.risk-figure {
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(248,81,73,.10),
+            rgba(248,81,73,.035)
+        );
+}
+
+.risk-type-box input {
+    min-height: 44px;
+
+    border-radius: 11px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.risk-type-box input:focus {
+    box-shadow:
+        0 0 0 3px rgba(248,81,73,.10);
+}
+
+.risk-btn {
+    min-height: 46px;
+
+    border-radius: 12px;
+}
+
+.risk-btn.proceed {
+    box-shadow:
+        0 10px 24px rgba(248,81,73,.20);
+}
+
+
+/* ---------- Transaction feedback ---------- */
+
+#swapView .swap-btn {
+    isolation: isolate;
+}
+
+#swapView .swap-btn:disabled {
+    opacity: 1;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--bg-tertiary),
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 85%,
+                var(--accent) 15%
+            ),
+            var(--bg-tertiary)
+        );
+
+    background-size: 220% 100%;
+
+    color: var(--text-secondary);
+
+    border: 1px solid var(--border-color);
+}
+
+/*
+ * When JS disables the button during approval / transaction,
+ * this subtle movement gives transaction feedback without
+ * changing transaction logic.
+ */
+#swapView .swap-btn:disabled:not(:empty) {
+    animation: freesiaSwapPending 2.2s linear infinite;
+}
+
+@keyframes freesiaSwapPending {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -20% 0; }
+}
+
+
+/* ---------- Better focus accessibility ---------- */
+
+#swapView button:focus-visible,
+#swapView .token-select:focus-visible,
+#swapView input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+
+/* ---------- Mobile panel refinement ---------- */
+
+@media (max-width: 599px) {
+
+    #swapView #settingsPanel,
+    #swapView #historyPanel {
+        left: 0;
+        right: 0;
+
+        width: 100%;
+        max-width: none;
+    }
+
+    #swapView .loss-amount {
+        font-size: 18px;
+    }
+
+    .risk-actions {
+        gap: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #swapView .swap-btn:disabled {
+        animation: none;
+    }
+}
+
