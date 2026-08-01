@@ -264,9 +264,895 @@
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
   }
+
+
+  /* =================================================================
+     FREESIA VAULT UI REFRESH V1
+     ================================================================= */
+
+  :root {
+    --vault-max: 1120px;
+    --vault-radius: 20px;
+    --vault-radius-sm: 14px;
+    --vault-shadow:
+      0 1px 0 rgba(255,255,255,.025) inset,
+      0 24px 60px rgba(0,0,0,.28);
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(900px 520px at 10% -10%, rgba(0,230,118,.10), transparent 64%),
+      radial-gradient(700px 440px at 100% 0%, rgba(140,220,203,.07), transparent 58%),
+      var(--bg);
+  }
+
+  [data-theme="light"] body {
+    background:
+      radial-gradient(900px 520px at 10% -10%, rgba(73,183,107,.09), transparent 64%),
+      radial-gradient(700px 440px at 100% 0%, rgba(140,220,203,.10), transparent 58%),
+      var(--bg);
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: var(--vault-max);
+    padding: 24px 24px 110px;
+  }
+
+  header.top {
+    position: sticky;
+    top: 12px;
+    z-index: 40;
+
+    padding: 12px 14px;
+    margin-bottom: 30px;
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    background: color-mix(in srgb, var(--bg-card) 88%, transparent);
+    box-shadow: 0 14px 40px rgba(0,0,0,.18);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logo-name {
+    font-size: 1.08rem;
+  }
+
+  .brand-text small {
+    margin-top: 2px;
+  }
+
+  .header-right {
+    gap: 9px;
+  }
+
+  .backlink,
+  .theme-toggle,
+  .btn-connect {
+    min-height: 38px;
+  }
+
+  .backlink {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 11px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--bg-elev);
+  }
+
+  h1 {
+    font-size: clamp(1.65rem, 4vw, 2.35rem);
+    line-height: 1.12;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    max-width: 760px;
+    font-size: .96rem;
+    line-height: 1.65;
+    margin-bottom: 26px;
+  }
+
+  .badge {
+    padding: 4px 10px;
+    font-size: .62rem;
+    font-weight: 800;
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+
+    border-radius: var(--vault-radius);
+    padding: 20px;
+
+    box-shadow: var(--vault-shadow);
+
+    transition:
+      transform .22s ease,
+      border-color .22s ease,
+      box-shadow .22s ease,
+      background .3s ease;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(0,230,118,.30),
+        transparent
+      );
+
+    opacity: .55;
+  }
+
+  .card:hover {
+    border-color: color-mix(in srgb, var(--green) 22%, var(--border));
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.035) inset,
+      0 28px 70px rgba(0,0,0,.32);
+  }
+
+  .card h2 {
+    margin-bottom: 15px;
+    font-size: .72rem;
+    font-weight: 750;
+    letter-spacing: .11em;
+  }
+
+  .card-description {
+    color: var(--text-dim);
+    font-size: .82rem;
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+
+  #overviewCard {
+    background:
+      linear-gradient(
+        145deg,
+        color-mix(in srgb, var(--bg-card) 94%, var(--green) 6%),
+        var(--bg-card)
+      );
+  }
+
+  #overviewCard .stat-row {
+    padding: 11px 12px;
+    margin-bottom: 6px;
+
+    border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+    border-radius: 12px;
+
+    background: color-mix(in srgb, var(--bg-elev) 72%, transparent);
+  }
+
+  #overviewCard .stat-row:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .stat-val {
+    font-size: 1rem;
+  }
+
+  .calc-input-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .vault-number-input {
+    flex: 1;
+    min-width: 0;
+
+    padding: 12px 13px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--bg-elev);
+    color: var(--text);
+
+    font-family: var(--mono);
+    font-size: 1rem;
+
+    outline: none;
+  }
+
+  .vault-number-input:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(0,230,118,.10);
+  }
+
+  .calc-button {
+    min-width: 100px;
+
+    padding: 11px 18px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background:
+      linear-gradient(135deg, var(--green), var(--green-deep));
+
+    color: #04140c;
+
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .calc-disclaimer {
+    margin-top: 9px;
+
+    color: var(--text-dim);
+
+    font-size: .65rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .calc-grid {
+    gap: 8px;
+  }
+
+  .calc-box {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--bg-elev);
+  }
+
+  .tabs {
+    padding: 4px;
+
+    border: 1px solid var(--border);
+    border-radius: 13px;
+
+    background: var(--bg-elev);
+  }
+
+  .tab {
+    border: 0;
+  }
+
+  .input-group {
+    min-height: 48px;
+  }
+
+  .btn-primary {
+    background:
+      linear-gradient(135deg, var(--green), var(--green-deep));
+
+    box-shadow: 0 9px 26px rgba(0,230,118,.15);
+  }
+
+  .btn-primary:not(:disabled):hover,
+  .calc-button:hover {
+    filter: brightness(1.07);
+  }
+
+  #actionCard {
+    border-color:
+      color-mix(in srgb, var(--green) 24%, var(--border));
+  }
+
+  #chartCard canvas {
+    margin-top: 6px;
+  }
+
+  details {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--bg-elev);
+  }
+
+  details + details {
+    margin-top: 8px;
+  }
+
+  details summary {
+    padding: 12px 14px;
+    font-weight: 650;
+  }
+
+  details p {
+    padding: 0 14px 14px;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  .bottom-nav {
+    left: 50%;
+    right: auto;
+
+    width: min(520px, calc(100% - 24px));
+
+    transform: translateX(-50%);
+
+    border: 1px solid var(--border);
+    border-radius: 18px;
+
+    background: color-mix(in srgb, var(--bg-card) 90%, transparent);
+
+    box-shadow: 0 18px 50px rgba(0,0,0,.34);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .bottom-nav .nav-item {
+    border-radius: 12px;
+  }
+
+  .bottom-nav .nav-item.active {
+    background: rgba(0,230,118,.10);
+  }
+
+  #actionCard,
+  #calcCard,
+  #faqCard {
+    scroll-margin-top: 100px;
+  }
+
+  @media (min-width: 900px) {
+    .wrap {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1.15fr)
+        minmax(340px, .85fr);
+
+      column-gap: 18px;
+      row-gap: 14px;
+    }
+
+    header.top,
+    .wrap > h1,
+    .wrap > .subtitle,
+    #overviewCard,
+    #faqCard,
+    .wrap > .disclaimer {
+      grid-column: 1 / -1;
+    }
+
+    header.top {
+      grid-row: 1;
+    }
+
+    .wrap > h1 {
+      grid-row: 2;
+    }
+
+    .wrap > .subtitle {
+      grid-row: 3;
+    }
+
+    #overviewCard {
+      grid-row: 4;
+    }
+
+    #calcCard {
+      grid-column: 1;
+      grid-row: 5;
+    }
+
+    #actionCard {
+      grid-column: 2;
+      grid-row: 5;
+
+      align-self: start;
+    }
+
+    #chartCard {
+      grid-column: 1;
+      grid-row: 6;
+    }
+
+    #faucetCard {
+      grid-column: 2;
+      grid-row: 6;
+
+      align-self: start;
+    }
+
+    #aiCard {
+      grid-column: 1;
+      grid-row: 7;
+    }
+
+    #txCard {
+      grid-column: 2;
+      grid-row: 7;
+
+      align-self: start;
+    }
+
+    #faqCard {
+      grid-row: 8;
+
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    #faqCard > h2 {
+      grid-column: 1 / -1;
+    }
+
+    #overviewCard {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px 10px;
+    }
+
+    #overviewCard > h2,
+    #overviewCard > .gas-warning,
+    #overviewCard > .disclaimer {
+      grid-column: 1 / -1;
+    }
+
+    #overviewCard .stat-row {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .wrap {
+      max-width: 620px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .wrap {
+      padding:
+        12px
+        12px
+        calc(var(--nav-height) + 42px);
+    }
+
+    header.top {
+      top: 8px;
+      padding: 10px;
+
+      margin-bottom: 22px;
+    }
+
+    .header-right {
+      width: auto;
+      justify-content: flex-end;
+    }
+
+    .backlink {
+      display: none;
+    }
+
+    .card {
+      padding: 16px;
+      border-radius: 17px;
+    }
+
+    .calc-input-row {
+      flex-direction: column;
+    }
+
+    .calc-button {
+      width: 100%;
+    }
+
+    #overviewCard .stat-row {
+      align-items: center;
+      gap: 12px;
+    }
+  }
+
+
+
+
+  /* =================================================================
+     FREESIA VAULT CONTROLS POLISH V2
+     Theme switch + premium mobile navigation
+     ================================================================= */
+
+  /* ---------- Theme switch ---------- */
+
+  .theme-toggle {
+    position: relative;
+
+    width: 58px;
+    height: 32px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+
+    padding: 3px;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    background:
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--bg-elev) 94%, white 6%),
+        var(--bg-elev)
+      );
+
+    color: var(--text-dim);
+
+    cursor: pointer;
+    overflow: hidden;
+
+    box-shadow:
+      inset 0 1px 2px rgba(0,0,0,.20),
+      0 5px 15px rgba(0,0,0,.10);
+
+    transition:
+      background .25s ease,
+      border-color .25s ease,
+      box-shadow .25s ease;
+  }
+
+  .theme-toggle:hover {
+    border-color:
+      color-mix(
+        in srgb,
+        var(--green) 35%,
+        var(--border)
+      );
+  }
+
+  .theme-icon {
+    position: relative;
+    z-index: 2;
+
+    display: grid;
+    place-items: center;
+
+    width: 24px;
+    height: 24px;
+
+    transition:
+      color .25s ease,
+      opacity .25s ease,
+      transform .25s ease;
+  }
+
+  .theme-icon svg {
+    width: 15px;
+    height: 15px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .theme-icon-moon {
+    color: #e7f4ef;
+  }
+
+  .theme-icon-sun {
+    color: var(--text-dim);
+    opacity: .55;
+  }
+
+  .theme-thumb {
+    position: absolute;
+
+    z-index: 1;
+
+    top: 3px;
+    left: 3px;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background:
+      linear-gradient(
+        145deg,
+        #35534a,
+        #203c35
+      );
+
+    box-shadow:
+      0 3px 8px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.08);
+
+    transition:
+      transform .28s cubic-bezier(.22,.8,.3,1),
+      background .28s ease,
+      box-shadow .28s ease;
+  }
+
+  [data-theme="light"] .theme-toggle {
+    background:
+      color-mix(
+        in srgb,
+        var(--green) 14%,
+        var(--bg-card)
+      );
+
+    border-color:
+      color-mix(
+        in srgb,
+        var(--green) 28%,
+        var(--border)
+      );
+  }
+
+  [data-theme="light"] .theme-thumb {
+    transform: translateX(26px);
+
+    background:
+      linear-gradient(
+        145deg,
+        #ffffff,
+        #edf4ef
+      );
+
+    box-shadow:
+      0 3px 9px rgba(50,90,70,.20),
+      inset 0 1px 0 #fff;
+  }
+
+  [data-theme="light"] .theme-icon-moon {
+    color: var(--text-dim);
+    opacity: .45;
+  }
+
+  [data-theme="light"] .theme-icon-sun {
+    color: var(--green-deep);
+    opacity: 1;
+  }
+
+
+  /* ---------- Bottom navigation ---------- */
+
+  .bottom-nav {
+    bottom:
+      max(
+        10px,
+        env(safe-area-inset-bottom)
+      );
+
+    width:
+      min(
+        460px,
+        calc(100% - 22px)
+      );
+
+    min-height: 68px;
+
+    padding: 7px;
+
+    gap: 4px;
+
+    border-radius: 21px;
+
+    border:
+      1px solid
+      color-mix(
+        in srgb,
+        var(--border) 90%,
+        var(--green) 10%
+      );
+
+    background:
+      color-mix(
+        in srgb,
+        var(--bg-card) 91%,
+        transparent
+      );
+
+    box-shadow:
+      0 18px 48px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.035);
+
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .bottom-nav .nav-item {
+    position: relative;
+
+    min-width: 0;
+    min-height: 54px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    padding: 5px 3px;
+
+    border: 1px solid transparent;
+    border-radius: 15px;
+
+    color: var(--text-dim);
+
+    background: transparent;
+
+    transition:
+      color .2s ease,
+      background .2s ease,
+      border-color .2s ease,
+      transform .15s ease,
+      box-shadow .2s ease;
+  }
+
+  .bottom-nav .nav-item .icon {
+    width: 23px;
+    height: 23px;
+
+    display: grid;
+    place-items: center;
+
+    margin: 0;
+
+    color: inherit;
+  }
+
+  .bottom-nav .nav-item .icon svg {
+    width: 21px;
+    height: 21px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .bottom-nav .nav-item .label {
+    font-size: .63rem;
+    line-height: 1;
+
+    font-weight: 700;
+
+    letter-spacing: .015em;
+
+    color: inherit;
+  }
+
+  .bottom-nav .nav-item.active {
+    color: var(--green);
+
+    border-color:
+      color-mix(
+        in srgb,
+        var(--green) 22%,
+        transparent
+      );
+
+    background:
+      linear-gradient(
+        180deg,
+        rgba(0,230,118,.12),
+        rgba(0,230,118,.055)
+      );
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.035);
+  }
+
+  .bottom-nav .nav-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    top: 3px;
+    left: 50%;
+
+    width: 17px;
+    height: 2px;
+
+    transform: translateX(-50%);
+
+    border-radius: 999px;
+
+    background: var(--green);
+
+    box-shadow:
+      0 0 10px rgba(0,230,118,.45);
+  }
+
+  .bottom-nav .nav-item:active {
+    transform: scale(.95);
+  }
+
+  [data-theme="light"] .bottom-nav {
+    background:
+      color-mix(
+        in srgb,
+        white 94%,
+        transparent
+      );
+
+    box-shadow:
+      0 16px 40px rgba(32,60,52,.16),
+      inset 0 1px 0 #fff;
+  }
+
+  [data-theme="light"] .bottom-nav .nav-item.active {
+    color: var(--green-deep);
+
+    background:
+      linear-gradient(
+        180deg,
+        rgba(73,183,107,.14),
+        rgba(73,183,107,.07)
+      );
+
+    border-color:
+      rgba(73,183,107,.20);
+  }
+
+  [data-theme="light"] .bottom-nav .nav-item.active::before {
+    background: var(--green-deep);
+
+    box-shadow:
+      0 0 8px rgba(73,183,107,.25);
+  }
+
+
+  /* ---------- Small-screen refinement ---------- */
+
+  @media (max-width: 420px) {
+    .bottom-nav {
+      min-height: 64px;
+      padding: 6px;
+    }
+
+    .bottom-nav .nav-item {
+      min-height: 50px;
+    }
+
+    .bottom-nav .nav-item .icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .bottom-nav .nav-item .label {
+      font-size: .60rem;
+    }
+
+    .theme-toggle {
+      width: 54px;
+    }
+
+    [data-theme="light"] .theme-thumb {
+      transform: translateX(22px);
+    }
+  }
+
+
 </style>
 </head>
 <body>
+<!-- FREESIA VAULT UI REFRESH V1 -->
 
 <!-- ===== SECURITY BANNER ===== -->
 <div class="sec-banner" id="secBanner">⚠️ <span id="secMsg"></span></div>
@@ -276,7 +1162,7 @@
 
   <!-- ===== HEADER ===== -->
   <header class="top">
-    <a class="brand" href="/" title="Kembali ke Freesia DEX">
+    <a class="brand" href="/" title="Kembali ke Freesia DEX" data-i18n-title="backTitle">
       <svg class="logo-icon" viewBox="0 0 80 80" role="img" aria-label="Freesia">
         <g transform="translate(40,40)">
           <path d="M0,0 C7.15,-5.76 13.00,-23.04 0.00,-32.00 C-13.00,-23.04 -7.15,-5.76 0,0 Z" fill="#2E6F68" transform="rotate(-12) scale(0.94)"/>
@@ -293,12 +1179,34 @@
       </span>
     </a>
     <div class="header-right">
-      <button type="button" class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      <button
+        type="button"
+        class="theme-toggle"
+        id="themeBtn"
+        onclick="toggleTheme()"
+        aria-label="Ganti mode tampilan"
+        title="Ganti mode tampilan">
+
+        <span class="theme-icon theme-icon-moon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.4 14.3A8.5 8.5 0 0 1 9.7 3.6a8.5 8.5 0 1 0 10.7 10.7Z"/>
+          </svg>
+        </span>
+
+        <span class="theme-icon theme-icon-sun" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M12 2.5v2M12 19.5v2M4.5 12h-2M21.5 12h-2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4"/>
+          </svg>
+        </span>
+
+        <span class="theme-thumb" aria-hidden="true"></span>
+      </button>
       <div class="lang-toggle">
         <button type="button" id="langId" onclick="setLang('id')">ID</button>
         <button type="button" id="langEn" onclick="setLang('en')">EN</button>
       </div>
-      <button type="button" class="btn-connect" id="connectBtn" onclick="onConnectBtn()">Connect</button>
+      <button type="button" class="btn-connect" id="connectBtn" onclick="onConnectBtn()" data-i18n="connect">Hubungkan</button>
       <a class="backlink" href="/" data-i18n="back">← DEX</a>
     </div>
   </header>
@@ -308,7 +1216,7 @@
   <p class="subtitle" data-i18n="subtitle">Setor USDC, terima share, biarkan agen AI mengelola alokasi. Setiap keputusan tercatat on-chain — terbuka untuk kamu periksa.</p>
 
   <!-- ===== VAULT SUMMARY ===== -->
-  <div class="card">
+  <div class="card" id="overviewCard">
     <h2 data-i18n="overview">Ringkasan Vault</h2>
     <div class="stat-row"><span class="stat-label" data-i18n="uWalletL">USDC di dompet</span><span class="stat-val" id="uWallet">—</span></div>
     <div class="stat-row"><span class="stat-label" data-i18n="uSharesL">Share kamu (faUSDC)</span><span class="stat-val" id="uShares">—</span></div>
@@ -321,26 +1229,30 @@
 
   <!-- ===== CALCULATOR RETURN ===== -->
   <div class="card" id="calcCard">
-    <h2>💰 Kalkulator Deposit</h2>
-    <p style="color:var(--text-dim);font-size:0.8rem;margin-bottom:8px;">Simulasi estimasi return berdasarkan performa vault 7 hari terakhir.</p>
-    <div style="display:flex;gap:8px;">
-      <input type="number" id="calcAmount" placeholder="1000" min="1" step="1" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg-elev);color:var(--text);font-size:1rem;outline:none;">
-      <button onclick="calculateReturn()" style="padding:10px 18px;background:var(--green);color:#04140c;border:0;border-radius:10px;font-weight:700;cursor:pointer;white-space:nowrap;">Hitung</button>
+    <h2><span aria-hidden="true">💰</span> <span data-i18n="calcTitle">Kalkulator Deposit</span></h2>
+    <p class="card-description" data-i18n="calcDesc">Simulasi estimasi return berdasarkan performa vault 7 hari terakhir.</p>
+    <div class="calc-input-row">
+      <input type="number" id="calcAmount"
+             placeholder="Jumlah USDC"
+             data-i18n-placeholder="calcPlaceholder"
+             min="1" step="1"
+             class="vault-number-input">
+      <button type="button" onclick="calculateReturn()" class="calc-button" data-i18n="calcButton">Hitung</button>
     </div>
     <div id="calcResult" style="display:none;margin-top:10px;">
       <div class="calc-grid">
-        <div class="calc-box"><div class="label">Estimasi Return (7 hari)</div><div class="value green" id="estReturn">+0.00%</div></div>
-        <div class="calc-box"><div class="label">APY (Annualized)</div><div class="value amber" id="estApy">0%</div></div>
-        <div class="calc-box"><div class="label">Estimasi Nilai Akhir</div><div class="value" id="estFinal">0 USDC</div></div>
-        <div class="calc-box"><div class="label">Share (faUSDC)</div><div class="value" id="estShares">0</div></div>
+        <div class="calc-box"><div class="label" data-i18n="calcReturn">Estimasi Return (7 hari)</div><div class="value green" id="estReturn">+0.00%</div></div>
+        <div class="calc-box"><div class="label" data-i18n="calcApy">APY (Annualized)</div><div class="value amber" id="estApy">0%</div></div>
+        <div class="calc-box"><div class="label" data-i18n="calcFinal">Estimasi Nilai Akhir</div><div class="value" id="estFinal">0 USDC</div></div>
+        <div class="calc-box"><div class="label" data-i18n="calcShares">Share (faUSDC)</div><div class="value" id="estShares">0</div></div>
       </div>
-      <p style="font-size:0.6rem;color:var(--text-dim);margin-top:6px;text-align:center;">⚠️ Estimasi berdasarkan performa historis, bukan jaminan.</p>
+      <p class="calc-disclaimer" data-i18n="calcDisclaimer">⚠️ Estimasi berdasarkan performa historis, bukan jaminan.</p>
     </div>
   </div>
 
   <!-- ===== PERFORMANCE CHART ===== -->
   <div class="card" id="chartCard">
-    <h2>📈 Performa 7 Hari</h2>
+    <h2><span aria-hidden="true">📈</span> <span data-i18n="perfTitle">Performa 7 Hari</span></h2>
     <canvas id="perfChart" height="140"></canvas>
   </div>
 
@@ -383,7 +1295,7 @@
   </div>
 
   <!-- ===== AI HISTORY ===== -->
-  <div class="card">
+  <div class="card" id="aiCard">
     <h2 data-i18n="aiTitle">Keputusan AI Terbaru</h2>
     <div id="aiList"><div class="empty" data-i18n="loading">Memuat riwayat…</div></div>
   </div>
@@ -396,26 +1308,26 @@
 
   <!-- ===== FAQ ===== -->
   <div class="card" id="faqCard">
-    <h2>❓ FAQ — Pertanyaan Umum</h2>
+    <h2 data-i18n="faqTitle">❓ FAQ — Pertanyaan Umum</h2>
     <details>
-      <summary>Apa itu AI Vault?</summary>
-      <p>AI Vault adalah vault yang dikelola oleh agen AI (GARCH) untuk mengoptimalkan alokasi aset berdasarkan volatilitas pasar. User deposit USDC dan menerima share (faUSDC) yang nilainya bertumbuh seiring waktu.</p>
+      <summary data-i18n="faq1">Apa itu AI Vault?</summary>
+      <p data-i18n="faq1a">AI Vault adalah vault yang dikelola oleh agen AI (GARCH) untuk mengoptimalkan alokasi aset berdasarkan volatilitas pasar. User deposit USDC dan menerima share (faUSDC) yang nilainya bertumbuh seiring waktu.</p>
     </details>
     <details>
-      <summary>Bagaimana AI menentukan alokasi?</summary>
-      <p>AI menggunakan model GARCH untuk memprediksi volatilitas pasar. Semakin tinggi volatilitas, semakin rendah alokasi (defensif). Semakin rendah volatilitas, semakin tinggi alokasi (agresif).</p>
+      <summary data-i18n="faq2">Bagaimana AI menentukan alokasi?</summary>
+      <p data-i18n="faq2a">AI menggunakan model GARCH untuk memprediksi volatilitas pasar. Semakin tinggi volatilitas, semakin rendah alokasi (defensif). Semakin rendah volatilitas, semakin tinggi alokasi (agresif).</p>
     </details>
     <details>
-      <summary>Apakah dana saya aman?</summary>
-      <p>Dana disimpan di smart contract yang telah diaudit. Ada guardrails (max delta 25%, emergency pause) dan semua rebalance tercatat on-chain. Namun ini masih testnet — gunakan dengan bijak.</p>
+      <summary data-i18n="faq3">Apakah dana saya aman?</summary>
+      <p data-i18n="faq3a">Dana disimpan di smart contract yang telah diaudit. Ada guardrails (max delta 25%, emergency pause) dan semua rebalance tercatat on-chain. Namun ini masih testnet — gunakan dengan bijak.</p>
     </details>
     <details>
-      <summary>Kapan saya bisa withdraw?</summary>
-      <p>Withdraw selalu tersedia kapan saja. Dana tidak bisa dikunci oleh admin. Cukup masuk ke tab "Tarik" dan masukkan jumlah yang diinginkan.</p>
+      <summary data-i18n="faq4">Kapan saya bisa withdraw?</summary>
+      <p data-i18n="faq4a">Withdraw selalu tersedia kapan saja. Dana tidak bisa dikunci oleh admin. Cukup masuk ke tab "Tarik" dan masukkan jumlah yang diinginkan.</p>
     </details>
     <details>
-      <summary>Berapa biaya transaksi?</summary>
-      <p>Transaksi membutuhkan zkLTC untuk gas. Pastikan saldo zkLTC cukup sebelum melakukan deposit atau withdraw.</p>
+      <summary data-i18n="faq5">Berapa biaya transaksi?</summary>
+      <p data-i18n="faq5a">Transaksi membutuhkan zkLTC untuk gas. Pastikan saldo zkLTC cukup sebelum melakukan deposit atau withdraw.</p>
     </details>
   </div>
 
@@ -430,20 +1342,42 @@
 <!-- ===== BOTTOM NAVIGATION ===== -->
 <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
   <button class="nav-item active" onclick="scrollToTop()" aria-label="Vault">
-    <span class="icon">🏠</span>
-    <span class="label">Vault</span>
+    <span class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3 19 6v5c0 4.7-3 8-7 10-4-2-7-5.3-7-10V6l7-3Z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+    </span>
+    <span class="label" data-i18n="navVault">Vault</span>
   </button>
   <button class="nav-item" onclick="scrollToSection('actionCard')" aria-label="Deposit">
-    <span class="icon">💰</span>
-    <span class="label">Deposit</span>
+    <span class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3v11"/>
+        <path d="m8.5 10.5 3.5 3.5 3.5-3.5"/>
+        <path d="M5 20h14"/>
+      </svg>
+    </span>
+    <span class="label" data-i18n="navDeposit">Setor</span>
   </button>
   <button class="nav-item" onclick="scrollToSection('calcCard')" aria-label="Calculator">
-    <span class="icon">📊</span>
-    <span class="label">Kalkulator</span>
+    <span class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <rect x="5" y="3" width="14" height="18" rx="2"/>
+        <path d="M8 7h8M8 11h2M12 11h2M16 11h1M8 15h2M12 15h2M16 15h1M8 18h2M12 18h5"/>
+      </svg>
+    </span>
+    <span class="label" data-i18n="navCalculator">Kalkulator</span>
   </button>
   <button class="nav-item" onclick="scrollToSection('faqCard')" aria-label="FAQ">
-    <span class="icon">❓</span>
-    <span class="label">FAQ</span>
+    <span class="icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M9.8 9a2.4 2.4 0 0 1 4.6 1c0 2-2.4 2.2-2.4 4"/>
+        <path d="M12 17.5h.01"/>
+      </svg>
+    </span>
+    <span class="label" data-i18n="navFaq">FAQ</span>
   </button>
 </nav>
 
@@ -451,10 +1385,10 @@
 <div class="modal-overlay" id="discModal">
   <div class="modal">
     <div class="m-ico warn">🔌</div>
-    <h3 id="discTitle">Putuskan dompet?</h3>
-    <p id="discBody">Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.</p>
+    <h3 id="discTitle" data-i18n="discTitle">Putuskan dompet?</h3>
+    <p id="discBody" data-i18n="discBody">Kamu akan keluar dari sesi ini. Dana kamu tetap aman di kontrak.</p>
     <div class="m-actions">
-      <button type="button" class="m-cancel" id="discCancel">Batal</button>
+      <button type="button" class="m-cancel" id="discCancel" data-i18n="cancel">Batal</button>
       <button type="button" class="m-confirm" id="discConfirm">Putuskan</button>
     </div>
   </div>
@@ -463,9 +1397,9 @@
 <div class="modal-overlay" id="confirmModal">
   <div class="modal">
     <div class="m-ico info">⚠️</div>
-    <h3 id="confirmTitle">Konfirmasi Transaksi</h3>
+    <h3 id="confirmTitle" data-i18n="confirmTitle">Konfirmasi Transaksi</h3>
     <p style="font-size:1.3rem;font-weight:700;margin:10px 0;color:var(--text);" id="confirmAmount">0 USDC</p>
-    <p id="confirmBody" style="color:var(--text-dim);">Pastikan jumlah sudah benar sebelum melanjutkan.</p>
+    <p id="confirmBody" style="color:var(--text-dim);" data-i18n="confirmBody">Pastikan jumlah sudah benar sebelum melanjutkan.</p>
     <div class="m-actions">
       <button type="button" class="m-cancel" id="confirmCancel">Batal</button>
       <button type="button" class="m-confirm green" id="confirmOk">Lanjutkan</button>
@@ -495,7 +1429,7 @@ const CONFIG = {
   SCAN_DELAY_MS: 250,
   SUBGRAPH: null,
   ALLOWED_HOSTS: [
-    "localhost", "127.0.0.1",
+    "localhost", "127.0.0.1", "43.228.215.235",
     "freesiadex.xyz", "www.freesiadex.xyz", "app.freesiadex.xyz",
     "freesia-black.vercel.app", "freesia-dex.vercel.app"
   ],
@@ -588,9 +1522,9 @@ function parseAmount(input) {
   try {
     const value = input.value.trim().replace(/,/g, '.');
     if (!value || value === '0' || value === '0.0') return null;
-    if (!/^\d*\.?\d*$/.test(value)) { toast('Format angka tidak valid', 'err'); return null; }
+    if (!/^\d*\.?\d*$/.test(value)) { toast(t("invalidFormat"), "err"); return null; }
     return ethers.parseUnits(value, CONFIG.USDC_DECIMALS);
-  } catch { toast('Jumlah tidak valid', 'err'); return null; }
+  } catch { toast(t("invalidAmount"), "err"); return null; }
 }
 
 function logId(x) { return String(x.txHash || "") + ":" + (x.logIndex != null ? x.logIndex : 0); }
@@ -617,7 +1551,7 @@ const RateLimiter = {
     if (!this._txCount[key]) this._txCount[key] = [];
     this._txCount[key] = this._txCount[key].filter(t => now - t < 60000);
     if (this._txCount[key].length >= CONFIG.MAX_TX_PER_MIN) {
-      toast('⚠️ Terlalu banyak transaksi. Tunggu 1 menit.', 'err');
+      toast(t("rateLimit"), "err");
       return false;
     }
     this._txCount[key].push(now);
@@ -766,6 +1700,39 @@ const I18N = {
 },
 
 };
+
+Object.assign(I18N.id, {
+  pageTitle: "AI Vault — Freesia",
+  metaDesc: "Freesia AI Vault — kelola USDC dengan strategi AI transparan di testnet.",
+  backTitle: "Kembali ke Freesia DEX",
+  perfTitle: "Performa 7 Hari",
+  navVault: "Vault",
+  navDeposit: "Setor",
+  navCalculator: "Kalkulator",
+  navFaq: "FAQ",
+  invalidFormat: "Format angka tidak valid.",
+  invalidAmount: "Jumlah tidak valid.",
+  rateLimit: "⚠️ Terlalu banyak transaksi. Tunggu 1 menit.",
+  contractMissing: "Kontrak tidak ditemukan. Jangan lanjutkan.",
+  contractVerifyFail: "Kontrak belum bisa diverifikasi. Periksa explorer."
+});
+
+Object.assign(I18N.en, {
+  pageTitle: "AI Vault — Freesia",
+  metaDesc: "Freesia AI Vault — manage testnet USDC with transparent AI-driven strategies.",
+  backTitle: "Back to Freesia DEX",
+  perfTitle: "7-Day Performance",
+  navVault: "Vault",
+  navDeposit: "Deposit",
+  navCalculator: "Calculator",
+  navFaq: "FAQ",
+  invalidFormat: "Invalid number format.",
+  invalidAmount: "Invalid amount.",
+  rateLimit: "⚠️ Too many transactions. Wait 1 minute.",
+  contractMissing: "Contract not found. Do not continue.",
+  contractVerifyFail: "Contract could not be verified. Check the explorer."
+});
+
 function t(k) { return (I18N[LANG] && I18N[LANG][k]) || k; }
 
 function applyI18n() {
@@ -774,6 +1741,22 @@ function applyI18n() {
     if (I18N[LANG][k] !== undefined) el.textContent = I18N[LANG][k];
   });
   document.documentElement.lang = LANG;
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+    const k = el.getAttribute("data-i18n-placeholder");
+    el.setAttribute("placeholder", t(k));
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach(el => {
+    const k = el.getAttribute("data-i18n-title");
+    el.setAttribute("title", t(k));
+  });
+
+  document.title = t("pageTitle");
+
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.setAttribute("content", t("metaDesc"));
+
   document.getElementById("langId").classList.toggle("active", LANG === "id");
   document.getElementById("langEn").classList.toggle("active", LANG === "en");
   const cb = document.getElementById("connectBtn");
@@ -791,15 +1774,29 @@ function applyI18n() {
   renderAiHistory();
   renderUserTxHistory();
 }
-function setLang(l) { LANG = l; localStorage.setItem("freesia_lang", l); applyI18n(); }
+function setLang(l) {
+  LANG = l;
+  localStorage.setItem("freesia_lang", l);
+  applyI18n();
+  applyTheme();
+}
 
 // ============================================================
 // THEME
 // ============================================================
 function applyTheme() {
   document.documentElement.setAttribute("data-theme", THEME);
+
   const btn = document.getElementById("themeBtn");
-  if (btn) btn.textContent = THEME === "dark" ? "🌙" : "☀️";
+
+  if (btn) {
+    const nextMode = THEME === "dark"
+      ? (LANG === "id" ? "Beralih ke mode terang" : "Switch to light mode")
+      : (LANG === "id" ? "Beralih ke mode gelap" : "Switch to dark mode");
+
+    btn.setAttribute("aria-label", nextMode);
+    btn.setAttribute("title", nextMode);
+  }
 }
 function toggleTheme() {
   THEME = THEME === "dark" ? "light" : "dark";
@@ -837,12 +1834,12 @@ async function verifyContract() {
       readProvider.getCode(CONFIG.VAULT), readProvider.getCode(CONFIG.USDC)
     ]);
     if (vaultCode === "0x" || usdcCode === "0x") {
-      showSecWarning(LANG === "id" ? "Kontrak tidak ditemukan! Jangan lanjutkan." : "Contract not found!");
+      showSecWarning(t("contractMissing"));
       return false;
     }
     return true;
   } catch {
-    showSecWarning("Kontrak belum bisa diverifikasi. Periksa explorer.");
+    showSecWarning(t("contractVerifyFail"));
     return true;
   }
 }

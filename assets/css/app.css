@@ -522,3 +522,215 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 1B
+   Mobile bottom navigation
+   ===================================================================== */
+
+.mobile-more-trigger,
+.mobile-more-panel {
+    display: none;
+}
+
+@media (max-width: 599px) {
+
+    body {
+        padding-bottom: 108px;
+    }
+
+    /*
+     * Existing navigation becomes the native-style mobile bottom bar.
+     * Leaderboard and Stats move into the More menu.
+     */
+    .nav-links {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        top: auto;
+
+        z-index: 100;
+
+        width: auto;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: center;
+        justify-content: initial;
+
+        gap: 4px;
+
+        padding: 7px;
+
+        overflow: visible;
+
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+
+        background: var(--bg-secondary);
+        box-shadow:
+            0 18px 50px rgba(0,0,0,.38),
+            0 0 0 1px var(--accent-glow);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        padding-top: 7px;
+    }
+
+    /*
+     * Five primary destinations:
+     * Swap / Pool / Earn / Portfolio / AI Vault
+     */
+    .nav-links #navLeaderboard,
+    .nav-links #navStats {
+        display: none;
+    }
+
+    .nav-links a {
+        min-width: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        height: 48px;
+
+        padding: 6px 3px;
+
+        border: 1px solid transparent;
+        border-radius: 12px;
+
+        font-size: 11px;
+        line-height: 1.15;
+        font-weight: 650;
+        text-align: center;
+        white-space: normal;
+
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
+    .nav-links a.active {
+        color: var(--accent);
+        background: var(--accent-glow);
+        border-color: var(--accent-dim);
+    }
+
+    .nav-links a:active {
+        transform: scale(.96);
+    }
+
+    /*
+     * Secondary navigation trigger.
+     * Keeps the main bottom bar limited to five destinations.
+     */
+    .mobile-more-trigger {
+        position: fixed;
+
+        right: 16px;
+        bottom: 82px;
+
+        z-index: 105;
+
+        width: 42px;
+        height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--border-color);
+        border-radius: 13px;
+
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+
+        box-shadow: var(--panel-shadow);
+
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 2px;
+
+        cursor: pointer;
+    }
+
+    .mobile-more-trigger:hover,
+    .mobile-more-trigger:active {
+        color: var(--accent);
+        border-color: var(--accent-dim);
+        background: var(--bg-tertiary);
+    }
+
+    .mobile-more-panel {
+        position: fixed;
+
+        top: auto;
+        left: auto;
+        right: 16px;
+        bottom: 132px;
+
+        z-index: 110;
+
+        width: min(230px, calc(100vw - 32px));
+
+        padding: 12px;
+
+        border-radius: 16px;
+    }
+
+    .mobile-more-panel.show {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .mobile-more-title {
+        padding: 5px 9px 9px;
+
+        color: var(--text-secondary);
+
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    .mobile-more-panel a {
+        display: block;
+
+        padding: 11px 12px;
+
+        border-radius: 10px;
+
+        color: var(--text-primary);
+        text-decoration: none;
+
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mobile-more-panel a:hover,
+    .mobile-more-panel a:active {
+        color: var(--accent);
+        background: var(--accent-glow);
+    }
+}
+
+/* Don't show mobile controls on tablets / desktops */
+@media (min-width: 600px) {
+    .mobile-more-trigger,
+    .mobile-more-panel {
+        display: none !important;
+    }
+}
+
