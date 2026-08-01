@@ -502,32 +502,8 @@
 /* ---------- Token amount cards ---------- */
 
 #swapView .input-section {
-    position: relative;
-
-    padding: 15px 16px 14px;
-
-    border: 1px solid var(--border-color);
     border-radius: 19px;
-
-    background:
-        linear-gradient(
-            145deg,
-            color-mix(
-                in srgb,
-                var(--bg-tertiary) 92%,
-                transparent
-            ),
-            color-mix(
-                in srgb,
-                var(--bg-secondary) 96%,
-                transparent
-            )
-        );
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 #swapView .input-section:focus-within {
@@ -543,36 +519,18 @@
 }
 
 #swapView .input-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
     margin-bottom: 11px;
-
-    color: var(--text-secondary);
-
-    font-size: 10px;
     line-height: 1;
-    font-weight: 750;
-
     letter-spacing: .07em;
-    text-transform: uppercase;
 }
 
 #swapView .balance-row {
     display: flex;
     align-items: center;
-
     gap: 5px;
-
-    font-size: 10px;
-
-    letter-spacing: 0;
-    text-transform: none;
 }
 
 #swapView .balance-row b {
-    color: var(--text-primary);
     font-weight: 650;
 }
 
@@ -1610,33 +1568,9 @@
 /* ---------- Liquidity inputs ---------- */
 
 #poolView .input-section {
-    position: relative;
-
     margin-bottom: 10px;
-
-    padding: 15px 16px 14px;
-
-    border: 1px solid var(--border-color);
     border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            color-mix(
-                in srgb,
-                var(--bg-tertiary) 92%,
-                transparent
-            ),
-            color-mix(
-                in srgb,
-                var(--bg-secondary) 96%,
-                transparent
-            )
-        );
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+    transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 #poolView .input-section:focus-within {
@@ -1652,35 +1586,16 @@
 }
 
 #poolView .input-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
     gap: 10px;
-
     margin-bottom: 10px;
-
-    color: var(--text-secondary);
-
-    font-size: 10px;
-    font-weight: 750;
-
     letter-spacing: .065em;
-    text-transform: uppercase;
 }
 
 #poolView .balance-row {
     color: var(--text-secondary);
-
-    font-size: 10px;
-
-    letter-spacing: 0;
-    text-transform: none;
 }
 
-#poolView .balance-row b {
-    color: var(--text-primary);
-}
+
 
 
 /* ---------- Amount row ---------- */
@@ -2143,33 +2058,9 @@
 /* ---------- Stake / Unstake cards ---------- */
 
 #earnView .input-section {
-    position: relative;
-
     margin-bottom: 11px;
-
-    padding: 15px 16px 14px;
-
-    border: 1px solid var(--border-color);
     border-radius: 18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            color-mix(
-                in srgb,
-                var(--bg-tertiary) 92%,
-                transparent
-            ),
-            color-mix(
-                in srgb,
-                var(--bg-secondary) 96%,
-                transparent
-            )
-        );
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+    transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 #earnView .input-section:focus-within {
@@ -2185,35 +2076,16 @@
 }
 
 #earnView .input-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
     gap: 10px;
-
     margin-bottom: 10px;
-
-    color: var(--text-secondary);
-
-    font-size: 10px;
-    font-weight: 750;
-
     letter-spacing: .065em;
-    text-transform: uppercase;
 }
 
 #earnView .balance-row {
     color: var(--text-secondary);
-
-    font-size: 10px;
-
-    letter-spacing: 0;
-    text-transform: none;
 }
 
-#earnView .balance-row b {
-    color: var(--text-primary);
-}
+
 
 
 /* ---------- Amount inputs ---------- */
@@ -4127,4 +3999,51 @@
 #leaderboardView .icon-btn:active,
 #statsView .icon-btn:active {
     transform: rotate(90deg);
+}
+
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED FORM ANATOMY 2C
+
+   Shared structural declarations only.
+   View-specific radius, margins, transitions and sizing stay local.
+   ===================================================================== */
+
+/* ---------- INPUT SECTIONS ---------- */
+#swapView .input-section,
+#poolView .input-section,
+#earnView .input-section {
+    position: relative;
+    padding: 15px 16px 14px;
+    border: 1px solid var(--border-color);
+    background: linear-gradient( 145deg, color-mix( in srgb, var(--bg-tertiary) 92%, transparent ), color-mix( in srgb, var(--bg-secondary) 96%, transparent ) );
+}
+
+/* ---------- INPUT LABELS ---------- */
+#swapView .input-label,
+#poolView .input-label,
+#earnView .input-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+}
+
+/* ---------- BALANCE ROWS ---------- */
+#swapView .balance-row,
+#poolView .balance-row,
+#earnView .balance-row {
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* ---------- BALANCE VALUES ---------- */
+#swapView .balance-row b,
+#poolView .balance-row b,
+#earnView .balance-row b {
+    color: var(--text-primary);
 }
