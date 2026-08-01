@@ -12,7 +12,7 @@ function showToast(msg, txHash) {
     const msgEl = document.getElementById('toastMsg');
     const linkEl = document.getElementById('toastLink');
     if (!toastEl || !msgEl) return;
-    
+
     msgEl.textContent = msg;
     if (txHash && TX_HASH_RE.test(txHash)) {
         linkEl.href = `${LITVM_NETWORK.blockExplorerUrls[0]}/tx/${txHash}`;
@@ -158,4 +158,135 @@ function showError(err, action) {
 function hideError() {
     const panel = document.getElementById('errorPanel');
     if (panel) panel.style.display = 'none';
+}
+
+// =====================================================================
+// APPLICATION NAVIGATION & INTERACTION
+// =====================================================================
+
+let currentView = 'swap';
+
+// =====================================================================
+// 14. VIEW FUNCTIONS
+// =====================================================================
+
+const VIEWS = {
+    swap:      { el: 'swapView',      nav: 'navSwap' },
+    pool:      { el: 'poolView',      nav: 'navPool',      onShow: () => refreshPoolView() },
+    earn:      { el: 'earnView',      nav: 'navEarn',      onShow: () => refreshEarnView() },
+    portfolio: { el: 'portfolioView', nav: 'navPortfolio', onShow: () => refreshPortfolioView() },
+    leaderboard: { el: 'leaderboardView', nav: 'navLeaderboard', onShow: () => refreshLeaderboardView() },
+    stats: { el: 'statsView', nav: 'navStats', onShow: () => refreshStatsView() }
+};
+
+function switchView(view) {
+    if (!VIEWS[view]) return;
+    currentView = view;
+    Object.entries(VIEWS).forEach(([key, cfg]) => {
+        const el = document.getElementById(cfg.el);
+        const nav = document.getElementById(cfg.nav);
+        if (key === view) {
+            if (el) { el.style.display = ''; el.classList.remove('view-enter'); void el.offsetWidth; el.classList.add('view-enter'); }
+        } else {
+            if (el) el.style.display = 'none';
+        }
+        if (nav) nav.classList.toggle('active', key === view);
+    });
+    const onShow = VIEWS[view].onShow;
+    if (typeof onShow === 'function') onShow();
+}
+
+// =====================================================================
+// 15. PANEL FUNCTIONS
+// =====================================================================
+
+function togglePanel(id) {
+    const panel = document.getElementById(id);
+    if (!panel) return;
+    const wasOpen = panel.classList.contains('show');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
+    closeWalletDropdown();
+    document.getElementById('settingsBtn')?.classList.remove('on');
+    document.getElementById('historyBtn')?.classList.remove('on');
+    if (!wasOpen) {
+        panel.classList.add('show');
+        if (id === 'settingsPanel') document.getElementById('settingsBtn')?.classList.add('on');
+        if (id === 'historyPanel') document.getElementById('historyBtn')?.classList.add('on');
+        if (id === 'faucetPanel') renderFaucetPanel();
+        if (id === 'historyPanel') refreshHistoryPanel();
+    }
+}
+
+function setSlippage(val, btn) {
+    val = parseFloat(val);
+    if (!isFinite(val) || val <= 0) return;
+    val = Math.min(Math.max(val, 0.01), 50);
+    if (val > 5) showToast(t('slip_warn'));
+    state.slippage = val;
+    document.querySelectorAll('.slip-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    else document.getElementById('customSlip').value = val;
+    updateFromPay();
+}
+
+// =====================================================================
+// 16. TOKEN MODAL FUNCTIONS
+// =====================================================================
+
+function openModal(target) {
+    state.pickerTarget = target;
+    document.getElementById('tokenSearch').value = '';
+    renderTokenList();
+    document.getElementById('tokenModal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('tokenModal').classList.remove('show'); }
+
+function closeModalOnOverlay(e) { if (e.target.id === 'tokenModal') closeModal(); }
+
+function renderTokenList() {
+    const q = document.getElementById('tokenSearch').value.trim().toLowerCase();
+    const list = document.getElementById('tokenList');
+    list.innerHTML = '';
+    const otherSide = state.pickerTarget === 'pay' ? state.receive : state.pay;
+    Object.entries(TOKENS).forEach(([sym, t]) => {
+        if (q && !sym.toLowerCase().includes(q) && !t.name.toLowerCase().includes(q)) return;
+        const disabled = sym === otherSide;
+        const row = document.createElement('div');
+        row.className = 'token-row' + (disabled ? ' disabled' : '');
+        const icon = document.createElement('div');
+        icon.className = 'token-icon';
+        icon.style.background = t.color;
+        icon.textContent = t.letter;
+        const info = document.createElement('div');
+        info.className = 'token-row-info';
+        const name = document.createElement('span');
+        name.textContent = sym;
+        const full = document.createElement('span');
+        full.textContent = t.name;
+        info.appendChild(name);
+        info.appendChild(full);
+        const bal = document.createElement('div');
+        bal.className = 'token-row-bal';
+        bal.textContent = fmt(t.balance, 4);
+        row.appendChild(icon);
+        row.appendChild(info);
+        row.appendChild(bal);
+        row.onclick = () => selectToken(sym);
+        list.appendChild(row);
+    });
+}
+
+async function selectToken(sym) {
+    if (state.pickerTarget === 'pay') {
+        if (sym === state.receive) return;
+        state.pay = sym;
+    } else {
+        if (sym === state.pay) return;
+        state.receive = sym;
+    }
+    closeModal();
+    await loadPoolReserves();
+    refreshLabels();
+    updateFromPay();
 }

@@ -569,3 +569,76 @@ async function executeSwap() {
         swapInFlight = false;
     }
 }
+
+// =====================================================================
+// SWAP IMPACT CHART
+// =====================================================================
+
+// =====================================================================
+// 17. CHART FUNCTIONS
+// =====================================================================
+
+function drawImpactChart() {
+    const line = document.getElementById('chartLine');
+    const area = document.getElementById('chartArea');
+    const dot  = document.getElementById('chartDot');
+    const axis = document.getElementById('chartAxisLabels');
+    const main = document.getElementById('chartPriceMain');
+    const note = document.getElementById('chartPriceNote');
+    if (!line || !area) return;
+
+    const r = reservesFor(state.pay, state.receive);
+    if (!r || !(r.rIn > 0) || !(r.rOut > 0)) {
+        line.setAttribute('d', '');
+        area.setAttribute('d', '');
+        if (dot) dot.style.display = 'none';
+        if (main) setSafeContent(main, '—');
+        if (note) setSafeContent(note, t('waiting_pool'));
+        return;
+    }
+
+    const spot = r.rOut / r.rIn;
+    if (main) setSafeContent(main, fmt(spot, 4));
+    if (note) setSafeContent(note, `1 ${state.pay} = ${fmt(spot, 4)} ${state.receive}`);
+
+    const maxIn = r.rIn * 0.25;
+    const W = 400, H = 150, STEPS = 60;
+    const maxImpact = 40;
+
+    const pts = [];
+    for (let i = 0; i <= STEPS; i++) {
+        const amtIn = (maxIn * i) / STEPS;
+        let impact = 0;
+        if (amtIn > 0) {
+            const out = quoteOut(amtIn, r.rIn, r.rOut);
+            impact = (1 - (out / amtIn) / spot) * 100;
+        }
+        const x = (i / STEPS) * W;
+        const y = H - Math.min(impact / maxImpact, 1) * H;
+        pts.push([x, y]);
+    }
+
+    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+    line.setAttribute('d', d);
+    area.setAttribute('d', `${d} L${W},${H} L0,${H} Z`);
+
+    const payVal = parseNum(document.getElementById('payInput')?.value);
+    if (dot && payVal > 0 && payVal <= maxIn) {
+        const impact = priceImpact(payVal);
+        const x = (payVal / maxIn) * W;
+        const y = H - Math.min(impact / maxImpact, 1) * H;
+        dot.setAttribute('cx', x.toFixed(1));
+        dot.setAttribute('cy', y.toFixed(1));
+        dot.style.display = '';
+    } else if (dot) {
+        dot.style.display = 'none';
+    }
+
+    if (axis) {
+        const spans = axis.querySelectorAll('span');
+        for (let i = 0; i < spans.length; i++) {
+            const v = (maxIn * i) / (spans.length - 1);
+            setSafeContent(spans[i], i === 0 ? '0' : fmt(v, 0));
+        }
+    }
+}

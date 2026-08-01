@@ -21,7 +21,6 @@ let state = {
 };
 
 let poolReserves = { a: 0, b: 0, tokenA: null, tokenB: null, loaded: false };
-let currentView = 'swap';
 let LANG = 'id';
 
 // =====================================================================
@@ -130,7 +129,7 @@ const I18N = {
     lb_reading: ["Membaca event dari blockchain…", "Reading events from the blockchain…"],
     lb_empty: ["Belum ada swap tercatat pada rentang blok ini.", "No swaps recorded in this block range yet."],
     lb_fail: ["Gagal membaca data dari blockchain. Coba muat ulang.", "Failed to read from the blockchain. Try reloading."],
-    lb_how: ["<strong>Cara kerja:</strong> peringkat dihitung dari event <b>Swap</b> yang terekam langsung di smart contract — bukan dari data browser. Siapa pun bisa memverifikasinya sendiri di explorer.", 
+    lb_how: ["<strong>Cara kerja:</strong> peringkat dihitung dari event <b>Swap</b> yang terekam langsung di smart contract — bukan dari data browser. Siapa pun bisa memverifikasinya sendiri di explorer.",
              "<strong>How it works:</strong> ranking is computed from <b>Swap</b> events recorded directly in the smart contract — not from browser data. Anyone can verify it on the explorer."],
     lb_you: ["(kamu)", "(you)"],
     lb_swaps: ["swap", "swaps"],
@@ -151,9 +150,9 @@ const I18N = {
     st_chart_older: ["lebih lama", "older"],
     st_chart_newer: ["terbaru", "newest"],
     st_chart_empty: ["Belum ada swap pada rentang blok ini. Grafik akan terisi saat ada aktivitas.", "No swaps in this block range yet. The chart will fill as activity happens."],
-    st_onchain: ["<strong>Semua angka dibaca on-chain.</strong> Dihitung dari event <b>Swap</b> dan cadangan pool yang terekam di smart contract — bukan data browser atau server kami. Siapa pun bisa memverifikasinya di explorer.", 
+    st_onchain: ["<strong>Semua angka dibaca on-chain.</strong> Dihitung dari event <b>Swap</b> dan cadangan pool yang terekam di smart contract — bukan data browser atau server kami. Siapa pun bisa memverifikasinya di explorer.",
                  "<strong>Every number is read on-chain.</strong> Computed from <b>Swap</b> events and pool reserves recorded in the smart contract — not from browser or our servers. Anyone can verify it on the explorer."],
-    st_phase: ["<strong>Fase awal testnet.</strong> Freesia baru dibuka dan aktivitasnya masih sangat kecil — angka di bawah menunjukkan itu apa adanya. Kami memilih menampilkan data sebenarnya daripada memolesnya.", 
+    st_phase: ["<strong>Fase awal testnet.</strong> Freesia baru dibuka dan aktivitasnya masih sangat kecil — angka di bawah menunjukkan itu apa adanya. Kami memilih menampilkan data sebenarnya daripada memolesnya.",
                "<strong>Early testnet phase.</strong> Freesia just opened and activity is still very small — the numbers below show that as-is. We'd rather show real data than polish it."],
     scope_note: ["Data on-chain dari LitVM Testnet.", "On-chain data from LitVM Testnet."],
     st_fail: ["Gagal membaca data dari blockchain. Coba muat ulang.", "Failed to read from the blockchain. Try reloading."],
@@ -169,7 +168,7 @@ const I18N = {
     pf_manage: ["Kelola Staking ", "Manage Staking "],
     pf_connect_btn: ["Hubungkan Wallet ", "Connect Wallet "],
     no_wallet_title: ["Wallet tidak terdeteksi", "No wallet detected"],
-    no_wallet_body: ["Kemungkinan beberapa extension wallet saling bentrok. Coba matikan wallet extension lain (Backpack, OKX, Bitget, dll), sisakan MetaMask saja, lalu muat ulang halaman ini.", 
+    no_wallet_body: ["Kemungkinan beberapa extension wallet saling bentrok. Coba matikan wallet extension lain (Backpack, OKX, Bitget, dll), sisakan MetaMask saja, lalu muat ulang halaman ini.",
                      "Multiple wallet extensions may be conflicting. Try disabling other wallet extensions (Backpack, OKX, Bitget, etc), keep only MetaMask, then reload this page."],
     close_label: ["Tutup", "Close"],
     slippage_title: ["Toleransi slippage", "Slippage tolerance"],
@@ -178,27 +177,27 @@ const I18N = {
     choose_wallet: ["Pilih wallet", "Choose a wallet"],
     chain_rejected_title: ["Wallet menolak menambah jaringan LitVM", "Wallet refused to add the LitVM network"],
     chain_rejected_body: ["Sebagian wallet (misalnya Zerion) tidak mengizinkan dapp menambahkan jaringan kustom secara otomatis.", "Some wallets (e.g. Zerion) don't allow dapps to add custom networks automatically."],
-    chain_rejected_advice: ["Tambahkan LitVM Testnet secara manual di wallet Anda (chainId 4441, RPC LiteForge), lalu hubungkan lagi. Atau gunakan MetaMask, atau opsi 📱 Wallet Mobile / QR saat menghubungkan.", 
+    chain_rejected_advice: ["Tambahkan LitVM Testnet secara manual di wallet Anda (chainId 4441, RPC LiteForge), lalu hubungkan lagi. Atau gunakan MetaMask, atau opsi 📱 Wallet Mobile / QR saat menghubungkan.",
                             "Add LitVM Testnet manually in your wallet (chainId 4441, LiteForge RPC), then connect again. Or use MetaMask, or the 📱 Mobile Wallet / QR option when connecting."],
     connecting: ["Menghubungkan…", "Connecting…"],
     disconnect: ["Putuskan", "Disconnect"],
     nav_verify: ["Verifikasi", "Verify"],
     intro_eyebrow: ["30 detik", "30 seconds"],
     intro_title: ["Sebelum Anda mulai", "Before you start"],
-    intro_lede: ["Empat hal yang sebaiknya Anda tahu. Kami lebih suka Anda mengetahuinya sekarang daripada setelah kehilangan sesuatu.", 
+    intro_lede: ["Empat hal yang sebaiknya Anda tahu. Kami lebih suka Anda mengetahuinya sekarang daripada setelah kehilangan sesuatu.",
                  "Four things worth knowing. We'd rather you knew them now than after losing something."],
     intro_1_t: ["Ini testnet — uangnya tidak nyata", "This is a testnet — the money isn't real"],
-    intro_1_b: ["Semua token di sini tanpa nilai dan gratis. Ambil dari tombol faucet di atas, lalu bereksperimen sepuasnya.", 
+    intro_1_b: ["Semua token di sini tanpa nilai dan gratis. Ambil dari tombol faucet di atas, lalu bereksperimen sepuasnya.",
                 "Every token here is worthless and free. Grab some from the faucet button above, then experiment all you like."],
     intro_2_t: ["Belum diaudit, dibangun satu orang", "Unaudited, built by one person"],
-    intro_2_b: ["Kontraknya ditinjau sendiri oleh pembuatnya. Itu bukan audit, dan kami tidak akan menyebutnya begitu.", 
+    intro_2_b: ["Kontraknya ditinjau sendiri oleh pembuatnya. Itu bukan audit, dan kami tidak akan menyebutnya begitu.",
                 "The contracts were reviewed by the person who wrote them. That isn't an audit, and we won't call it one."],
     intro_3_t: ["Kami memperingatkan sebelum Anda rugi", "We warn you before you lose money"],
-    intro_3_b: ["Sebelum swap, Freesia menghitung kerugian Anda dalam dolar — bukan cuma persen — dan menahan Anda kalau angkanya buruk.", 
+    intro_3_b: ["Sebelum swap, Freesia menghitung kerugian Anda dalam dolar — bukan cuma persen — dan menahan Anda kalau angkanya buruk.",
                 "Before a swap, Freesia works out your loss in dollars — not just a percentage — and slows you down when the number is bad."],
     intro_4_t: ["Fee 0,3%, seluruhnya ke penyedia likuiditas", "0.3% fee, all of it to liquidity providers"],
     intro_4_b: ["Freesia tidak mengambil potongan. Belum ada token, belum ada janji airdrop.", "Freesia takes no cut. There's no token, and no airdrop promise."],
-    intro_proof: ["Jangan percaya begitu saja: <a href=\"/verify\">periksa tiap kontrak</a> langsung dari blockchain, dan baca <a href=\"/insiden\">daftar kesalahan kami</a> — termasuk yang masih terbuka.", 
+    intro_proof: ["Jangan percaya begitu saja: <a href=\"/verify\">periksa tiap kontrak</a> langsung dari blockchain, dan baca <a href=\"/insiden\">daftar kesalahan kami</a> — termasuk yang masih terbuka.",
                   "Don't just take our word: <a href=\"/verify\">check every contract</a> straight from the blockchain, and read <a href=\"/insiden\">the list of our mistakes</a> — including the ones still open."],
     intro_verify: ["Lihat buktinya", "Show me the proof"],
     intro_start: ["Saya mengerti", "Got it"],
@@ -213,7 +212,7 @@ const I18N = {
     hist_view: ["Lihat ↗", "View ↗"],
     hist_local: ["demo (lokal)", "demo (local)"],
     hist_clear: ["Muat ulang dari blockchain", "Refresh from chain"],
-    hist_scope: ["Dibaca dari ~{n} blok terakhir. Swap lebih lama tidak tercakup — semuanya tetap ada di explorer.", 
+    hist_scope: ["Dibaca dari ~{n} blok terakhir. Swap lebih lama tidak tercakup — semuanya tetap ada di explorer.",
                  "Read from the last ~{n} blocks. Older swaps aren't covered — they all remain on the explorer."],
     select_token: ["Pilih token", "Select a token"],
     search_token: ["Cari nama atau simbol", "Search name or symbol"],
@@ -226,14 +225,14 @@ const I18N = {
     loss_t_moderate: ["Swap ini sedikit merugikan", "This swap costs you a little"],
     loss_t_high: ["Swap ini merugikan Anda", "This swap hurts you"],
     loss_t_severe: ["Kerugian besar — pertimbangkan lagi", "Large loss — reconsider"],
-    loss_explain: ["Di harga wajar Anda akan menerima {ideal} {sym}, tapi karena ukuran swap ini menggeser harga pool, Anda hanya menerima {actual} {sym}. Dampak harga {imp}%.", 
+    loss_explain: ["Di harga wajar Anda akan menerima {ideal} {sym}, tapi karena ukuran swap ini menggeser harga pool, Anda hanya menerima {actual} {sym}. Dampak harga {imp}%.",
                    "At the fair price you'd receive {ideal} {sym}, but because this swap size moves the pool price, you only receive {actual} {sym}. Price impact {imp}%."],
-    loss_advice_max: ["Untuk menjaga kerugian di bawah 2%, swap maksimal sekitar {amt} {sym}. Likuiditas pool ini masih kecil.", 
+    loss_advice_max: ["Untuk menjaga kerugian di bawah 2%, swap maksimal sekitar {amt} {sym}. Likuiditas pool ini masih kecil.",
                       "To keep the loss under 2%, swap at most about {amt} {sym}. This pool's liquidity is still small."],
     loss_advice_limited: ["Likuiditas pool ini terbatas untuk ukuran swap tersebut.", "This pool's liquidity is limited for that swap size."],
     risk_title: ["Swap ini merugikan Anda", "This swap hurts you"],
     risk_est_loss: ["Perkiraan kerugian", "Estimated loss"],
-    risk_note_body: ["Kerugian ini terjadi karena ukuran swap Anda menggeser harga di pool. Semakin besar swap dibanding likuiditas pool, semakin buruk harga yang Anda dapat. <b>Dana Anda tidak dicuri</b> — selisih ini masuk ke pool dan penyedia likuiditas.", 
+    risk_note_body: ["Kerugian ini terjadi karena ukuran swap Anda menggeser harga di pool. Semakin besar swap dibanding likuiditas pool, semakin buruk harga yang Anda dapat. <b>Dana Anda tidak dicuri</b> — selisih ini masuk ke pool dan penyedia likuiditas.",
                      "This loss happens because your swap size moves the pool price. The larger the swap relative to pool liquidity, the worse your price. <b>Your funds are not stolen</b> — the difference goes to the pool and its liquidity providers."],
     risk_phrase: ["SAYA MENGERTI", "I UNDERSTAND"],
     risk_type_label: ["Ketik {p} untuk melanjutkan:", "Type {p} to continue:"],
@@ -298,7 +297,7 @@ const I18N = {
     wait_h: ["Tunggu ~{h}j", "Wait ~{h}h"],
     earn_footer: ["Belum punya LP? Tambahkan likuiditas di tab Pool dulu, lalu kembali ke sini untuk stake.", "Don't have LP yet? Add liquidity on the Pool tab first, then come back here to stake it."],
     pf_footer: ["Data dibaca langsung dari smart contract di LitVM Testnet.", "Data is read directly from the smart contracts on LitVM Testnet."],
-    pf_note_body: ["<strong>Catatan:</strong> token reward saat ini bernama <b>FREE</b> sesuai kontrak yang ter-deploy. Sistem <b>veMBG</b> (vote-escrowed) masih dalam roadmap dan akan hadir setelah kontraknya siap.", 
+    pf_note_body: ["<strong>Catatan:</strong> token reward saat ini bernama <b>FREE</b> sesuai kontrak yang ter-deploy. Sistem <b>veMBG</b> (vote-escrowed) masih dalam roadmap dan akan hadir setelah kontraknya siap.",
                    "<strong>Note:</strong> the reward token is currently named <b>FREE</b>, matching the deployed contract. The <b>veMBG</b> (vote-escrowed) system is still on the roadmap and will arrive once its contract is ready."],
     pf_excl_free: ["Belum termasuk {n} FREE yang belum diklaim (belum ada harga pasar)", "Excludes {n} unclaimed FREE (no market price yet)"],
     pf_total_sub2: ["Nilai dompet + posisi likuiditas Anda", "Your wallet value + liquidity positions"],
@@ -348,25 +347,25 @@ function setLang(l) {
     LANG = (l === 'en') ? 'en' : 'id';
     try { localStorage.setItem('freesia_lang', LANG); } catch (e) {}
     document.documentElement.lang = LANG;
-    
+
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const k = el.getAttribute('data-i18n');
         const v = t(k);
         if (I18N_HTML_KEYS.has(k)) el.innerHTML = v;
         else el.textContent = v;
     });
-    
+
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
         el.placeholder = t(el.getAttribute('data-i18n-ph'));
     });
     document.querySelectorAll('[data-i18n-title]').forEach(el => {
         el.title = t(el.getAttribute('data-i18n-title'));
     });
-    
+
     document.querySelectorAll('[data-langbtn]').forEach(b => {
         b.classList.toggle('active', b.getAttribute('data-langbtn') === LANG);
     });
-    
+
     try {
         const wBtn = document.getElementById('walletBtn');
         if (wBtn && !state.connected) wBtn.textContent = t('connect_wallet');
@@ -428,198 +427,12 @@ async function loadPoolReserves() {
 // =====================================================================
 
 // =====================================================================
-// 14. VIEW FUNCTIONS
+// 14–16. APPLICATION UI DIPINDAHKAN KE assets/js/ui.js
 // =====================================================================
 
-const VIEWS = {
-    swap:      { el: 'swapView',      nav: 'navSwap' },
-    pool:      { el: 'poolView',      nav: 'navPool',      onShow: () => refreshPoolView() },
-    earn:      { el: 'earnView',      nav: 'navEarn',      onShow: () => refreshEarnView() },
-    portfolio: { el: 'portfolioView', nav: 'navPortfolio', onShow: () => refreshPortfolioView() },
-    leaderboard: { el: 'leaderboardView', nav: 'navLeaderboard', onShow: () => refreshLeaderboardView() },
-    stats: { el: 'statsView', nav: 'navStats', onShow: () => refreshStatsView() }
-};
-
-function switchView(view) {
-    if (!VIEWS[view]) return;
-    currentView = view;
-    Object.entries(VIEWS).forEach(([key, cfg]) => {
-        const el = document.getElementById(cfg.el);
-        const nav = document.getElementById(cfg.nav);
-        if (key === view) {
-            if (el) { el.style.display = ''; el.classList.remove('view-enter'); void el.offsetWidth; el.classList.add('view-enter'); }
-        } else {
-            if (el) el.style.display = 'none';
-        }
-        if (nav) nav.classList.toggle('active', key === view);
-    });
-    const onShow = VIEWS[view].onShow;
-    if (typeof onShow === 'function') onShow();
-}
-
 // =====================================================================
-// 15. PANEL FUNCTIONS
+// 17. SWAP CHART DIPINDAHKAN KE assets/js/swap.js
 // =====================================================================
-
-function togglePanel(id) {
-    const panel = document.getElementById(id);
-    if (!panel) return;
-    const wasOpen = panel.classList.contains('show');
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-    closeWalletDropdown();
-    document.getElementById('settingsBtn')?.classList.remove('on');
-    document.getElementById('historyBtn')?.classList.remove('on');
-    if (!wasOpen) {
-        panel.classList.add('show');
-        if (id === 'settingsPanel') document.getElementById('settingsBtn')?.classList.add('on');
-        if (id === 'historyPanel') document.getElementById('historyBtn')?.classList.add('on');
-        if (id === 'faucetPanel') renderFaucetPanel();
-        if (id === 'historyPanel') refreshHistoryPanel();
-    }
-}
-
-function setSlippage(val, btn) {
-    val = parseFloat(val);
-    if (!isFinite(val) || val <= 0) return;
-    val = Math.min(Math.max(val, 0.01), 50);
-    if (val > 5) showToast(t('slip_warn'));
-    state.slippage = val;
-    document.querySelectorAll('.slip-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    else document.getElementById('customSlip').value = val;
-    updateFromPay();
-}
-
-// =====================================================================
-// 16. TOKEN MODAL FUNCTIONS
-// =====================================================================
-
-function openModal(target) {
-    state.pickerTarget = target;
-    document.getElementById('tokenSearch').value = '';
-    renderTokenList();
-    document.getElementById('tokenModal').classList.add('show');
-}
-
-function closeModal() { document.getElementById('tokenModal').classList.remove('show'); }
-
-function closeModalOnOverlay(e) { if (e.target.id === 'tokenModal') closeModal(); }
-
-function renderTokenList() {
-    const q = document.getElementById('tokenSearch').value.trim().toLowerCase();
-    const list = document.getElementById('tokenList');
-    list.innerHTML = '';
-    const otherSide = state.pickerTarget === 'pay' ? state.receive : state.pay;
-    Object.entries(TOKENS).forEach(([sym, t]) => {
-        if (q && !sym.toLowerCase().includes(q) && !t.name.toLowerCase().includes(q)) return;
-        const disabled = sym === otherSide;
-        const row = document.createElement('div');
-        row.className = 'token-row' + (disabled ? ' disabled' : '');
-        const icon = document.createElement('div');
-        icon.className = 'token-icon';
-        icon.style.background = t.color;
-        icon.textContent = t.letter;
-        const info = document.createElement('div');
-        info.className = 'token-row-info';
-        const name = document.createElement('span');
-        name.textContent = sym;
-        const full = document.createElement('span');
-        full.textContent = t.name;
-        info.appendChild(name);
-        info.appendChild(full);
-        const bal = document.createElement('div');
-        bal.className = 'token-row-bal';
-        bal.textContent = fmt(t.balance, 4);
-        row.appendChild(icon);
-        row.appendChild(info);
-        row.appendChild(bal);
-        row.onclick = () => selectToken(sym);
-        list.appendChild(row);
-    });
-}
-
-async function selectToken(sym) {
-    if (state.pickerTarget === 'pay') {
-        if (sym === state.receive) return;
-        state.pay = sym;
-    } else {
-        if (sym === state.pay) return;
-        state.receive = sym;
-    }
-    closeModal();
-    await loadPoolReserves();
-    refreshLabels();
-    updateFromPay();
-}
-
-// =====================================================================
-// 17. CHART FUNCTIONS
-// =====================================================================
-
-function drawImpactChart() {
-    const line = document.getElementById('chartLine');
-    const area = document.getElementById('chartArea');
-    const dot  = document.getElementById('chartDot');
-    const axis = document.getElementById('chartAxisLabels');
-    const main = document.getElementById('chartPriceMain');
-    const note = document.getElementById('chartPriceNote');
-    if (!line || !area) return;
-
-    const r = reservesFor(state.pay, state.receive);
-    if (!r || !(r.rIn > 0) || !(r.rOut > 0)) {
-        line.setAttribute('d', '');
-        area.setAttribute('d', '');
-        if (dot) dot.style.display = 'none';
-        if (main) setSafeContent(main, '—');
-        if (note) setSafeContent(note, t('waiting_pool'));
-        return;
-    }
-
-    const spot = r.rOut / r.rIn;
-    if (main) setSafeContent(main, fmt(spot, 4));
-    if (note) setSafeContent(note, `1 ${state.pay} = ${fmt(spot, 4)} ${state.receive}`);
-
-    const maxIn = r.rIn * 0.25;
-    const W = 400, H = 150, STEPS = 60;
-    const maxImpact = 40;
-
-    const pts = [];
-    for (let i = 0; i <= STEPS; i++) {
-        const amtIn = (maxIn * i) / STEPS;
-        let impact = 0;
-        if (amtIn > 0) {
-            const out = quoteOut(amtIn, r.rIn, r.rOut);
-            impact = (1 - (out / amtIn) / spot) * 100;
-        }
-        const x = (i / STEPS) * W;
-        const y = H - Math.min(impact / maxImpact, 1) * H;
-        pts.push([x, y]);
-    }
-
-    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-    line.setAttribute('d', d);
-    area.setAttribute('d', `${d} L${W},${H} L0,${H} Z`);
-
-    const payVal = parseNum(document.getElementById('payInput')?.value);
-    if (dot && payVal > 0 && payVal <= maxIn) {
-        const impact = priceImpact(payVal);
-        const x = (payVal / maxIn) * W;
-        const y = H - Math.min(impact / maxImpact, 1) * H;
-        dot.setAttribute('cx', x.toFixed(1));
-        dot.setAttribute('cy', y.toFixed(1));
-        dot.style.display = '';
-    } else if (dot) {
-        dot.style.display = 'none';
-    }
-
-    if (axis) {
-        const spans = axis.querySelectorAll('span');
-        for (let i = 0; i < spans.length; i++) {
-            const v = (maxIn * i) / (spans.length - 1);
-            setSafeContent(spans[i], i === 0 ? '0' : fmt(v, 0));
-        }
-    }
-}
 
 // =====================================================================
 // 18–20. POOL & LIQUIDITY DIPINDAHKAN KE assets/js/pool.js
@@ -696,7 +509,7 @@ function applyThemeIcon() {
     const btn = document.getElementById('themeBtn');
     if (!btn) return;
     const isLight = currentTheme() === 'light';
-    btn.innerHTML = isLight ? 
+    btn.innerHTML = isLight ?
         '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.5 14.2A8.6 8.6 0 0 1 9.8 3.5a1 1 0 0 0-1.3-1.2A10.3 10.3 0 1 0 21.7 15.5a1 1 0 0 0-1.2-1.3z"/></svg>' :
         '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><g stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 2.4v2.4M12 19.2v2.4M4.5 4.5l1.7 1.7M17.8 17.8l1.7 1.7M2.4 12h2.4M19.2 12h2.4M4.5 19.5l1.7-1.7M17.8 6.2l1.7-1.7"/></g></svg>';
     btn.title = isLight ? 'Ganti ke tema gelap' : 'Ganti ke tema terang';
