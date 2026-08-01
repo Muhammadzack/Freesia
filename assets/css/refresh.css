@@ -376,25 +376,13 @@
 /* ---------- Main Swap surface ---------- */
 
 #swapView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             600px 260px at 50% -80px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    border: 1px solid var(--border-color);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.26);
 }
 
@@ -987,11 +975,7 @@
 
 @media (min-width: 900px) {
 
-    #swapView {
-        max-width: 680px;
 
-        padding: 30px;
-    }
 
     #swapView .input-section {
         padding: 18px 19px 16px;
@@ -1011,11 +995,7 @@
 
 @media (max-width: 599px) {
 
-    #swapView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #swapView .swap-header {
         margin-bottom: 14px;
@@ -1463,24 +1443,13 @@
    ===================================================================== */
 
 #poolView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             620px 260px at 50% -90px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.25);
 }
 
@@ -1948,11 +1917,7 @@
 
 @media (min-width: 900px) {
 
-    #poolView {
-        max-width: 680px;
 
-        padding: 30px;
-    }
 
     #poolView .amount-input {
         font-size: 34px;
@@ -1985,11 +1950,7 @@
 
 @media (max-width: 599px) {
 
-    #poolView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #poolView > .slip-row {
         gap: 4px;
@@ -2051,24 +2012,13 @@
    ===================================================================== */
 
 #earnView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             620px 260px at 50% -90px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.25);
 }
 
@@ -2527,11 +2477,7 @@
 
 @media (min-width: 900px) {
 
-    #earnView {
-        max-width: 680px;
 
-        padding: 30px;
-    }
 
     #earnView .amount-input,
     #earnView #stakeAmount,
@@ -2568,11 +2514,7 @@
 
 @media (max-width: 599px) {
 
-    #earnView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #earnView > .slip-row {
         gap: 4px;
@@ -2642,24 +2584,13 @@
    ===================================================================== */
 
 #portfolioView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             620px 270px at 50% -100px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.25);
 }
 
@@ -3233,11 +3164,7 @@
 
 @media (min-width: 900px) {
 
-    #portfolioView {
-        max-width: 680px;
 
-        padding: 30px;
-    }
 
     #portfolioView .pf-total {
         padding: 28px 24px;
@@ -3261,11 +3188,7 @@
 
 @media (max-width: 599px) {
 
-    #portfolioView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #portfolioView .pf-total {
         padding: 20px 17px;
@@ -3324,24 +3247,13 @@
    ===================================================================== */
 
 #leaderboardView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             620px 270px at 50% -100px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.25);
 }
 
@@ -3707,11 +3619,7 @@
 
 @media (min-width: 900px) {
 
-    #leaderboardView {
-        max-width: 680px;
 
-        padding: 30px;
-    }
 
     #leaderboardView #lbList > div:not(.pf-empty) {
         min-height: 70px;
@@ -3726,11 +3634,7 @@
 
 @media (max-width: 599px) {
 
-    #leaderboardView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #leaderboardView #lbList > div:not(.pf-empty) {
         min-height: 61px;
@@ -3746,24 +3650,13 @@
    ===================================================================== */
 
 #statsView {
-    position: relative;
-    overflow: visible;
-
-    padding: 26px;
-
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-
-    background:
-        radial-gradient(
+    background: radial-gradient(
             640px 280px at 50% -100px,
             var(--accent-glow),
             transparent 70%
         ),
         var(--bg-secondary);
-
-    box-shadow:
-        0 1px 0 rgba(255,255,255,.025) inset,
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
         0 24px 70px rgba(0,0,0,.25);
 }
 
@@ -4202,10 +4095,7 @@
 
 @media (min-width: 900px) {
 
-    #statsView {
-        max-width: 680px;
-        padding: 30px;
-    }
+
 
     #statsView #statCards {
         grid-template-columns:
@@ -4232,11 +4122,7 @@
 
 @media (max-width: 599px) {
 
-    #statsView {
-        padding: 17px;
 
-        border-radius: 20px;
-    }
 
     #statsView .stat-card {
         min-height: 98px;
@@ -4268,6 +4154,53 @@
 
     #statsView .stat-card {
         min-height: 88px;
+    }
+}
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED VIEW SHELL 2A
+
+   Geometry bersama untuk view utama.
+   Background dan shadow khusus view tetap berada
+   di section masing-masing agar visual tidak berubah.
+   ===================================================================== */
+
+#swapView,
+#poolView,
+#earnView,
+#portfolioView,
+#leaderboardView,
+#statsView {
+    position: relative;
+    overflow: visible;
+
+    padding: 26px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+}
+
+@media (min-width: 900px) {
+    #swapView,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        max-width: 680px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 599px) {
+    #swapView,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        padding: 17px;
+        border-radius: 20px;
     }
 }
 
