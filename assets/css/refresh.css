@@ -423,13 +423,8 @@
 }
 
 #swapView .swap-title {
-    margin: 0;
-
     font-size: 22px;
     line-height: 1;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 #swapView .swap-settings {
@@ -438,34 +433,11 @@
 }
 
 #swapView .icon-btn {
-    width: 38px;
-    height: 38px;
-
-    display: grid;
-    place-items: center;
-
     padding: 0;
-
-    border: 1px solid var(--border-color);
-    border-radius: 11px;
-
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-
-    transition:
-        color .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        transform .15s ease;
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .15s ease;
 }
 
-#swapView .icon-btn:hover {
-    color: var(--accent);
 
-    border-color: var(--accent-dim);
-
-    background: var(--accent-glow);
-}
 
 #swapView .icon-btn:active {
     transform: scale(.95);
@@ -1480,12 +1452,7 @@
 }
 
 #poolView .swap-title {
-    margin: 0;
-
     font-size: 21px;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 
@@ -2049,12 +2016,7 @@
 }
 
 #earnView .swap-title {
-    margin: 0;
-
     font-size: 21px;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 
@@ -2617,50 +2579,18 @@
 /* ---------- Header ---------- */
 
 #portfolioView .swap-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    min-height: 42px;
-
     margin-bottom: 18px;
 }
 
 #portfolioView .swap-title {
-    margin: 0;
-
     font-size: 21px;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 #portfolioView .icon-btn {
-    width: 38px;
-    height: 38px;
-
-    display: grid;
-    place-items: center;
-
-    border: 1px solid var(--border-color);
-    border-radius: 11px;
-
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-
-    transition:
-        color .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        transform .2s ease;
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .2s ease;
 }
 
-#portfolioView .icon-btn:hover {
-    color: var(--accent);
 
-    border-color: var(--accent-dim);
-    background: var(--accent-glow);
-}
 
 #portfolioView .icon-btn:active {
     transform: rotate(35deg) scale(.95);
@@ -3280,53 +3210,20 @@
 /* ---------- Header ---------- */
 
 #leaderboardView .swap-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    min-height: 42px;
-
     margin-bottom: 17px;
 }
 
 #leaderboardView .swap-title {
-    margin: 0;
-
     font-size: 21px;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 #leaderboardView .icon-btn {
-    width: 38px;
-    height: 38px;
-
-    display: grid;
-    place-items: center;
-
-    border: 1px solid var(--border-color);
-    border-radius: 11px;
-
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-
-    transition:
-        color .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        transform .3s ease;
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .3s ease;
 }
 
-#leaderboardView .icon-btn:hover {
-    color: var(--accent);
-    border-color: var(--accent-dim);
-    background: var(--accent-glow);
-}
 
-#leaderboardView .icon-btn:active {
-    transform: rotate(90deg);
-}
+
+
 
 
 /* ---------- Sort selector ---------- */
@@ -3682,53 +3579,20 @@
 /* ---------- Header ---------- */
 
 #statsView .swap-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    min-height: 42px;
-
     margin-bottom: 17px;
 }
 
 #statsView .swap-title {
-    margin: 0;
-
     font-size: 21px;
-    font-weight: 760;
-
-    letter-spacing: -.025em;
 }
 
 #statsView .icon-btn {
-    width: 38px;
-    height: 38px;
-
-    display: grid;
-    place-items: center;
-
-    border: 1px solid var(--border-color);
-    border-radius: 11px;
-
-    background: var(--bg-tertiary);
-    color: var(--text-secondary);
-
-    transition:
-        color .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        transform .3s ease;
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .3s ease;
 }
 
-#statsView .icon-btn:hover {
-    color: var(--accent);
-    border-color: var(--accent-dim);
-    background: var(--accent-glow);
-}
 
-#statsView .icon-btn:active {
-    transform: rotate(90deg);
-}
+
+
 
 
 /* ---------- Loading / indexing phase ---------- */
@@ -4204,3 +4068,63 @@
     }
 }
 
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED VIEW CONTROLS 2B
+
+   Hanya declaration yang identik dipindahkan ke sini.
+   Perbedaan masing-masing view tetap berada di section asal.
+   ===================================================================== */
+
+/* ---------- MAIN VIEW TITLES ---------- */
+#swapView .swap-title,
+#poolView .swap-title,
+#earnView .swap-title,
+#portfolioView .swap-title,
+#leaderboardView .swap-title,
+#statsView .swap-title {
+    margin: 0;
+    font-weight: 760;
+    letter-spacing: -.025em;
+}
+
+/* ---------- DASHBOARD HEADERS ---------- */
+#portfolioView .swap-header,
+#leaderboardView .swap-header,
+#statsView .swap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 42px;
+}
+
+/* ---------- VIEW ICON BUTTONS ---------- */
+#swapView .icon-btn,
+#portfolioView .icon-btn,
+#leaderboardView .icon-btn,
+#statsView .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+/* ---------- VIEW ICON BUTTON HOVER ---------- */
+#swapView .icon-btn:hover,
+#portfolioView .icon-btn:hover,
+#leaderboardView .icon-btn:hover,
+#statsView .icon-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+/* ---------- REFRESH ACTIVE ---------- */
+#leaderboardView .icon-btn:active,
+#statsView .icon-btn:active {
+    transform: rotate(90deg);
+}
