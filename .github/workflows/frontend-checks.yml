@@ -97,9 +97,9 @@ jobs:
 
           echo "OK: /vault route"
 
-      - name: Verify main.js loads last
+      - name: Verify JavaScript dependency order
         run: |
-          python3 - <<'PY'
+          python3 - <<'PYCODE'
           from pathlib import Path
           import re
           import sys
@@ -111,20 +111,39 @@ jobs:
               html
           )
 
-          if not scripts:
-              sys.exit("ERROR: no frontend JS modules found")
+          expected = [
+              "/assets/js/utils.js",
+              "/assets/js/config.js",
+              "/assets/js/i18n.js",
+              "/assets/js/ui.js",
+              "/assets/js/wallet.js",
+              "/assets/js/swap.js",
+              "/assets/js/pool.js",
+              "/assets/js/staking.js",
+              "/assets/js/portfolio.js",
+              "/assets/js/leaderboard.js",
+              "/assets/js/stats.js",
+              "/assets/js/faucet.js",
+              "/assets/js/history.js",
+              "/assets/js/main.js",
+          ]
 
-          if scripts[-1] != "/assets/js/main.js":
-              print("Loaded JS order:")
+          if scripts != expected:
+              print("ERROR: JavaScript dependency order changed")
+              print()
+              print("Expected:")
+              for script in expected:
+                  print(" ", script)
+
+              print()
+              print("Found:")
               for script in scripts:
                   print(" ", script)
 
-              sys.exit(
-                  f"ERROR: main.js is not last: {scripts[-1]}"
-              )
+              sys.exit(1)
 
-          print("OK: main.js is the final JS module")
-          PY
+          print("OK: complete JavaScript dependency order is valid")
+          PYCODE
 
       - name: Frontend validation complete
         run: |
