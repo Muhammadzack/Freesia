@@ -1,0 +1,131 @@
+name: Frontend Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend-checks:
+    name: Validate Freesia Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check required files
+        run: |
+          required_files=(
+            "index.html"
+            "vault.html"
+            "assets/css/app.css"
+            "assets/css/refresh.css"
+            "assets/js/utils.js"
+            "assets/js/config.js"
+            "assets/js/i18n.js"
+            "assets/js/ui.js"
+            "assets/js/wallet.js"
+            "assets/js/swap.js"
+            "assets/js/pool.js"
+            "assets/js/staking.js"
+            "assets/js/portfolio.js"
+            "assets/js/leaderboard.js"
+            "assets/js/stats.js"
+            "assets/js/faucet.js"
+            "assets/js/history.js"
+            "assets/js/main.js"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: missing $file"
+              exit 1
+            fi
+
+            echo "OK: $file"
+          done
+
+      - name: Validate JavaScript syntax
+        run: |
+          for file in assets/js/*.js; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+
+      - name: Reject legacy app.js
+        run: |
+          if [ -f assets/js/app.js ]; then
+            echo "ERROR: legacy assets/js/app.js exists"
+            exit 1
+          fi
+
+          if grep -R -n 'assets/js/app\.js' index.html assets; then
+            echo "ERROR: legacy app.js reference found"
+            exit 1
+          fi
+
+          echo "OK: no legacy app.js"
+
+      - name: Check production safety
+        run: |
+          if grep -R -n \
+            '43\.228\.215\.235\|muhammadzacks-projects\.vercel\.app' \
+            index.html vault.html assets; then
+
+            echo "ERROR: development or Preview hostname found"
+            exit 1
+          fi
+
+          echo "OK: no development hostname"
+
+      - name: Verify Vault production route
+        run: |
+          grep -q 'href="/vault"' index.html || {
+            echo "ERROR: production /vault route missing"
+            exit 1
+          }
+
+          echo "OK: /vault route"
+
+      - name: Verify main.js loads last
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          html = Path("index.html").read_text(encoding="utf-8")
+
+          scripts = re.findall(
+              r'<script[^>]+src="(/assets/js/[^"?]+\.js)',
+              html
+          )
+
+          if not scripts:
+              sys.exit("ERROR: no frontend JS modules found")
+
+          if scripts[-1] != "/assets/js/main.js":
+              print("Loaded JS order:")
+              for script in scripts:
+                  print(" ", script)
+
+              sys.exit(
+                  f"ERROR: main.js is not last: {scripts[-1]}"
+              )
+
+          print("OK: main.js is the final JS module")
+          PY
+
+      - name: Frontend validation complete
+        run: |
+          echo "Freesia frontend checks passed."
