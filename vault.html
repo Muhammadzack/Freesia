@@ -1433,9 +1433,6 @@ const CONFIG = {
     "freesiadex.xyz", "www.freesiadex.xyz", "app.freesiadex.xyz",
     "freesia-black.vercel.app", "freesia-dex.vercel.app"
   ],
-  PREVIEW_HOST_SUFFIXES: [
-    "-muhammadzacks-projects.vercel.app"
-  ],
   MAX_INPUT_LEN: 24,
   SLIPPAGE_BPS: 100,
   MAX_TX_PER_MIN: 5,
@@ -1567,10 +1564,7 @@ const RateLimiter = {
 // ============================================================
 function checkDomain() {
   const host = location.hostname;
-  const isAllowed =
-    CONFIG.ALLOWED_HOSTS.includes(host) ||
-    CONFIG.PREVIEW_HOST_SUFFIXES.some(suffix => host.endsWith(suffix)) ||
-    host === "";
+  const isAllowed = CONFIG.ALLOWED_HOSTS.includes(host) || host === "";
   if (!isAllowed) {
     document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:20px;padding:20px;text-align:center;background:#0a0f0d;color:#dce8e2;"><h1 style="color:#ff5c5c;">⚠️ SITUS TIDAK TERVERIFIKASI</h1><p>Anda mengakses dari domain: <strong>${escapeHtml(host)}</strong></p><p>Pastikan Anda berada di freesiadex.xyz</p><p style="color:#ff5c5c;">Ini bisa jadi percobaan phishing!</p><button onclick="location.href='https://freesiadex.xyz'" style="padding:12px 24px;border-radius:12px;border:0;background:#00e676;color:#04140c;font-weight:700;cursor:pointer;">Buka Situs Resmi</button></div>`;
     throw new Error("Domain tidak diizinkan");
