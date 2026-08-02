@@ -1,0 +1,4049 @@
+/*
+ * Freesia UI Refresh Layer
+ *
+ * Loaded after app.css.
+ * Contains the professional responsive UI introduced
+ * during the 2026 interface refresh.
+ *
+ * Keep protocol/business logic out of this file.
+ */
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 1A
+   Desktop application shell
+   ===================================================================== */
+
+:root {
+    --shell-sidebar: 220px;
+    --shell-content: 760px;
+}
+
+@media (min-width: 900px) {
+    body {
+        align-items: stretch;
+        padding: 24px 32px 48px calc(var(--shell-sidebar) + 56px);
+    }
+
+    .header {
+        width: 100%;
+        max-width: var(--shell-content);
+        margin: 0 auto 24px;
+        gap: 0;
+    }
+
+    .header-top {
+        min-height: 58px;
+    }
+
+    /* Existing nav becomes desktop sidebar */
+    .nav-links {
+        position: fixed;
+        left: 24px;
+        top: 24px;
+        bottom: 24px;
+        width: var(--shell-sidebar);
+        z-index: 50;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 6px;
+
+        padding: 90px 14px 18px;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        background: var(--bg-secondary);
+        box-shadow: var(--card-shadow);
+    }
+
+    .nav-links::before {
+        content: "FREESIA";
+        position: absolute;
+        top: 24px;
+        left: 20px;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .16em;
+    }
+
+    .nav-links::after {
+        content: "DEX";
+        position: absolute;
+        top: 44px;
+        left: 20px;
+        color: var(--accent);
+        font-size: 22px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 650;
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
+    .nav-links a:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--border-color);
+        transform: translateX(2px);
+    }
+
+    .nav-links a.active {
+        color: var(--accent);
+        background: var(--accent-glow);
+        border-color: var(--accent-dim);
+    }
+
+    #statusBar,
+    .header,
+    .swap-card,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView,
+    .footer {
+        width: 100%;
+        max-width: var(--shell-content);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .swap-card {
+        padding: 28px;
+        border-radius: 22px;
+    }
+
+    #statusBar {
+        margin-bottom: 16px !important;
+    }
+}
+
+@media (min-width: 600px) and (max-width: 899px) {
+    body {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .header,
+    #statusBar,
+    .swap-card,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        max-width: 620px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 1B
+   Mobile bottom navigation
+   ===================================================================== */
+
+.mobile-more-trigger,
+.mobile-more-panel {
+    display: none;
+}
+
+@media (max-width: 599px) {
+
+    body {
+        padding-bottom: 108px;
+    }
+
+    /*
+     * Existing navigation becomes the native-style mobile bottom bar.
+     * Leaderboard and Stats move into the More menu.
+     */
+    .nav-links {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        top: auto;
+
+        z-index: 100;
+
+        width: auto;
+        height: auto;
+
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: center;
+        justify-content: initial;
+
+        gap: 4px;
+
+        padding: 7px;
+
+        overflow: visible;
+
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+
+        background: var(--bg-secondary);
+        box-shadow:
+            0 18px 50px rgba(0,0,0,.38),
+            0 0 0 1px var(--accent-glow);
+
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+
+        padding-top: 7px;
+    }
+
+    /*
+     * Five primary destinations:
+     * Swap / Pool / Earn / Portfolio / AI Vault
+     */
+    .nav-links #navLeaderboard,
+    .nav-links #navStats {
+        display: none;
+    }
+
+    .nav-links a {
+        min-width: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        height: 48px;
+
+        padding: 6px 3px;
+
+        border: 1px solid transparent;
+        border-radius: 12px;
+
+        font-size: 11px;
+        line-height: 1.15;
+        font-weight: 650;
+        text-align: center;
+        white-space: normal;
+
+        transition:
+            background .2s ease,
+            border-color .2s ease,
+            color .2s ease,
+            transform .2s ease;
+    }
+
+    .nav-links a::after {
+        display: none;
+    }
+
+    .nav-links a.active {
+        color: var(--accent);
+        background: var(--accent-glow);
+        border-color: var(--accent-dim);
+    }
+
+    .nav-links a:active {
+        transform: scale(.96);
+    }
+
+    /*
+     * Secondary navigation trigger.
+     * Keeps the main bottom bar limited to five destinations.
+     */
+    .mobile-more-trigger {
+        position: fixed;
+
+        right: 16px;
+        bottom: 82px;
+
+        z-index: 105;
+
+        width: 42px;
+        height: 42px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--border-color);
+        border-radius: 13px;
+
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+
+        box-shadow: var(--panel-shadow);
+
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 2px;
+
+        cursor: pointer;
+    }
+
+    .mobile-more-trigger:hover,
+    .mobile-more-trigger:active {
+        color: var(--accent);
+        border-color: var(--accent-dim);
+        background: var(--bg-tertiary);
+    }
+
+    .mobile-more-panel {
+        position: fixed;
+
+        top: auto;
+        left: auto;
+        right: 16px;
+        bottom: 132px;
+
+        z-index: 110;
+
+        width: min(230px, calc(100vw - 32px));
+
+        padding: 12px;
+
+        border-radius: 16px;
+    }
+
+    .mobile-more-panel.show {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .mobile-more-title {
+        padding: 5px 9px 9px;
+
+        color: var(--text-secondary);
+
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+    }
+
+    .mobile-more-panel a {
+        display: block;
+
+        padding: 11px 12px;
+
+        border-radius: 10px;
+
+        color: var(--text-primary);
+        text-decoration: none;
+
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mobile-more-panel a:hover,
+    .mobile-more-panel a:active {
+        color: var(--accent);
+        background: var(--accent-glow);
+    }
+}
+
+/* Don't show mobile controls on tablets / desktops */
+@media (min-width: 600px) {
+    .mobile-more-trigger,
+    .mobile-more-panel {
+        display: none !important;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 2A
+   Professional Swap Interface
+   ===================================================================== */
+
+/* ---------- Main Swap surface ---------- */
+
+#swapView {
+    background: radial-gradient(
+            600px 260px at 50% -80px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.26);
+}
+
+#swapView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    border-radius: 24px 24px 0 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Swap header ---------- */
+
+#swapView .swap-header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 44px;
+
+    margin-bottom: 18px;
+}
+
+#swapView .swap-title {
+    font-size: 22px;
+    line-height: 1;
+}
+
+#swapView .swap-settings {
+    display: flex;
+    gap: 7px;
+}
+
+#swapView .icon-btn {
+    padding: 0;
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .15s ease;
+}
+
+
+
+#swapView .icon-btn:active {
+    transform: scale(.95);
+}
+
+#swapView .icon-btn .ic {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* ---------- Settings / history floating panels ---------- */
+
+#swapView .panel {
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-secondary) 94%,
+            transparent
+        );
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.30);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+/* ---------- Shielded swap info ---------- */
+
+#swapView .shield-toggle {
+    margin-bottom: 8px;
+
+    padding: 11px 13px;
+
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 86%,
+            transparent
+        );
+
+    border: 1px solid var(--border-color);
+}
+
+#swapView .shield-tax {
+    margin-bottom: 14px;
+
+    padding: 0 4px;
+
+    font-size: 10.5px;
+    line-height: 1.5;
+}
+
+
+/* ---------- Token amount cards ---------- */
+
+#swapView .input-section {
+    border-radius: 19px;
+    transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+#swapView .input-section:focus-within {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 46%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#swapView .input-label {
+    margin-bottom: 11px;
+    line-height: 1;
+    letter-spacing: .07em;
+}
+
+#swapView .balance-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#swapView .balance-row b {
+    font-weight: 650;
+}
+
+#swapView .pct-btn {
+    min-height: 25px;
+
+    padding: 3px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 9px;
+    font-weight: 750;
+
+    transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
+}
+
+#swapView .pct-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+
+/* ---------- Amount + token layout ---------- */
+
+#swapView .input-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+/* amount becomes primary visual element */
+#swapView .amount-input {
+    order: 1;
+
+    flex: 1;
+    min-width: 0;
+
+    padding: 3px 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--text-primary);
+
+    font-size: clamp(25px, 7vw, 34px);
+    line-height: 1.15;
+    font-weight: 620;
+
+    letter-spacing: -.035em;
+
+    text-align: left;
+}
+
+/* token picker becomes right-side capsule */
+#swapView .token-select {
+    order: 2;
+
+    flex: 0 0 auto;
+
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 10px 6px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.10);
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        transform .15s ease;
+}
+
+#swapView .token-select:hover {
+    border-color: var(--accent-dim);
+    background: var(--bg-primary);
+}
+
+#swapView .token-select:active {
+    transform: scale(.97);
+}
+
+#swapView .token-select .token-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    font-size: 11px;
+}
+
+#swapView .token-symbol {
+    font-size: 14px;
+    font-weight: 750;
+}
+
+#swapView .token-arrow {
+    margin-left: 1px;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+}
+
+#swapView .usd-value {
+    min-height: 15px;
+
+    margin-top: 7px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* ---------- Floating swap-direction control ---------- */
+
+#swapView .swap-divider {
+    position: relative;
+
+    z-index: 5;
+
+    height: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#swapView .swap-arrow-btn {
+    position: absolute;
+
+    width: 42px;
+    height: 42px;
+
+    display: grid;
+    place-items: center;
+
+    padding: 0;
+
+    border:
+        4px solid
+        var(--bg-secondary);
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--bg-tertiary),
+            var(--bg-primary)
+        );
+
+    color: var(--accent);
+
+    box-shadow:
+        0 7px 18px rgba(0,0,0,.22);
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+#swapView .swap-arrow-btn:hover {
+    transform: rotate(180deg);
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.28);
+}
+
+#swapView .swap-arrow-btn .ic {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* ---------- Quote details ---------- */
+
+#swapView .rate-box {
+    margin-top: 15px;
+
+    padding: 13px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 72%,
+            transparent
+        );
+}
+
+#swapView .rate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    min-height: 28px;
+
+    gap: 16px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+}
+
+#swapView .rate-row + .rate-row {
+    border-top:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--border-color) 55%,
+            transparent
+        );
+}
+
+#swapView .rate-row b {
+    color: var(--text-primary);
+
+    font-size: 11.5px;
+    font-weight: 650;
+
+    text-align: right;
+}
+
+#swapView #impactLabel {
+    color: var(--accent);
+}
+
+
+/* ---------- Loss / safety ---------- */
+
+#swapView .loss-panel {
+    margin-top: 12px;
+
+    border-radius: 15px;
+}
+
+#swapView #safetyCheck {
+    margin: 12px 0 !important;
+
+    border-radius: 15px !important;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 78%,
+            transparent
+        ) !important;
+}
+
+
+/* ---------- Impact chart ---------- */
+
+#swapView .chart-section {
+    margin-top: 14px;
+
+    padding: 15px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 65%,
+            transparent
+        );
+}
+
+#swapView .chart-header {
+    margin-bottom: 12px;
+}
+
+#swapView .chart-container {
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#swapView .chart-caption {
+    margin-top: 8px;
+
+    font-size: 10px;
+    line-height: 1.45;
+
+    color: var(--text-secondary);
+}
+
+
+/* ---------- Primary Swap action ---------- */
+
+#swapView .swap-btn {
+    min-height: 54px;
+
+    margin-top: 16px;
+
+    border-radius: 15px;
+
+    font-size: 15px;
+    font-weight: 760;
+
+    letter-spacing: -.01em;
+
+    box-shadow:
+        0 12px 30px rgba(63,185,80,.22);
+
+    transition:
+        transform .16s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+#swapView .swap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 16px 38px rgba(63,185,80,.30);
+}
+
+#swapView .swap-btn:active:not(:disabled) {
+    transform: translateY(0) scale(.99);
+}
+
+#swapView .swap-btn:disabled {
+    box-shadow: none;
+}
+
+
+/* ---------- Footer inside card ---------- */
+
+#swapView .footer-info {
+    margin-top: 13px;
+
+    opacity: .72;
+
+    font-size: 9.5px;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #swapView .input-section {
+        padding: 18px 19px 16px;
+    }
+
+    #swapView .amount-input {
+        font-size: 36px;
+    }
+
+    #swapView .token-select {
+        min-height: 48px;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #swapView .swap-header {
+        margin-bottom: 14px;
+    }
+
+    #swapView .swap-title {
+        font-size: 20px;
+    }
+
+    #swapView .input-section {
+        padding: 14px;
+        border-radius: 17px;
+    }
+
+    #swapView .amount-input {
+        font-size: 27px;
+    }
+
+    #swapView .token-select {
+        min-height: 42px;
+        padding-right: 9px;
+    }
+
+    #swapView .token-select .token-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    #swapView .token-symbol {
+        font-size: 13px;
+    }
+
+    #swapView .rate-box {
+        padding: 11px 12px;
+    }
+
+    #swapView .chart-section {
+        padding: 12px;
+    }
+
+    #swapView .swap-btn {
+        min-height: 52px;
+    }
+}
+
+
+/* ---------- Very narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #swapView {
+        padding: 14px;
+    }
+
+    #swapView .input-label {
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    #swapView .balance-row {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    #swapView .amount-input {
+        font-size: 24px;
+    }
+
+    #swapView .token-select {
+        gap: 5px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 2B
+   Settings, Risk & Transaction Feedback
+   ===================================================================== */
+
+/* ---------- Settings / History panel ---------- */
+
+#swapView #settingsPanel,
+#swapView #historyPanel {
+    padding: 15px;
+}
+
+#swapView #settingsPanel h5,
+#swapView #historyPanel h5 {
+    margin: 0 0 12px;
+
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 750;
+    letter-spacing: -.01em;
+}
+
+#swapView .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 7px;
+}
+
+#swapView .slip-btn {
+    min-height: 38px;
+
+    padding: 7px 9px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    font-weight: 700;
+
+    transition:
+        color .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#swapView .slip-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+}
+
+#swapView .slip-btn.active {
+    color: var(--accent);
+
+    background: var(--accent-glow);
+    border-color: var(--accent-dim);
+}
+
+#swapView .slip-btn:active {
+    transform: scale(.97);
+}
+
+#swapView .slip-custom {
+    width: 100%;
+
+    margin-top: 9px;
+    padding: 11px 12px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    outline: none;
+
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+
+    font-size: 12px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#swapView .slip-custom:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+
+/* ---------- History ---------- */
+
+#swapView #historyPanel #txList {
+    scrollbar-width: thin;
+}
+
+#swapView .tx-empty {
+    padding: 18px 10px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 11px;
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
+/* ---------- Price impact visual states ---------- */
+
+#swapView #impactLabel {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 24px;
+
+    padding: 3px 8px;
+
+    border-radius: 999px;
+
+    background: var(--accent-glow);
+
+    font-weight: 750;
+}
+
+
+/* ---------- Safety panel ---------- */
+
+#swapView #safetyCheck {
+    position: relative;
+
+    overflow: hidden;
+}
+
+#swapView #safetyCheck::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background: var(--accent);
+}
+
+#swapView #safetyTitle {
+    font-weight: 750;
+}
+
+#swapView #safetyBody {
+    padding-left: 26px;
+
+    font-size: 11.5px;
+    line-height: 1.55;
+}
+
+
+/* ---------- Loss / risky swap panel ---------- */
+
+#swapView .loss-panel {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 14px;
+
+    border: 1px solid var(--border-color);
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+}
+
+#swapView .loss-head {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+}
+
+#swapView .loss-title {
+    font-size: 12px;
+    font-weight: 750;
+}
+
+#swapView .loss-amount {
+    margin-bottom: 6px;
+
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: -.025em;
+}
+
+#swapView .loss-explain,
+#swapView .loss-advice {
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* ---------- Risk confirmation modal ---------- */
+
+.risk-modal {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.risk-modal .modal,
+.risk-modal .risk-card {
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+        0 28px 80px rgba(0,0,0,.40);
+}
+
+.risk-head {
+    align-items: flex-start;
+}
+
+.risk-badge {
+    border: 1px solid rgba(248,81,73,.22);
+
+    box-shadow:
+        0 0 0 5px rgba(248,81,73,.05);
+}
+
+.risk-figure {
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(248,81,73,.10),
+            rgba(248,81,73,.035)
+        );
+}
+
+.risk-type-box input {
+    min-height: 44px;
+
+    border-radius: 11px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.risk-type-box input:focus {
+    box-shadow:
+        0 0 0 3px rgba(248,81,73,.10);
+}
+
+.risk-btn {
+    min-height: 46px;
+
+    border-radius: 12px;
+}
+
+.risk-btn.proceed {
+    box-shadow:
+        0 10px 24px rgba(248,81,73,.20);
+}
+
+
+/* ---------- Transaction feedback ---------- */
+
+#swapView .swap-btn {
+    isolation: isolate;
+}
+
+#swapView .swap-btn:disabled {
+    opacity: 1;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--bg-tertiary),
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 85%,
+                var(--accent) 15%
+            ),
+            var(--bg-tertiary)
+        );
+
+    background-size: 220% 100%;
+
+    color: var(--text-secondary);
+
+    border: 1px solid var(--border-color);
+}
+
+/*
+ * When JS disables the button during approval / transaction,
+ * this subtle movement gives transaction feedback without
+ * changing transaction logic.
+ */
+#swapView .swap-btn:disabled:not(:empty) {
+    animation: freesiaSwapPending 2.2s linear infinite;
+}
+
+@keyframes freesiaSwapPending {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -20% 0; }
+}
+
+
+/* ---------- Better focus accessibility ---------- */
+
+#swapView button:focus-visible,
+#swapView .token-select:focus-visible,
+#swapView input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+
+/* ---------- Mobile panel refinement ---------- */
+
+@media (max-width: 599px) {
+
+    #swapView #settingsPanel,
+    #swapView #historyPanel {
+        left: 0;
+        right: 0;
+
+        width: 100%;
+        max-width: none;
+    }
+
+    #swapView .loss-amount {
+        font-size: 18px;
+    }
+
+    .risk-actions {
+        gap: 8px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #swapView .swap-btn:disabled {
+        animation: none;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 3A
+   Professional Liquidity Pool Interface
+   ===================================================================== */
+
+#poolView {
+    background: radial-gradient(
+            620px 260px at 50% -90px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#poolView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#poolView .swap-header {
+    margin-bottom: 17px;
+}
+
+#poolView .swap-title {
+    font-size: 21px;
+}
+
+
+/* ---------- Pool selector ---------- */
+
+#poolView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+
+    margin-bottom: 15px !important;
+
+    padding: 5px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#poolView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    padding: 7px 8px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+    font-weight: 720;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#poolView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#poolView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#poolView > .slip-row .slip-btn:active {
+    transform: scale(.97);
+}
+
+
+/* ---------- Pool statistics ---------- */
+
+#poolView > .rate-box {
+    display: grid;
+
+    gap: 0;
+
+    margin: 0 0 15px !important;
+    padding: 6px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 76%,
+            transparent
+        );
+}
+
+#poolView > .rate-box .rate-row {
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+}
+
+#poolView > .rate-box .rate-row + .rate-row {
+    border-top:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--border-color) 58%,
+            transparent
+        );
+}
+
+#poolView > .rate-box .rate-row b {
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 680;
+
+    text-align: right;
+}
+
+
+/* ---------- Pool health ---------- */
+
+#poolView #poolHealth {
+    position: relative;
+
+    overflow: hidden;
+
+    margin-bottom: 15px !important;
+    padding: 13px 14px !important;
+
+    border-radius: 15px !important;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 78%,
+            transparent
+        ) !important;
+}
+
+#poolView #poolHealth::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background: var(--accent);
+}
+
+
+/* ---------- Liquidity inputs ---------- */
+
+#poolView .input-section {
+    margin-bottom: 10px;
+    border-radius: 18px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+#poolView .input-section:focus-within {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 46%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#poolView .input-label {
+    gap: 10px;
+    margin-bottom: 10px;
+    letter-spacing: .065em;
+}
+
+#poolView .balance-row {
+    color: var(--text-secondary);
+}
+
+
+
+
+/* ---------- Amount row ---------- */
+
+#poolView .input-row {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+#poolView .amount-input {
+    order: 1;
+
+    flex: 1;
+    min-width: 0;
+
+    padding: 3px 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.15;
+    font-weight: 620;
+
+    letter-spacing: -.035em;
+
+    text-align: left !important;
+}
+
+#poolView .token-select {
+    order: 2;
+
+    min-height: 43px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 6px 11px 6px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+
+    background: var(--bg-secondary);
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.09);
+}
+
+#poolView .token-select .token-icon {
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    font-size: 10px;
+}
+
+#poolView .token-symbol {
+    font-size: 13px;
+    font-weight: 750;
+}
+
+
+/* ---------- Add liquidity pair relationship ---------- */
+
+#poolView #addLiqSectionA {
+    margin-bottom: 7px;
+
+    border-radius: 18px 18px 13px 13px;
+}
+
+#poolView #addLiqSectionB {
+    margin-top: 0;
+
+    border-radius: 13px 13px 18px 18px;
+}
+
+
+/* ---------- Remove liquidity ---------- */
+
+#poolView #removeLpAmount {
+    width: 100%;
+
+    min-height: 50px;
+
+    padding: 10px 12px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 13px;
+
+    outline: none;
+
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+
+    font-size: 23px;
+    font-weight: 620;
+
+    letter-spacing: -.025em;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#poolView #removeLpAmount:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#poolView #removeEstimate {
+    margin-top: 9px !important;
+    padding: 9px 11px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    background: var(--bg-tertiary);
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+}
+
+
+/* ---------- Liquidity actions ---------- */
+
+#poolView .swap-btn {
+    min-height: 52px;
+
+    margin-top: 13px;
+
+    border-radius: 15px;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    letter-spacing: -.01em;
+
+    box-shadow:
+        0 11px 28px rgba(63,185,80,.18);
+
+    transition:
+        transform .16s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+#poolView .swap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 15px 34px rgba(63,185,80,.26);
+}
+
+#poolView .swap-btn:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+#poolView .swap-btn:disabled {
+    box-shadow: none;
+}
+
+
+/* ---------- Separate add/remove visual areas ---------- */
+
+#poolView #addLiqSectionA::before {
+    content: "ADD LIQUIDITY";
+
+    position: absolute;
+
+    top: -9px;
+    left: 14px;
+
+    padding: 2px 6px;
+
+    background: var(--bg-secondary);
+    color: var(--accent);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: .10em;
+}
+
+#poolView #removeLpAmount {
+    margin-top: 4px;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #poolView .amount-input {
+        font-size: 34px;
+    }
+
+    #poolView > .rate-box {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        column-gap: 18px;
+    }
+
+    #poolView > .rate-box .rate-row {
+        border-top: 0;
+    }
+
+    #poolView > .rate-box .rate-row:nth-child(n+3) {
+        border-top:
+            1px solid
+            color-mix(
+                in srgb,
+                var(--border-color) 58%,
+                transparent
+            );
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #poolView > .slip-row {
+        gap: 4px;
+    }
+
+    #poolView > .slip-row .slip-btn {
+        min-height: 38px;
+
+        padding: 5px;
+
+        font-size: 9.5px;
+    }
+
+    #poolView .input-section {
+        padding: 14px;
+
+        border-radius: 17px;
+    }
+
+    #poolView .amount-input {
+        font-size: 26px;
+    }
+
+    #poolView .token-select {
+        min-height: 41px;
+    }
+
+    #poolView .swap-btn {
+        min-height: 51px;
+    }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #poolView {
+        padding: 14px;
+    }
+
+    #poolView > .slip-row {
+        grid-template-columns: 1fr;
+    }
+
+    #poolView .input-label {
+        align-items: flex-start;
+    }
+
+    #poolView .amount-input {
+        font-size: 23px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 3B
+   Professional Earn / Staking Interface
+   ===================================================================== */
+
+#earnView {
+    background: radial-gradient(
+            620px 260px at 50% -90px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#earnView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#earnView .swap-header {
+    margin-bottom: 17px;
+}
+
+#earnView .swap-title {
+    font-size: 21px;
+}
+
+
+/* ---------- Pair / staking selector ---------- */
+
+#earnView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 7px;
+
+    padding: 5px;
+    margin-bottom: 15px !important;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#earnView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    padding: 7px 8px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+    font-weight: 720;
+
+    transition:
+        background .18s ease,
+        color .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#earnView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#earnView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#earnView > .slip-row .slip-btn:active {
+    transform: scale(.97);
+}
+
+
+/* ---------- Earn summary ---------- */
+
+#earnView .rate-box {
+    margin: 0 0 15px !important;
+    padding: 6px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 76%,
+            transparent
+        );
+}
+
+#earnView .rate-row {
+    min-height: 38px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+}
+
+#earnView .rate-row + .rate-row {
+    border-top:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--border-color) 58%,
+            transparent
+        );
+}
+
+#earnView .rate-row b {
+    color: var(--text-primary);
+
+    font-size: 12px;
+    font-weight: 680;
+
+    text-align: right;
+}
+
+
+/* Highlight reward-looking values */
+#earnView .rate-row b[id*="reward"],
+#earnView .rate-row b[id*="Reward"],
+#earnView [id*="apr"],
+#earnView [id*="APR"] {
+    color: var(--accent);
+}
+
+
+/* ---------- Stake / Unstake cards ---------- */
+
+#earnView .input-section {
+    margin-bottom: 11px;
+    border-radius: 18px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+#earnView .input-section:focus-within {
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 46%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 0 0 3px var(--accent-glow);
+}
+
+#earnView .input-label {
+    gap: 10px;
+    margin-bottom: 10px;
+    letter-spacing: .065em;
+}
+
+#earnView .balance-row {
+    color: var(--text-secondary);
+}
+
+
+
+
+/* ---------- Amount inputs ---------- */
+
+#earnView .amount-input,
+#earnView #stakeAmount,
+#earnView #unstakeAmount {
+    width: 100%;
+
+    min-height: 56px;
+
+    padding: 8px 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+    color: var(--text-primary);
+
+    font-size: clamp(24px, 7vw, 32px);
+    line-height: 1.15;
+    font-weight: 620;
+
+    letter-spacing: -.035em;
+
+    text-align: left !important;
+}
+
+#earnView .amount-input::placeholder,
+#earnView #stakeAmount::placeholder,
+#earnView #unstakeAmount::placeholder {
+    color:
+        color-mix(
+            in srgb,
+            var(--text-secondary) 55%,
+            transparent
+        );
+}
+
+
+/* ---------- Percentage controls ---------- */
+
+#earnView .pct-btn {
+    min-height: 26px;
+
+    padding: 3px 7px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 7px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 9px;
+    font-weight: 750;
+
+    transition:
+        color .18s ease,
+        border-color .18s ease,
+        background .18s ease;
+}
+
+#earnView .pct-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+
+/* ---------- Main staking actions ---------- */
+
+#earnView .swap-btn {
+    min-height: 52px;
+
+    margin-top: 12px;
+
+    border-radius: 15px;
+
+    font-size: 14px;
+    font-weight: 750;
+
+    letter-spacing: -.01em;
+
+    box-shadow:
+        0 11px 28px rgba(63,185,80,.18);
+
+    transition:
+        transform .16s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+#earnView .swap-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 15px 34px rgba(63,185,80,.26);
+}
+
+#earnView .swap-btn:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+#earnView .swap-btn:disabled {
+    box-shadow: none;
+}
+
+
+/* ---------- Claim reward becomes secondary premium action ---------- */
+
+#earnView #claimBtn {
+    min-height: 50px;
+
+    margin-top: 12px !important;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--accent) 30%,
+            var(--border-color)
+        );
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            color-mix(
+                in srgb,
+                var(--accent) 15%,
+                var(--bg-tertiary)
+            ),
+            var(--bg-tertiary)
+        ) !important;
+
+    color: var(--accent);
+
+    box-shadow: none;
+}
+
+#earnView #claimBtn:hover:not(:disabled) {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 10px 26px var(--accent-glow);
+}
+
+
+/* ---------- Visual separation ---------- */
+
+#earnView #stakeAmount {
+    position: relative;
+}
+
+#earnView .input-section:first-of-type::before {
+    content: "STAKE";
+
+    position: absolute;
+
+    top: -9px;
+    left: 14px;
+
+    padding: 2px 7px;
+
+    background: var(--bg-secondary);
+    color: var(--accent);
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: .11em;
+}
+
+
+/* ---------- Transaction pending ---------- */
+
+#earnView .swap-btn:disabled {
+    opacity: 1;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--bg-tertiary),
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 84%,
+                var(--accent) 16%
+            ),
+            var(--bg-tertiary)
+        );
+
+    background-size: 220% 100%;
+
+    color: var(--text-secondary);
+
+    border: 1px solid var(--border-color);
+
+    animation: freesiaEarnPending 2.2s linear infinite;
+}
+
+@keyframes freesiaEarnPending {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -20% 0;
+    }
+}
+
+
+/* ---------- Accessibility ---------- */
+
+#earnView button:focus-visible,
+#earnView input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        font-size: 34px;
+    }
+
+    #earnView .rate-box {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        column-gap: 18px;
+    }
+
+    #earnView .rate-row {
+        border-top: 0;
+    }
+
+    #earnView .rate-row:nth-child(n+3) {
+        border-top:
+            1px solid
+            color-mix(
+                in srgb,
+                var(--border-color) 58%,
+                transparent
+            );
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #earnView > .slip-row {
+        gap: 4px;
+    }
+
+    #earnView > .slip-row .slip-btn {
+        min-height: 38px;
+
+        padding: 5px;
+
+        font-size: 9.5px;
+    }
+
+    #earnView .input-section {
+        padding: 14px;
+
+        border-radius: 17px;
+    }
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        min-height: 50px;
+
+        font-size: 26px;
+    }
+
+    #earnView .swap-btn {
+        min-height: 51px;
+    }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #earnView {
+        padding: 14px;
+    }
+
+    #earnView > .slip-row {
+        grid-template-columns: 1fr;
+    }
+
+    #earnView .input-label {
+        align-items: flex-start;
+    }
+
+    #earnView .amount-input,
+    #earnView #stakeAmount,
+    #earnView #unstakeAmount {
+        font-size: 23px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #earnView .swap-btn:disabled {
+        animation: none;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 4A
+   Professional Portfolio Dashboard
+   ===================================================================== */
+
+#portfolioView {
+    background: radial-gradient(
+            620px 270px at 50% -100px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#portfolioView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#portfolioView .swap-header {
+    margin-bottom: 18px;
+}
+
+#portfolioView .swap-title {
+    font-size: 21px;
+}
+
+#portfolioView .icon-btn {
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .2s ease;
+}
+
+
+
+#portfolioView .icon-btn:active {
+    transform: rotate(35deg) scale(.95);
+}
+
+
+/* ---------- Total portfolio hero ---------- */
+
+#portfolioView .pf-total {
+    position: relative;
+    overflow: hidden;
+
+    margin-bottom: 25px;
+
+    padding: 24px 20px;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--accent) 28%,
+            var(--border-color)
+        );
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            360px 180px at 100% 0%,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 85%,
+                var(--accent) 15%
+            ),
+            var(--bg-tertiary)
+        );
+
+    text-align: left;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.035),
+        0 15px 36px rgba(0,0,0,.14);
+}
+
+#portfolioView .pf-total::after {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    right: -42px;
+    top: -46px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid
+        color-mix(
+            in srgb,
+            var(--accent) 18%,
+            transparent
+        );
+}
+
+#portfolioView .pf-total-label {
+    position: relative;
+    z-index: 1;
+
+    margin-bottom: 8px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+    font-weight: 780;
+
+    letter-spacing: .10em;
+    text-transform: uppercase;
+}
+
+#portfolioView .pf-total-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--text-primary);
+
+    font-size: clamp(34px, 9vw, 46px);
+    line-height: 1.05;
+    font-weight: 820;
+
+    letter-spacing: -.045em;
+}
+
+#portfolioView .pf-total-sub {
+    position: relative;
+    z-index: 1;
+
+    max-width: 420px;
+
+    margin-top: 9px;
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    line-height: 1.5;
+}
+
+
+/* ---------- Section titles ---------- */
+
+#portfolioView .pf-section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 21px 3px 10px;
+
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+    font-weight: 780;
+
+    letter-spacing: .09em;
+    text-transform: uppercase;
+}
+
+#portfolioView .pf-section-title::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--border-color),
+            transparent
+        );
+}
+
+
+/* ---------- Token / position list ---------- */
+
+#portfolioView .pf-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+#portfolioView .pf-row {
+    min-height: 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+#portfolioView .pf-row:hover {
+    transform: translateY(-1px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 34%,
+            var(--border-color)
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 90%,
+            var(--accent) 10%
+        );
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.10);
+}
+
+#portfolioView .pf-row-left {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+#portfolioView .pf-row-left .token-icon {
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.12);
+}
+
+#portfolioView .pf-row-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+#portfolioView .pf-row-title {
+    overflow: hidden;
+
+    color: var(--text-primary);
+
+    font-size: 13px;
+    font-weight: 720;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#portfolioView .pf-row-sub {
+    overflow: hidden;
+
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#portfolioView .pf-row-right {
+    flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 3px;
+
+    text-align: right;
+}
+
+#portfolioView .pf-row-amount {
+    color: var(--text-primary);
+
+    font-size: 13px;
+    font-weight: 750;
+
+    letter-spacing: -.01em;
+}
+
+#portfolioView .pf-row-usd {
+    color: var(--text-secondary);
+
+    font-size: 10.5px;
+}
+
+
+/* ---------- Empty state ---------- */
+
+#portfolioView .pf-empty {
+    padding: 25px 14px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 55%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+
+/* ---------- Quick actions ---------- */
+
+#portfolioView .pf-actions {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 9px;
+}
+
+#portfolioView .pf-action-btn {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 64px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 12px 14px;
+
+    border: 1px solid transparent;
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            color-mix(
+                in srgb,
+                var(--accent) 75%,
+                #3fb950
+            )
+        );
+
+    color: #fff;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    text-align: left;
+
+    box-shadow:
+        0 10px 27px rgba(63,185,80,.18);
+
+    transition:
+        transform .16s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+}
+
+#portfolioView .pf-action-btn::after {
+    content: "→";
+
+    position: absolute;
+
+    right: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 19px;
+
+    opacity: .55;
+}
+
+#portfolioView .pf-action-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 14px 32px rgba(63,185,80,.25);
+}
+
+#portfolioView .pf-action-btn:active:not(:disabled) {
+    transform: scale(.985);
+}
+
+#portfolioView .pf-action-btn.secondary {
+    border-color: var(--border-color);
+
+    background: var(--bg-tertiary);
+
+    color: var(--text-primary);
+
+    box-shadow: none;
+}
+
+#portfolioView .pf-action-btn.secondary:hover:not(:disabled) {
+    border-color: var(--accent-dim);
+
+    color: var(--accent);
+
+    background: var(--accent-glow);
+}
+
+#portfolioView .pf-action-btn:disabled {
+    box-shadow: none;
+
+    opacity: .55;
+
+    cursor: not-allowed;
+}
+
+#portfolioView .pf-action-sub {
+    max-width: calc(100% - 28px);
+
+    overflow: hidden;
+
+    font-size: 9.5px;
+    font-weight: 550;
+
+    opacity: .72;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+/* ---------- Protocol note ---------- */
+
+#portfolioView .pf-note {
+    position: relative;
+
+    margin-top: 20px;
+
+    padding: 13px 14px 13px 17px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 72%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 10.8px;
+    line-height: 1.6;
+}
+
+#portfolioView .pf-note::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 11px;
+    bottom: 11px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: var(--warning);
+}
+
+#portfolioView .pf-note strong {
+    color: var(--text-primary);
+}
+
+#portfolioView .pf-note b {
+    color: var(--accent);
+}
+
+
+/* ---------- Footer ---------- */
+
+#portfolioView .footer-info {
+    margin-top: 14px;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+
+    opacity: .72;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #portfolioView .pf-total {
+        padding: 28px 24px;
+    }
+
+    #portfolioView .pf-total-value {
+        font-size: 48px;
+    }
+
+    /*
+     * Lists stay one-column intentionally:
+     * easier to compare amounts and avoids dense DeFi dashboard clutter.
+     */
+    #portfolioView .pf-row {
+        min-height: 70px;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #portfolioView .pf-total {
+        padding: 20px 17px;
+
+        border-radius: 17px;
+    }
+
+    #portfolioView .pf-total-value {
+        font-size: 36px;
+    }
+
+    #portfolioView .pf-row {
+        min-height: 62px;
+
+        padding: 11px 12px;
+    }
+
+    #portfolioView .pf-actions {
+        gap: 7px;
+    }
+
+    #portfolioView .pf-action-btn {
+        min-height: 61px;
+
+        padding: 11px 12px;
+    }
+}
+
+
+/* ---------- Narrow phones ---------- */
+
+@media (max-width: 400px) {
+
+    #portfolioView .pf-actions {
+        grid-template-columns: 1fr;
+    }
+
+    #portfolioView .pf-total-value {
+        font-size: 32px;
+    }
+
+    #portfolioView .pf-row {
+        gap: 8px;
+    }
+
+    #portfolioView .pf-row-title,
+    #portfolioView .pf-row-amount {
+        font-size: 12px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 4B
+   Professional Leaderboard
+   ===================================================================== */
+
+#leaderboardView {
+    background: radial-gradient(
+            620px 270px at 50% -100px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#leaderboardView::before {
+    content: "";
+
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#leaderboardView .swap-header {
+    margin-bottom: 17px;
+}
+
+#leaderboardView .swap-title {
+    font-size: 21px;
+}
+
+#leaderboardView .icon-btn {
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .3s ease;
+}
+
+
+
+
+
+
+/* ---------- Sort selector ---------- */
+
+#leaderboardView > .slip-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 6px;
+
+    margin-bottom: 17px !important;
+
+    padding: 5px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background: var(--bg-tertiary);
+}
+
+#leaderboardView > .slip-row .slip-btn {
+    min-height: 40px;
+
+    border: 1px solid transparent;
+    border-radius: 10px;
+
+    background: transparent;
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    font-weight: 720;
+
+    transition:
+        color .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        transform .15s ease;
+}
+
+#leaderboardView > .slip-row .slip-btn:hover {
+    color: var(--accent);
+}
+
+#leaderboardView > .slip-row .slip-btn.active {
+    color: var(--accent);
+
+    border-color: var(--accent-dim);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+
+/* ---------- Ranking list ---------- */
+
+#leaderboardView #lbList {
+    display: flex !important;
+    flex-direction: column;
+
+    gap: 7px !important;
+}
+
+#leaderboardView #lbList > * {
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+/*
+ * leaderboard.js menggunakan row dinamis.
+ * Styling dibuat generik agar tidak tergantung class internal.
+ */
+#leaderboardView #lbList > div:not(.pf-empty) {
+    position: relative;
+
+    min-height: 65px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 11px 13px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+
+    overflow: hidden;
+}
+
+#leaderboardView #lbList > div:not(.pf-empty):hover {
+    transform: translateY(-1px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 33%,
+            var(--border-color)
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 90%,
+            var(--accent) 10%
+        );
+
+    box-shadow:
+        0 8px 22px rgba(0,0,0,.10);
+}
+
+
+/* ---------- Top 3 ranking ---------- */
+
+#leaderboardView #lbList > div:nth-child(1):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #d4af37 38%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(212,175,55,.11),
+            var(--bg-tertiary)
+        );
+}
+
+#leaderboardView #lbList > div:nth-child(2):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #aab5c3 30%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(170,181,195,.08),
+            var(--bg-tertiary)
+        );
+}
+
+#leaderboardView #lbList > div:nth-child(3):not(.pf-empty) {
+    border-color:
+        color-mix(
+            in srgb,
+            #b87333 30%,
+            var(--border-color)
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(184,115,51,.08),
+            var(--bg-tertiary)
+        );
+}
+
+
+/* subtle ranking accent */
+
+#leaderboardView #lbList > div:nth-child(-n+3):not(.pf-empty)::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 3px;
+
+    border-radius: 999px;
+}
+
+#leaderboardView #lbList > div:nth-child(1)::before {
+    background: #d4af37;
+}
+
+#leaderboardView #lbList > div:nth-child(2)::before {
+    background: #aab5c3;
+}
+
+#leaderboardView #lbList > div:nth-child(3)::before {
+    background: #b87333;
+}
+
+
+/* ---------- Loading / empty ---------- */
+
+#leaderboardView .pf-empty {
+    padding: 26px 14px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 15px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 55%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 11.5px;
+    text-align: center;
+}
+
+
+/* ---------- On-chain explanation ---------- */
+
+#leaderboardView .pf-note {
+    position: relative;
+
+    margin-top: 18px !important;
+
+    padding: 13px 14px 13px 17px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 72%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 10.8px;
+    line-height: 1.6;
+}
+
+#leaderboardView .pf-note::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 11px;
+    bottom: 11px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: var(--accent);
+}
+
+#leaderboardView .pf-note strong {
+    color: var(--text-primary);
+}
+
+#leaderboardView .pf-note b {
+    color: var(--accent);
+}
+
+
+/* ---------- Footer ---------- */
+
+#leaderboardView .footer-info {
+    margin-top: 14px;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+
+    opacity: .72;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #leaderboardView #lbList > div:not(.pf-empty) {
+        min-height: 70px;
+
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #leaderboardView #lbList > div:not(.pf-empty) {
+        min-height: 61px;
+
+        padding: 10px 11px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA UI REFRESH — SPRINT 4C
+   Professional Protocol Statistics Dashboard
+   ===================================================================== */
+
+#statsView {
+    background: radial-gradient(
+            640px 280px at 50% -100px,
+            var(--accent-glow),
+            transparent 70%
+        ),
+        var(--bg-secondary);
+    box-shadow: 0 1px 0 rgba(255,255,255,.025) inset,
+        0 24px 70px rgba(0,0,0,.25);
+}
+
+#statsView::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--accent),
+            transparent
+        );
+
+    opacity: .28;
+}
+
+
+/* ---------- Header ---------- */
+
+#statsView .swap-header {
+    margin-bottom: 17px;
+}
+
+#statsView .swap-title {
+    font-size: 21px;
+}
+
+#statsView .icon-btn {
+    transition: color .18s ease, border-color .18s ease, background .18s ease, transform .3s ease;
+}
+
+
+
+
+
+
+/* ---------- Loading / indexing phase ---------- */
+
+#statsView #statsPhase {
+    position: relative;
+
+    margin-bottom: 15px !important;
+
+    padding: 12px 14px 12px 17px;
+
+    border-radius: 13px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 75%,
+            transparent
+        );
+}
+
+#statsView #statsPhase::before {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    top: 9px;
+    bottom: 9px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: var(--accent);
+}
+
+
+/* ---------- KPI cards ---------- */
+
+#statsView #statCards {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 9px !important;
+
+    margin-bottom: 20px !important;
+}
+
+#statsView .stat-card {
+    position: relative;
+    overflow: hidden;
+
+    min-height: 105px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    gap: 5px;
+
+    padding: 15px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            color-mix(
+                in srgb,
+                var(--bg-tertiary) 90%,
+                transparent
+            ),
+            color-mix(
+                in srgb,
+                var(--bg-secondary) 98%,
+                transparent
+            )
+        );
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+#statsView .stat-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+    height: 70px;
+
+    right: -30px;
+    top: -30px;
+
+    border-radius: 50%;
+
+    background: var(--accent-glow);
+}
+
+#statsView .stat-card:hover {
+    transform: translateY(-1px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 34%,
+            var(--border-color)
+        );
+
+    box-shadow:
+        0 9px 24px rgba(0,0,0,.10);
+}
+
+#statsView .stat-label {
+    position: relative;
+    z-index: 1;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+    font-weight: 780;
+
+    letter-spacing: .07em;
+}
+
+#statsView .stat-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--text-primary);
+
+    font-size: clamp(23px, 7vw, 31px);
+    line-height: 1.05;
+    font-weight: 820;
+
+    letter-spacing: -.035em;
+}
+
+#statsView .stat-sub {
+    position: relative;
+    z-index: 1;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+    line-height: 1.35;
+}
+
+
+/* highlight protocol TVL */
+
+#statsView #stTvl {
+    color: var(--accent);
+}
+
+
+/* ---------- Section labels ---------- */
+
+#statsView .input-label {
+    color: var(--text-secondary);
+
+    font-size: 10px;
+    font-weight: 780;
+
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+
+/* ---------- Swap activity chart ---------- */
+
+#statsView #stChart {
+    width: 100% !important;
+    height: 130px !important;
+
+    display: block;
+
+    padding: 4px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent-glow),
+            transparent
+        );
+}
+
+#statsView #stChartRange {
+    padding: 3px 8px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+
+    background: var(--bg-tertiary);
+
+    color: var(--text-secondary) !important;
+
+    font-size: 9px;
+    font-weight: 650 !important;
+}
+
+#statsView #stChartLabels {
+    margin-top: 8px !important;
+
+    color: var(--text-secondary) !important;
+
+    font-size: 9.5px !important;
+}
+
+#statsView #stChartNote {
+    margin-top: 9px !important;
+
+    padding: 0 2px;
+
+    color: var(--text-secondary) !important;
+
+    font-size: 10.5px !important;
+    line-height: 1.5;
+}
+
+
+/* ---------- Pool breakdown ---------- */
+
+#statsView #stPoolBreakdown {
+    display: flex !important;
+    flex-direction: column;
+
+    gap: 7px !important;
+}
+
+#statsView #stPoolBreakdown > div:not(.pf-empty) {
+    min-height: 62px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 82%,
+            transparent
+        );
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease;
+}
+
+#statsView #stPoolBreakdown > div:not(.pf-empty):hover {
+    transform: translateY(-1px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 32%,
+            var(--border-color)
+        );
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 90%,
+            var(--accent) 10%
+        );
+}
+
+
+/* ---------- Empty states ---------- */
+
+#statsView .pf-empty {
+    padding: 24px 14px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 55%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 11px;
+    text-align: center;
+}
+
+
+/* ---------- On-chain verification note ---------- */
+
+#statsView > .pf-note {
+    position: relative;
+
+    margin-top: 20px;
+
+    padding: 13px 14px 13px 17px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--bg-tertiary) 72%,
+            transparent
+        );
+
+    color: var(--text-secondary);
+
+    font-size: 10.8px;
+    line-height: 1.6;
+}
+
+#statsView > .pf-note::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 11px;
+    bottom: 11px;
+
+    width: 3px;
+
+    border-radius: 999px;
+
+    background: var(--accent);
+}
+
+#statsView > .pf-note strong {
+    color: var(--text-primary);
+}
+
+#statsView > .pf-note b {
+    color: var(--accent);
+}
+
+
+/* ---------- Footer ---------- */
+
+#statsView .footer-info {
+    margin-top: 14px;
+
+    color: var(--text-secondary);
+
+    font-size: 9.5px;
+
+    opacity: .72;
+}
+
+
+/* ---------- Desktop ---------- */
+
+@media (min-width: 900px) {
+
+
+
+    #statsView #statCards {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr)) !important;
+    }
+
+    #statsView .stat-card {
+        min-height: 118px;
+
+        padding: 15px 13px;
+    }
+
+    #statsView .stat-value {
+        font-size: 25px;
+    }
+
+    #statsView #stChart {
+        height: 155px !important;
+    }
+}
+
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 599px) {
+
+
+
+    #statsView .stat-card {
+        min-height: 98px;
+
+        padding: 13px;
+    }
+
+    #statsView .stat-value {
+        font-size: 24px;
+    }
+
+    #statsView #stChart {
+        height: 115px !important;
+    }
+}
+
+
+/* ---------- Very narrow phones ---------- */
+
+@media (max-width: 370px) {
+
+    #statsView {
+        padding: 14px;
+    }
+
+    #statsView #statCards {
+        grid-template-columns: 1fr !important;
+    }
+
+    #statsView .stat-card {
+        min-height: 88px;
+    }
+}
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED VIEW SHELL 2A
+
+   Geometry bersama untuk view utama.
+   Background dan shadow khusus view tetap berada
+   di section masing-masing agar visual tidak berubah.
+   ===================================================================== */
+
+#swapView,
+#poolView,
+#earnView,
+#portfolioView,
+#leaderboardView,
+#statsView {
+    position: relative;
+    overflow: visible;
+
+    padding: 26px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+}
+
+@media (min-width: 900px) {
+    #swapView,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        max-width: 680px;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 599px) {
+    #swapView,
+    #poolView,
+    #earnView,
+    #portfolioView,
+    #leaderboardView,
+    #statsView {
+        padding: 17px;
+        border-radius: 20px;
+    }
+}
+
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED VIEW CONTROLS 2B
+
+   Hanya declaration yang identik dipindahkan ke sini.
+   Perbedaan masing-masing view tetap berada di section asal.
+   ===================================================================== */
+
+/* ---------- MAIN VIEW TITLES ---------- */
+#swapView .swap-title,
+#poolView .swap-title,
+#earnView .swap-title,
+#portfolioView .swap-title,
+#leaderboardView .swap-title,
+#statsView .swap-title {
+    margin: 0;
+    font-weight: 760;
+    letter-spacing: -.025em;
+}
+
+/* ---------- DASHBOARD HEADERS ---------- */
+#portfolioView .swap-header,
+#leaderboardView .swap-header,
+#statsView .swap-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 42px;
+}
+
+/* ---------- VIEW ICON BUTTONS ---------- */
+#swapView .icon-btn,
+#portfolioView .icon-btn,
+#leaderboardView .icon-btn,
+#statsView .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border-color);
+    border-radius: 11px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+}
+
+/* ---------- VIEW ICON BUTTON HOVER ---------- */
+#swapView .icon-btn:hover,
+#portfolioView .icon-btn:hover,
+#leaderboardView .icon-btn:hover,
+#statsView .icon-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent-dim);
+    background: var(--accent-glow);
+}
+
+/* ---------- REFRESH ACTIVE ---------- */
+#leaderboardView .icon-btn:active,
+#statsView .icon-btn:active {
+    transform: rotate(90deg);
+}
+
+
+/* =====================================================================
+   FREESIA CONSOLIDATION — SHARED FORM ANATOMY 2C
+
+   Shared structural declarations only.
+   View-specific radius, margins, transitions and sizing stay local.
+   ===================================================================== */
+
+/* ---------- INPUT SECTIONS ---------- */
+#swapView .input-section,
+#poolView .input-section,
+#earnView .input-section {
+    position: relative;
+    padding: 15px 16px 14px;
+    border: 1px solid var(--border-color);
+    background: linear-gradient( 145deg, color-mix( in srgb, var(--bg-tertiary) 92%, transparent ), color-mix( in srgb, var(--bg-secondary) 96%, transparent ) );
+}
+
+/* ---------- INPUT LABELS ---------- */
+#swapView .input-label,
+#poolView .input-label,
+#earnView .input-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-secondary);
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+}
+
+/* ---------- BALANCE ROWS ---------- */
+#swapView .balance-row,
+#poolView .balance-row,
+#earnView .balance-row {
+    font-size: 10px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* ---------- BALANCE VALUES ---------- */
+#swapView .balance-row b,
+#poolView .balance-row b,
+#earnView .balance-row b {
+    color: var(--text-primary);
+}
