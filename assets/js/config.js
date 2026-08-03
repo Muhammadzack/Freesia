@@ -8,10 +8,28 @@
 // =====================================================================
 
 const CHAIN_ID_EXPECTED = 4441;
+
+const RPC_ENDPOINTS = Object.freeze([
+    {
+        id: 'primary',
+        label: 'Caldera Partner',
+        url: 'https://liteforge.rpc.caldera.xyz/infra-partner-http',
+        priority: 1,
+        stallTimeout: 450
+    },
+    {
+        id: 'official',
+        label: 'Caldera Official',
+        url: 'https://liteforge.rpc.caldera.xyz/http',
+        priority: 2,
+        stallTimeout: 650
+    }
+]);
+
 const LITVM_NETWORK = {
     chainId: '0x1159',
     chainName: 'LitVM Testnet',
-    rpcUrls: ['https://liteforge.rpc.caldera.xyz/infra-partner-http'],
+    rpcUrls: RPC_ENDPOINTS.map(rpc => rpc.url),
     nativeCurrency: { name: 'zkLTC', symbol: 'zkLTC', decimals: 18 },
     blockExplorerUrls: ['https://liteforge.explorer.caldera.xyz']
 };

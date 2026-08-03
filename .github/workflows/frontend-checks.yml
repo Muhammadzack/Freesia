@@ -32,6 +32,7 @@ jobs:
             "assets/css/refresh.css"
             "assets/js/utils.js"
             "assets/js/config.js"
+            "assets/js/rpc.js"
             "assets/js/i18n.js"
             "assets/js/ui.js"
             "assets/js/wallet.js"
@@ -114,6 +115,7 @@ jobs:
           expected = [
               "/assets/js/utils.js",
               "/assets/js/config.js",
+              "/assets/js/rpc.js",
               "/assets/js/i18n.js",
               "/assets/js/ui.js",
               "/assets/js/wallet.js",
