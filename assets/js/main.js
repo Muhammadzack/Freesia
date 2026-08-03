@@ -196,24 +196,81 @@ applyThemeIcon();
 // =====================================================================
 
 async function pingLatency() {
-    const p = dataProvider();
     const dot = document.getElementById('netDot');
     const lat = document.getElementById('netLatency');
-    if (!p || !dot || !lat) return;
-    const t0 = performance.now();
+
+    if (!dot || !lat) return;
+
     try {
-        await p.getBlockNumber();
-        const ms = Math.round(performance.now() - t0);
+        let diagnostics =
+            typeof getRpcDiagnostics === 'function'
+                ? getRpcDiagnostics()
+                : null;
+
+        let preferred = diagnostics?.endpoints?.find(
+            item =>
+                item.id === diagnostics.preferredRpc &&
+                item.healthy === true
+        );
+
+        // Health monitor mungkin belum selesai saat page baru load.
+        if (
+            (!preferred || preferred.latency == null) &&
+            typeof refreshRpcHealth === 'function'
+        ) {
+            await refreshRpcHealth();
+
+            diagnostics =
+                typeof getRpcDiagnostics === 'function'
+                    ? getRpcDiagnostics()
+                    : null;
+
+            preferred = diagnostics?.endpoints?.find(
+                item =>
+                    item.id === diagnostics.preferredRpc &&
+                    item.healthy === true
+            );
+        }
+
+        if (!preferred || preferred.latency == null) {
+            throw new Error(
+                'No healthy RPC latency available'
+            );
+        }
+
+        const ms = preferred.latency;
+
         lat.textContent = ms + ' ms';
+
         let color = 'var(--accent)';
-        if (ms >= 800) color = 'var(--danger)';
-        else if (ms >= 300) color = 'var(--warning)';
+
+        // RPC latency thresholds tuned for mobile/browser use.
+        if (ms >= 1500) {
+            color = 'var(--danger)';
+        } else if (ms >= 800) {
+            color = 'var(--warning)';
+        }
+
         dot.style.background = color;
-        dot.style.boxShadow = '0 0 6px ' + color;
+        dot.style.boxShadow =
+            '0 0 6px ' + color;
+
+        dot.title =
+            'RPC: ' +
+            (preferred.label || preferred.id) +
+            ' · ' +
+            ms +
+            ' ms';
+
     } catch (e) {
         lat.textContent = t('net_disconnected');
-        dot.style.background = 'var(--danger)';
+
+        dot.style.background =
+            'var(--danger)';
+
         dot.style.boxShadow = 'none';
+
+        dot.title = 'RPC unavailable';
     }
 }
 
@@ -227,6 +284,10 @@ async function refreshStatusPrices() {
 }
 
 function startStatusBar() {
+    if (typeof startRpcHealthMonitor === 'function') {
+        startRpcHealthMonitor();
+    }
+
     pingLatency();
     refreshStatusPrices();
     setInterval(() => { if (!document.hidden) pingLatency(); }, 15000);

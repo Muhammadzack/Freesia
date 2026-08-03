@@ -14,17 +14,9 @@
 // =====================================================================
 
 let provider = null, signer = null, userAddress = null;
-let readProvider = null;
-try {
-    readProvider = new ethers.JsonRpcProvider(LITVM_NETWORK.rpcUrls[0], {
-        chainId: CHAIN_ID_EXPECTED,
-        name: LITVM_NETWORK.chainName
-    });
-} catch (e) {
-    console.error('Gagal membuat read-only provider:', e);
-}
 
-function dataProvider() { return provider || readProvider; }
+// readProvider + dataProvider() disediakan oleh rpc.js.
+// Wallet provider di file ini hanya digunakan untuk account/signing.
 
 let wcProvider = null;
 let wcModal = null;
